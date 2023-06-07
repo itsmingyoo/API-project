@@ -1,0 +1,9 @@
+node_modules
+#environment variables
+.env
+#no idea what buyild is
+build
+#DS_Store is for mac environments
+.DS_Store
+#ignores all database files
+*.db
