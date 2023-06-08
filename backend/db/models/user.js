@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, Validator } = require("sequelize"); // require Validator
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
