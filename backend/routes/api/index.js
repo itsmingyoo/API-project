@@ -1,10 +1,15 @@
-// backend/routes/api/index.js
 // remember to import this to routes/index.js and connect it to the router there
 const router = require("express").Router();
+const sessionRouter = require("./session.js");
+const usersRouter = require("./users.js");
 
 //keep the restoreUser middleware
 const { restoreUser } = require("../../utils/auth.js");
+
+//routers
 router.use(restoreUser); // global middleware
+router.use("/session", sessionRouter);
+router.use("/users", usersRouter);
 
 // test route
 router.post("/test", function (req, res) {
