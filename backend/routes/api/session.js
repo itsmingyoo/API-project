@@ -47,5 +47,11 @@ router.post("/", async (req, res, next) => {
   });
 });
 
+// Log out 'delete' - removes the token cookie from the response and returns a JSON success message for logging out
+router.delete("/", (_req, res) => {
+  res.clearCookie("token");
+  return res.json({ message: "success" });
+});
+
 //EXPORT
 module.exports = router;
