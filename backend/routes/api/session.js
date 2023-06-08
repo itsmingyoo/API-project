@@ -53,5 +53,25 @@ router.delete("/", (_req, res) => {
   return res.json({ message: "success" });
 });
 
+/** RESTORE SESSION USER EXPLANATION
+ *The GET /api/session get session user route will return the session user as JSON under the key of user . If there is not a session, it will return a JSON with an empty object. req.user should be assigned when the restoreUser middleware is called as it was connected to the router in the routes/api/index.js file before the routes/api/session.js was connected to the router (router.use(restoreUser))
+ */
+// Restore session user
+router.get("/", (req, res) => {
+  const { user } = req;
+  if (user) {
+    const safeUser = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    };
+    return res.json({
+      user: safeUser,
+    });
+  } else return res.json({ user: null });
+  /*Test the route by navigating to http://localhost:8000/api/session. You should see the current session user information if you have the token cookie. If you don't have a token cookie, you should see an empty object returned. http://localhost:8000/api/csrf/restore to grab XSRF token
+   */
+});
+
 //EXPORT
 module.exports = router;
