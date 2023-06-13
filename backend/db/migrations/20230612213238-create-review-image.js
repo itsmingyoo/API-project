@@ -10,7 +10,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     options.tableName = "ReviewImages";
     await queryInterface.createTable(
-      options,
+      "ReviewImages",
       {
         id: {
           allowNull: false,
