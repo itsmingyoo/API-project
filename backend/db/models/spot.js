@@ -37,19 +37,18 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-        // validate: {
-        //   isFirstCap(value) {
-        //     let split = value.split(" ");
-        //     console.log(split);
-        //     for (let i = 0; i < split.length; i++) {
-        //       if (!split[i][0].toUpperCase()) {
-        //         throw new Error(
-        //           "First letter of address should be capitalized"
-        //         );
-        //       }
-        //     }
-        //   },
-        // },
+        validate: {
+          isFirstCap(value) {
+            let split = value.split(" ");
+            for (let i = 0; i < split.length; i++) {
+              if (!split[i][0].toUpperCase()) {
+                throw new Error(
+                  "First letter of address should be capitalized"
+                );
+              }
+            }
+          },
+        },
       },
       city: {
         type: DataTypes.STRING,
@@ -66,13 +65,16 @@ module.exports = (sequelize, DataTypes) => {
       country: {
         type: DataTypes.STRING,
         allowNull: false,
-        // validate: {
-        //   isFirstCap(value) {
-        //     if (!isUppercase(value.split(" ")[0])) {
-        //       throw new Error("First letter should be capitalized");
-        //     }
-        //   },
-        // },
+        validate: {
+          isFirstCap(value) {
+            let arr = value.split(" ");
+            for (let i = 0; i < arr.length; i++) {
+              if (!Validator.isUppercase(arr[i][0])) {
+                throw new Error("First letter should be capitalized");
+              }
+            }
+          },
+        },
       },
       lat: DataTypes.DECIMAL,
       lng: DataTypes.DECIMAL,
