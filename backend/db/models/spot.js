@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Spot.belongsTo(models.User, { foreignKey: "ownerId" });
+      // Spot.belongsTo(models.User, { foreignKey: "ownerId" });
       Spot.hasMany(models.SpotImage, {
         foreignKey: "spotId",
         onDelete: "CASCADE",
@@ -54,18 +54,18 @@ module.exports = (sequelize, DataTypes) => {
       city: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          isFirstCap(value) {
-            let arr = value.split(" ");
-            for (let i = 0; i < arr.length; i++) {
-              if (!Validator.isUppercase(arr[i][0])) {
-                throw new Error(
-                  "First letter of each word in city should be capitalized"
-                );
-              }
-            }
-          },
-        },
+        // validate: {
+        //   isFirstCap(value) {
+        //     let arr = value.split(" ");
+        //     for (let i = 0; i < arr.length; i++) {
+        //       if (!Validator.isUppercase(arr[i][0])) {
+        //         throw new Error(
+        //           "First letter of each word in city should be capitalized"
+        //         );
+        //       }
+        //     }
+        //   },
+        // },
       },
       state: {
         type: DataTypes.STRING,
@@ -78,18 +78,18 @@ module.exports = (sequelize, DataTypes) => {
       country: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          isFirstCap(value) {
-            let arr = value.split(" ");
-            for (let i = 0; i < arr.length; i++) {
-              if (!Validator.isUppercase(arr[i][0])) {
-                throw new Error(
-                  "First letter of each word in country should be capitalized"
-                );
-              }
-            }
-          },
-        },
+        // validate: {
+        //   isFirstCap(value) {
+        //     let arr = value.split(" ");
+        //     for (let i = 0; i < arr.length; i++) {
+        //       if (!Validator.isUppercase(arr[i][0])) {
+        //         throw new Error(
+        //           "First letter of each word in country should be capitalized"
+        //         );
+        //       }
+        //     }
+        //   },
+        // },
       },
       lat: DataTypes.DECIMAL,
       lng: DataTypes.DECIMAL,
