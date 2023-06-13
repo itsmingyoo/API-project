@@ -1,4 +1,5 @@
 "use strict";
+// user does exist wdym
 const { Model, Validator } = require("sequelize"); // require Validator
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
