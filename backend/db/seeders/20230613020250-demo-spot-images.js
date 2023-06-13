@@ -1,6 +1,6 @@
 "use strict";
 /** @type {import('sequelize-cli').Migration} */
-const { Booking } = require("../models");
+const { SpotImage } = require("../models");
 let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA; // define your schema in options object
@@ -9,27 +9,28 @@ if (process.env.NODE_ENV === "production") {
 const test = [
   {
     spotId: 1,
-    userId: 1,
-    startDate: "2011-01-01",
-    endDate: "2011-01-02",
+    url: "https://thankyousoooomuch.com",
+    // url: 12418406,
+    preview: false,
   },
   {
     spotId: 2,
-    userId: 2,
-    startDate: "2011-02-01",
-    endDate: "2011-02-02",
+    url: "https://thankyousoooomuchh.com",
+    // url: 12418406,
+    preview: false,
   },
   {
     spotId: 3,
-    userId: 3,
-    startDate: "2011-03-01",
-    endDate: "2011-03-02",
+    url: "https://thankyousoooomuchhh.com",
+    // url: 12418406,
+    preview: false,
   },
 ];
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     try {
-      await Booking.bulkCreate(test, { validate: true });
+      await SpotImage.bulkCreate(test, { validate: true });
     } catch (e) {
       console.error(e);
       throw e;
@@ -37,7 +38,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "Bookings";
+    options.tableName = "SpotImages";
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, [
       { spotId: { [Op.in]: [1, 2, 3] } },

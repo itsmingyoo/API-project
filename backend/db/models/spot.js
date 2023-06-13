@@ -10,16 +10,21 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Spot.belongsTo(models.User, { foreignKey: "ownerId" });
-      Spot.hasMany(models.SpotImage, { foreignKey: "spotId" });
+      Spot.hasMany(models.SpotImage, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+      });
       Spot.belongsToMany(models.User, {
         through: models.Booking,
         foreignKey: "spotId",
         otherKey: "userId",
+        onDelete: "CASCADE",
       });
       Spot.belongsToMany(models.User, {
         through: models.Review,
         foreignKey: "spotId",
         otherKey: "userId",
+        onDelete: "CASCADE",
       });
     }
   }
@@ -28,10 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       ownerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: "Users",
-        },
-        onDelete: "CASCADE",
       },
       address: {
         type: DataTypes.STRING,
@@ -39,9 +40,9 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         validate: {
           isFirstCap(value) {
-            let split = value.split(" ");
-            for (let i = 0; i < split.length; i++) {
-              if (!split[i][0].toUpperCase()) {
+            let arr = value.split(" ");
+            for (let i = 0; i < arr.length; i++) {
+              if (arr[i][0] !== arr[i][0].toUpperCase()) {
                 throw new Error(
                   "First letter of each word in address should be capitalized"
                 );
@@ -53,6 +54,18 @@ module.exports = (sequelize, DataTypes) => {
       city: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          isFirstCap(value) {
+            let arr = value.split(" ");
+            for (let i = 0; i < arr.length; i++) {
+              if (!Validator.isUppercase(arr[i][0])) {
+                throw new Error(
+                  "First letter of each word in city should be capitalized"
+                );
+              }
+            }
+          },
+        },
       },
       state: {
         type: DataTypes.STRING,
