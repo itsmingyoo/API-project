@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
     ],
     where,
     include: [{ model: Review, attributes: [] }],
-    // include: [{ model: SpotImage, attributes: ["url"] }],
+    group: "Reviews.id",
   });
 
   console.log(allSpots);
