@@ -9,18 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Spot.hasMany(models.SpotImage, { foreignKey: "spotId" });
       Spot.belongsTo(models.User, { foreignKey: "ownerId" });
-      // Spot.belongsToMany(models.User, {
-      //   through: models.Booking,
-      //   foreignKey: "spotId",
-      //   otherKey: "userId",
-      // });
-      // Spot.belongsToMany(models.User, {
-      //   through: models.Review,
-      //   foreignKey: "spotId",
-      //   otherKey: "userId",
-      // });
+      Spot.hasMany(models.SpotImage, { foreignKey: "spotId" });
+      Spot.belongsToMany(models.User, {
+        through: models.Booking,
+        foreignKey: "spotId",
+        otherKey: "userId",
+      });
+      Spot.belongsToMany(models.User, {
+        through: models.Review,
+        foreignKey: "spotId",
+        otherKey: "userId",
+      });
     }
   }
   Spot.init(
@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
             for (let i = 0; i < split.length; i++) {
               if (!split[i][0].toUpperCase()) {
                 throw new Error(
-                  "First letter of address should be capitalized"
+                  "First letter of each word in address should be capitalized"
                 );
               }
             }
@@ -70,7 +70,9 @@ module.exports = (sequelize, DataTypes) => {
             let arr = value.split(" ");
             for (let i = 0; i < arr.length; i++) {
               if (!Validator.isUppercase(arr[i][0])) {
-                throw new Error("First letter should be capitalized");
+                throw new Error(
+                  "First letter of each word in country should be capitalized"
+                );
               }
             }
           },
