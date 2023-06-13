@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
     ],
     where,
     include: [{ model: Review, attributes: [] }],
-    group: "Reviews.id",
+    group: ["Spot.id", "Reviews.id"],
   });
   //   allSpots = allSpots.map((spot) => {
   //     spot = spot.toJSON();
