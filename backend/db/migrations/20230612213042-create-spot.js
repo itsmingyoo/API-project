@@ -10,7 +10,6 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     options.tableName = "Spots";
     await queryInterface.createTable(
-      options,
       {
         id: {
           allowNull: false,
@@ -72,7 +71,7 @@ module.exports = {
           defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
         },
       },
-      {}
+      options
     );
   },
   async down(queryInterface, Sequelize) {
