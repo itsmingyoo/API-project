@@ -29,7 +29,8 @@ const test = [
 module.exports = {
   async up(queryInterface, Sequelize) {
     try {
-      await Review.bulkCreate(test, { validate: true });
+      options.tableName = "Bookings";
+      await Review.bulkCreate(test, options);
     } catch (e) {
       console.error(e);
       throw e;

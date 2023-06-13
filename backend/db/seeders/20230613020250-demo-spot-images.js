@@ -30,7 +30,8 @@ const test = [
 module.exports = {
   async up(queryInterface, Sequelize) {
     try {
-      await SpotImage.bulkCreate(test, { validate: true });
+      options.tableName = "Bookings";
+      await SpotImage.bulkCreate(test, options);
     } catch (e) {
       console.error(e);
       throw e;
