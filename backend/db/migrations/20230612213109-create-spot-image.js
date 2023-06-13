@@ -8,8 +8,9 @@ if (process.env.NODE_ENV === "production") {
 }
 module.exports = {
   async up(queryInterface, Sequelize) {
+    options.tableName = "SpotImages";
     await queryInterface.createTable(
-      "SpotImages",
+      options,
       {
         id: {
           allowNull: false,
@@ -42,7 +43,7 @@ module.exports = {
           defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
         },
       },
-      options
+      {}
     );
   },
   async down(queryInterface, Sequelize) {

@@ -8,8 +8,9 @@ if (process.env.NODE_ENV === "production") {
 }
 module.exports = {
   async up(queryInterface, Sequelize) {
+    options.tableName = "Reviews";
     await queryInterface.createTable(
-      "Reviews",
+      options,
       {
         id: {
           allowNull: false,
@@ -48,7 +49,7 @@ module.exports = {
           defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
         },
       },
-      options
+      {}
     );
   },
   async down(queryInterface, Sequelize) {
