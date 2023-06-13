@@ -9,15 +9,15 @@ if (process.env.NODE_ENV === "production") {
 const test = [
   {
     ownerId: 1,
-    address: "Demo Address",
-    city: "Demo",
+    address: "123 Disney Lane",
+    city: "San Francisco",
     state: "CA",
-    country: "United States",
-    // lat: Math.random(),
-    // lng: Math.random(),
-    name: "One",
-    description: "Free Ramen",
-    price: 12345.13,
+    country: "United States of America",
+    lat: 37.7645358,
+    lng: -122.4730327,
+    name: "App Academy",
+    description: "Place where web developers are created",
+    price: 123,
   },
   {
     ownerId: 2,
@@ -61,7 +61,7 @@ module.exports = {
     await queryInterface.bulkDelete(
       options,
       {
-        name: { [Op.in]: ["One", "Two", "Three"] },
+        name: { [Op.in]: ["App Academy", "Two", "Three"] },
       },
       {}
     );
