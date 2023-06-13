@@ -26,16 +26,27 @@ router.get("/", async (req, res) => {
       [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"],
     ],
     where,
-    include: [{ model: Review, attributes: [] }],
+    include: [
+      { model: Review, attributes: [] },
+      {
+        model: SpotImage,
+        attributes: [["url", "previewImage"]],
+        where: { preview: false },
+      },
+    ],
     group: ["Spot.id", "Reviews.id"],
   });
-  //   allSpots = allSpots.map((spot) => {
-  //     spot = spot.toJSON();
-  //     spot.previewImage = "image url";
-  //   });
-  //   console.log(allSpots);
 
-  res.json(allSpots);
+  let resObj = {};
+  resObj.Spots = allSpots.map((spot) => {
+    spot = spot.toJSON();
+    // spot.SpotImages[0] points to an array, then you key into previewImage to grab the URL
+    spot.previewImage = spot.SpotImages[0].previewImage;
+    delete spot["SpotImages"]; // must use square bracket with '' to delete a key in an object
+    return spot;
+  });
+
+  res.json(resObj);
 });
 
 // 2. Get all spots owned by current user
