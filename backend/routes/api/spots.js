@@ -63,7 +63,7 @@ router.get("/", async (req, res) => {
       {
         model: SpotImage,
         attributes: [["url", "previewImage"]],
-        where: { preview: false },
+        where: { preview: true },
       },
     ],
     group: ["Spot.id", "Reviews.id"],
@@ -106,7 +106,7 @@ router.get("/current", async (req, res) => {
       {
         model: SpotImage,
         attributes: [["url", "previewImage"]],
-        where: { preview: false },
+        where: { preview: true },
         required: false,
       },
     ],
@@ -127,8 +127,14 @@ router.get("/current", async (req, res) => {
           preview: true,
         },
       });
-      spot.previewImage = spot.previewImage.url;
       //   console.log(spot);
+
+      //edge case for null values to avoid errors
+      if (spot.previewImage !== null) {
+        spot.previewImage = spot.previewImage.url;
+      } else {
+        spot.previewImage = "image url";
+      }
       delete spot["SpotImages"];
       return spot;
     })
