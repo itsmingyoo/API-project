@@ -127,7 +127,7 @@ router.get("/current", async (req, res) => {
           preview: true,
         },
       });
-      //   console.log(spot);
+      //   console.log(spot); //asdf
 
       //edge case for null values to avoid errors
       if (spot.previewImage !== null) {
