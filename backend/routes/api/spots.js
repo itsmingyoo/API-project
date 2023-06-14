@@ -2,7 +2,39 @@ const express = require("express");
 const { Op } = require("sequelize");
 const { Spot, User, SpotImage, sequelize, Review } = require("../../db/models");
 const { getCurrentUser } = require("../../utils/auth");
+const { check } = require("express-validator");
+const { handleValidationErrors } = require("../../utils/validation");
 const router = express.Router();
+const validateSpot = [
+  check("address")
+    .exists({ checkFalsy: true })
+    .withMessage("Street address is required"),
+  check("city").exists({ checkFalsy: true }).withMessage("City is required"),
+  check("state").exists({ checkFalsy: true }).withMessage("State is required"),
+  check("country")
+    .exists({ checkFalsy: true })
+    .withMessage("Country is required"),
+  check("lat")
+    .exists({ checkFalsy: true })
+    .isFloat()
+    .withMessage("Latitude is not valid"),
+  check("lng")
+    .exists({ checkFalsy: true })
+    .isFloat()
+    .withMessage("Longitude is not valid"),
+  check("name")
+    .exists({ checkFalsy: true })
+    .isLength({ max: 50 })
+    .withMessage("Name must be less than 50 characters"),
+  check("description")
+    .exists({ checkFalsy: true })
+    .withMessage("Description is required"),
+  check("price")
+    .exists({ checkFalsy: true })
+    .isNumeric()
+    .withMessage("Price per day is required"),
+  handleValidationErrors,
+];
 
 // 1. get all spots
 router.get("/", async (req, res) => {
@@ -26,33 +58,92 @@ router.get("/", async (req, res) => {
       [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"],
     ],
     where,
-    include: [{ model: Review, attributes: [] }],
+    include: [
+      { model: Review, attributes: [] },
+      {
+        model: SpotImage,
+        attributes: [["url", "previewImage"]],
+        where: { preview: true },
+      },
+    ],
     group: ["Spot.id", "Reviews.id"],
   });
-  //   allSpots = allSpots.map((spot) => {
-  //     spot = spot.toJSON();
-  //     spot.previewImage = "image url";
-  //   });
-  //   console.log(allSpots);
 
-  res.json(allSpots);
+  let resObj = {};
+  resObj.Spots = allSpots.map((spot) => {
+    spot = spot.toJSON();
+    // spot.SpotImages[0] points to an array, then you key into previewImage to grab the URL
+    spot.previewImage = spot.SpotImages[0].previewImage;
+    // console.log(spot);
+    delete spot["SpotImages"]; // must use square bracket with '' to delete a key in an object
+    return spot;
+  });
+
+  res.json(resObj);
 });
 
 // 2. Get all spots owned by current user
-// router.get("/spots/current", async (req, res) => {
-//   const findSpot = await Spot.findAll({
-//     //proper syntax for include if you want to use this
-//     // include: {
-//     //   model: SpotImage,
-//     //   attributes: ["preview"],
-//     // },
-//   });
-//   console.log("hellooooooo", findSpot);
-//   res.json(findSpot);
-// });
+router.get("/current", async (req, res) => {
+  const findSpots = await Spot.findAll({
+    attributes: [
+      "id",
+      "ownerId",
+      "address",
+      "city",
+      "state",
+      "country",
+      "lat",
+      "lng",
+      "name",
+      "description",
+      "price",
+      "createdAt",
+      "updatedAt",
+      [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"],
+    ],
+    include: [
+      { model: Review, attributes: [] },
+      {
+        model: SpotImage,
+        attributes: [["url", "previewImage"]],
+        where: { preview: true },
+        required: false,
+      },
+    ],
+    group: ["Spot.id", "Reviews.id"],
+    where: {
+      ownerId: req.user.id,
+    },
+  });
+
+  let resObj = {};
+  resObj.Spots = await Promise.all(
+    findSpots.map(async (spot) => {
+      spot = spot.toJSON();
+      spot.previewImage = await SpotImage.findOne({
+        attributes: ["url"],
+        where: {
+          spotId: spot.id,
+          preview: true,
+        },
+      });
+      //   console.log(spot);
+
+      //edge case for null values to avoid errors
+      if (spot.previewImage !== null) {
+        spot.previewImage = spot.previewImage.url;
+      } else {
+        spot.previewImage = "image url";
+      }
+      delete spot["SpotImages"];
+      return spot;
+    })
+  );
+  res.json(resObj);
+});
 
 // 3. Create a Spot
-router.post("/", getCurrentUser, async (req, res) => {
+router.post("/", getCurrentUser, validateSpot, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
   if (
