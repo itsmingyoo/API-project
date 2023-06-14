@@ -66,7 +66,7 @@ router.get("/", async (req, res) => {
         where: { preview: true },
       },
     ],
-    group: ["Spot.id", "Reviews.id"],
+    group: ["Spot.id", "Reviews.id", "SpotImages.id"],
   });
 
   let resObj = {};
@@ -110,7 +110,7 @@ router.get("/current", async (req, res) => {
         required: false,
       },
     ],
-    group: ["Spot.id", "Reviews.id"],
+    group: ["Spot.id", "Reviews.id", "SpotImages.id"],
     where: {
       ownerId: req.user.id,
     },
@@ -127,7 +127,7 @@ router.get("/current", async (req, res) => {
           preview: true,
         },
       });
-      //   console.log(spot);
+      //   console.log(spot); //asdf
 
       //edge case for null values to avoid errors
       if (spot.previewImage !== null) {
