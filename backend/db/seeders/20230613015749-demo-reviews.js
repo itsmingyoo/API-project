@@ -10,19 +10,19 @@ const test = [
   {
     spotId: 1,
     userId: 1,
-    review: "THANK YOU",
+    review: "THANK YOU1",
     stars: 1,
   },
   {
     spotId: 2,
     userId: 2,
-    review: "THANK YOU",
+    review: "VERY MUCH2",
     stars: 2,
   },
   {
     spotId: 3,
     userId: 3,
-    review: "THANK YOU",
+    review: "SO MUCH3",
     stars: 3,
   },
 ];
