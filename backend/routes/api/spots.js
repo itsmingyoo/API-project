@@ -74,6 +74,7 @@ router.get("/", async (req, res) => {
     spot = spot.toJSON();
     // spot.SpotImages[0] points to an array, then you key into previewImage to grab the URL
     spot.previewImage = spot.SpotImages[0].previewImage;
+    // console.log(spot);
     delete spot["SpotImages"]; // must use square bracket with '' to delete a key in an object
     return spot;
   });
@@ -82,17 +83,58 @@ router.get("/", async (req, res) => {
 });
 
 // 2. Get all spots owned by current user
-// router.get("/spots/current", async (req, res) => {
-//   const findSpot = await Spot.findAll({
-//     //proper syntax for include if you want to use this
-//     // include: {
-//     //   model: SpotImage,
-//     //   attributes: ["preview"],
-//     // },
-//   });
-//   console.log("hellooooooo", findSpot);
-//   res.json(findSpot);
-// });
+router.get("/current", async (req, res) => {
+  const findSpots = await Spot.findAll({
+    attributes: [
+      "id",
+      "ownerId",
+      "address",
+      "city",
+      "state",
+      "country",
+      "lat",
+      "lng",
+      "name",
+      "description",
+      "price",
+      "createdAt",
+      "updatedAt",
+      [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"],
+    ],
+    include: [
+      { model: Review, attributes: [] },
+      {
+        model: SpotImage,
+        attributes: [["url", "previewImage"]],
+        where: { preview: false },
+        required: false,
+      },
+    ],
+    group: ["Spot.id", "Reviews.id"],
+    where: {
+      ownerId: req.user.id,
+    },
+  });
+
+  let resObj = {};
+  resObj.Spots = await Promise.all(
+    findSpots.map(async (spot) => {
+      spot = spot.toJSON();
+      spot.previewImage = await SpotImage.findOne({
+        attributes: ["url"],
+        where: {
+          spotId: spot.id,
+          preview: true,
+        },
+      });
+      spot.previewImage = spot.previewImage.url;
+      //   console.log(spot);
+      delete spot["SpotImages"];
+      return spot;
+    })
+  );
+  res.json(resObj);
+});
 
 // 3. Create a Spot
 router.post("/", getCurrentUser, validateSpot, async (req, res) => {
