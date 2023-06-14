@@ -11,19 +11,19 @@ const test = [
     spotId: 1,
     url: "https://thankyousoooomuch.com",
     // url: 12418406,
-    preview: false,
+    preview: true,
   },
   {
     spotId: 2,
-    url: "https://thankyousoooomuchh.com",
+    url: "https://thankyo.com",
     // url: 12418406,
-    preview: false,
+    preview: true,
   },
   {
     spotId: 3,
     url: "https://thankyousoooomuchhh.com",
     // url: 12418406,
-    preview: false,
+    preview: true,
   },
 ];
 
