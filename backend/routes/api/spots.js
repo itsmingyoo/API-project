@@ -198,10 +198,11 @@ router.post("/:spotId/images", async (req, res) => {
       message: "Spot couldn't be found",
     });
   }
+  const { url, preview } = req.body;
   if (req.user.id === spot.ownerId) {
     spot.toJSON();
-    spot.url = "image url";
-    spot.preview = true;
+    spot.url = url;
+    spot.preview = preview;
   } else {
     res.statusCode = 404;
     return res.json({
@@ -211,8 +212,8 @@ router.post("/:spotId/images", async (req, res) => {
 
   res.json({
     id: spot.id,
-    url: "image url",
-    preview: true,
+    url,
+    preview,
   });
 });
 
@@ -292,6 +293,7 @@ router.get("/:spotId", async (req, res) => {
         [sequelize.fn("COUNT", sequelize.col("stars")), "numReviews"],
         [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"],
       ],
+      group: ["Spot.id", "Reviews.id"],
     },
     include: [
       {
