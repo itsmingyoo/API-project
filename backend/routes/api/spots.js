@@ -238,4 +238,24 @@ router.put("/:spotId", getCurrentUser, async (req, res) => {
   }
 });
 
+router.delete("/:spotId", async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+  if (spot === null || !spot.ownerId) {
+    return res.json({
+      message: "Spot couldn't be found",
+    });
+  }
+  if (req.user.id === spot.ownerId) {
+    spot.destroy();
+  } else {
+    res.statusCode = 404;
+    return res.json({
+      message: "Spot couldn't be found",
+    });
+  }
+  res.json({
+    message: "Successfully deleted",
+  });
+});
+
 module.exports = router;
