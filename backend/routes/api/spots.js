@@ -66,7 +66,7 @@ router.get("/", async (req, res) => {
         where: { preview: true },
       },
     ],
-    group: ["Spot.id", "Reviews.id"],
+    group: ["Spot.id", "Reviews.id", "SpotImages.id"],
   });
 
   let resObj = {};
@@ -110,7 +110,7 @@ router.get("/current", async (req, res) => {
         required: false,
       },
     ],
-    group: ["Spot.id", "Reviews.id"],
+    group: ["Spot.id", "Reviews.id", "SpotImages.id"],
     where: {
       ownerId: req.user.id,
     },
