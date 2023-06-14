@@ -190,6 +190,31 @@ router.post("/", getCurrentUser, validateSpot, async (req, res) => {
 });
 
 // 4. add an image to a spot based on the spot's id
+router.post("/:spotId/images", async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+  if (!spot || spot === null) {
+    res.statusCode = 404;
+    return res.json({
+      message: "Spot couldn't be found",
+    });
+  }
+  if (req.user.id === spot.ownerId) {
+    spot.toJSON();
+    spot.url = "image url";
+    spot.preview = true;
+  } else {
+    res.statusCode = 404;
+    return res.json({
+      message: "Spot couldn't be found",
+    });
+  }
+
+  res.json({
+    id: spot.id,
+    url: "image url",
+    preview: true,
+  });
+});
 
 // 5. edit a spot
 router.put("/:spotId", getCurrentUser, async (req, res) => {
@@ -238,6 +263,7 @@ router.put("/:spotId", getCurrentUser, async (req, res) => {
   }
 });
 
+// 6. delete route
 router.delete("/:spotId", async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
   if (spot === null || !spot.ownerId) {
