@@ -284,4 +284,45 @@ router.delete("/:spotId", async (req, res) => {
   });
 });
 
+// 7. get spot details from id
+router.get("/:spotId", async (req, res) => {
+  let spot = await Spot.findByPk(req.params.spotId, {
+    attributes: {
+      include: [
+        [sequelize.fn("COUNT", sequelize.col("stars")), "numReviews"],
+        [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"],
+      ],
+    },
+    include: [
+      {
+        model: Review,
+        attributes: [],
+      },
+      {
+        model: SpotImage,
+        attributes: ["id", "url", "preview"],
+      },
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+    ],
+  });
+
+  //   console.log(spot);
+  //   console.log(spot.id);
+  spot = spot.toJSON();
+  if (spot.ownerId !== null && spot.id !== null) {
+    spot.Owner = spot.User;
+    delete spot.User;
+  } else {
+    res.status(404);
+    return res.json({
+      message: "Spot couldn't be found",
+    });
+  }
+
+  res.json(spot);
+});
+
 module.exports = router;
