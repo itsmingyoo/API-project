@@ -81,7 +81,6 @@ router.get("/", async (req, res) => {
     spot = spot.toJSON();
     // spot.SpotImages[0] points to an array, then you key into previewImage to grab the URL
     spot.previewImage = spot.SpotImages[0].previewImage;
-    // console.log(spot);
     delete spot["SpotImages"]; // must use square bracket with '' to delete a key in an object
     return spot;
   });

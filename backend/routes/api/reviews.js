@@ -57,8 +57,44 @@ router.get("/current", async (req, res) => {
       delete review.Spot["SpotImages"];
     });
   });
+
   //   console.log(reviewsList);
-  res.json(reviewsList);
+  res.json({ Reviews: reviewsList });
+});
+
+// 2. add image to a review based on the review's id
+router.post("/:reviewId/images", async (req, res) => {
+  let currReview = await Review.findByPk(req.params.reviewId, {
+    include: {
+      model: ReviewImage,
+    },
+  });
+
+  //case of not found
+  if (!currReview) {
+    res.status(404);
+    return res.json({
+      message: "Review couldn't be found",
+    });
+  }
+
+  //case of over 10
+  if (currReview.ReviewImages.length > 9) {
+    //starts at 3 bc of 3 test seeders
+    res.status(403);
+    return res.json({
+      message: "Maximum number of images for this resource was reached",
+    });
+  }
+
+  if (currReview.userId === req.user.id) {
+    const { url } = req.body;
+    const newUrl = await ReviewImage.create({
+      url,
+      reviewId: currReview.id,
+    });
+    return res.json({ id: newUrl.id, url: newUrl.url }); // remember this: including key-values
+  }
 });
 
 module.exports = router;
