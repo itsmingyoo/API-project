@@ -128,4 +128,26 @@ router.put("/:reviewId", requireAuth, async (req, res) => {
   res.json(currentReview);
 });
 
+// 4. delete a review
+router.delete("/:reviewId", requireAuth, async (req, res) => {
+  const currReview = await Review.findByPk(req.params.reviewId);
+  if (!currReview) {
+    res.status(404);
+    return res.json({
+      message: "Review couldn't be found",
+    });
+  }
+  if (currReview.userId === req.user.id) {
+    currReview.destroy();
+  } else {
+    res.status(404);
+    return res.json({
+      message: "Unable to delete review due to incorrect user.",
+    });
+  }
+  res.json({
+    message: "Successfully deleted",
+  });
+});
+
 module.exports = router;
