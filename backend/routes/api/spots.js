@@ -7,8 +7,10 @@ const {
   sequelize,
   Review,
   ReviewImage,
+  Booking,
 } = require("../../db/models");
 const { getCurrentUser } = require("../../utils/auth");
+const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const router = express.Router();
@@ -405,5 +407,30 @@ router.get("/:spotId/reviews", async (req, res) => {
 
   res.json(spotReviews);
 });
+
+// 10. create booking - WIP
+// router.post("/:spotId/bookings", requireAuth, async (req, res) => {
+//   const spot = await Spot.findByPk(req.params.spotId);
+//   if (!spot) {
+//     res.status(404);
+//     return res.json({
+//       message: "Spot couldn't be found",
+//     });
+//   }
+//   // spot must not be booked by user already
+//   if (spot.ownerId === req.user.id) {
+//     console.log("spot is already owned by you baboon");
+//   } else {
+//     const { startDate, endDate } = req.body;
+//     const newBooking = await Booking.create({
+//       spotId: spot.spotId,
+//       userId: req.user.id,
+//       startDate,
+//       endDate,
+//     });
+//     res.json(newBooking);
+//   }
+//   res.json(spot);
+// });
 
 module.exports = router;
