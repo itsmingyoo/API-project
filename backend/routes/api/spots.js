@@ -330,9 +330,6 @@ router.get("/:spotId", async (req, res) => {
 // 8. create a review for a spotId
 router.post("/:spotId/reviews", async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
-  // const review = await Review.findByPk(req.params.spotId);
-  const allReviews = await spot.getReviews();
-  // return res.json(allReviews);
   if (!spot) {
     res.status(404);
     return res.json({
@@ -340,13 +337,17 @@ router.post("/:spotId/reviews", async (req, res) => {
     });
   }
 
-  // check if user made a review for the current spot
-  for (let i = 0; i < allReviews.length; i++) {
-    if (req.user.id === allReviews[i].userId) {
-      res.status(500);
-      return res.json({
-        message: "User already has a review for this spot",
-      });
+  const spotReviews = await spot.getReviews();
+
+  // check if user has a review for the current spot
+  if (spotReviews !== null) {
+    for (let i = 0; i < spotReviews.length; i++) {
+      if (req.user.id === spotReviews[i].userId) {
+        res.status(500);
+        return res.json({
+          message: "User already has a review for this spot",
+        });
+      }
     }
   }
 
@@ -359,7 +360,6 @@ router.post("/:spotId/reviews", async (req, res) => {
       review,
       stars,
     });
-    // console.log(newReview);
     res.status(201);
     return res.json(newReview);
   } else {
