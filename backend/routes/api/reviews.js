@@ -95,6 +95,11 @@ router.post("/:reviewId/images", async (req, res) => {
       reviewId: currReview.id,
     });
     return res.json({ id: newUrl.id, url: newUrl.url }); // remember this: including key-values
+  } else {
+    res.status(404);
+    return res.json({
+      message: "Review couldn't be found",
+    });
   }
 });
 
