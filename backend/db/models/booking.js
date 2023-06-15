@@ -9,8 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Booking.belongsTo(models.User, { foreignKey: "userId" });
-      // Booking.belongsTo(models.Spot, { foreignKey: "spotId" });
+      Booking.belongsTo(models.User, {
+        foreignKey: "userId",
+        onDelete: "CASCADE",
+      });
+      Booking.belongsTo(models.Spot, {
+        foreignKey: "spotId",
+        onDelete: "CASCADE",
+      });
     }
   }
   Booking.init(
@@ -24,13 +30,13 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       startDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         validate: {
           isDate: true,
         },
       },
       endDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         validate: {
           isDate: true,
         },

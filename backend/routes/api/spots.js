@@ -408,29 +408,29 @@ router.get("/:spotId/reviews", async (req, res) => {
   res.json(spotReviews);
 });
 
-// 10. create booking
-router.post("/:spotId/bookings", requireAuth, async (req, res) => {
-  const spot = await Spot.findByPk(req.params.spotId);
-  if (!spot) {
-    res.status(404);
-    return res.json({
-      message: "Spot couldn't be found",
-    });
-  }
-  // spot must not be booked by user already
-  if (spot.ownerId === req.user.id) {
-    console.log("spot is already owned by you baboon");
-  } else {
-    const { startDate, endDate } = req.body;
-    const newBooking = await Booking.create({
-      spotId: spot.spotId,
-      userId: req.user.id,
-      startDate,
-      endDate,
-    });
-    res.json(newBooking);
-  }
-  res.json(spot);
-});
+// 10. create booking - WIP
+// router.post("/:spotId/bookings", requireAuth, async (req, res) => {
+//   const spot = await Spot.findByPk(req.params.spotId);
+//   if (!spot) {
+//     res.status(404);
+//     return res.json({
+//       message: "Spot couldn't be found",
+//     });
+//   }
+//   // spot must not be booked by user already
+//   if (spot.ownerId === req.user.id) {
+//     console.log("spot is already owned by you baboon");
+//   } else {
+//     const { startDate, endDate } = req.body;
+//     const newBooking = await Booking.create({
+//       spotId: spot.spotId,
+//       userId: req.user.id,
+//       startDate,
+//       endDate,
+//     });
+//     res.json(newBooking);
+//   }
+//   res.json(spot);
+// });
 
 module.exports = router;
