@@ -205,23 +205,23 @@ router.post("/:spotId/images", async (req, res) => {
       message: "Spot couldn't be found",
     });
   }
-  const { url, preview } = req.body;
   if (req.user.id === spot.ownerId) {
-    spot.toJSON();
-    spot.url = url;
-    spot.preview = preview;
+    const { url, preview } = req.body;
+    const newSpot = await spot.createSpotImage({
+      url,
+      preview,
+    });
+    res.json({
+      id: newSpot.id,
+      url: newSpot.url,
+      preview: newSpot.preview,
+    });
   } else {
     res.statusCode = 404;
     return res.json({
       message: "Spot couldn't be found",
     });
   }
-
-  res.json({
-    id: spot.id,
-    url,
-    preview,
-  });
 });
 
 // 5. edit a spot
