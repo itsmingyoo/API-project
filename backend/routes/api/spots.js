@@ -72,7 +72,7 @@ router.get("/", async (req, res) => {
       {
         model: SpotImage,
         attributes: [["url", "previewImage"]],
-        // where: { preview: true },
+        // where: { preview: true }, dont need this
         require: false,
       },
     ],
