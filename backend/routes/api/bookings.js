@@ -135,4 +135,35 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
   res.json(book);
 });
 
+// delete a booking
+router.delete("/:bookingId", requireAuth, async (req, res) => {
+  const book = await Booking.findByPk(req.params.bookingId);
+  if (!book) {
+    res.status(404);
+    return res.json({
+      message: "Booking couldn't be found",
+    });
+  }
+  const currentDate = new Date().getTime();
+  const bookStarter = new Date(book.startDate).getTime();
+  const bookEnder = new Date(book.endDate).getTime();
+
+  if (currentDate > bookStarter && currentDate < bookEnder) {
+    res.status(403);
+    return res.json({
+      message: "Bookings that have been started can't be deleted",
+    });
+  }
+  if (book.userId === req.user.id) {
+    book.destroy();
+    res.json({
+      message: "Successfully deleted",
+    });
+  } else {
+    res.json({
+      message: "Booking must belong to user.",
+    });
+  }
+});
+
 module.exports = router;
