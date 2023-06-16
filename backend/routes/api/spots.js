@@ -86,6 +86,9 @@ router.get("/", async (req, res) => {
     if (spot.SpotImages[0]) {
       spot.previewImage = spot.SpotImages[0].previewImage;
       delete spot["SpotImages"]; // must use square bracket with '' to delete a key in an object
+    } else {
+      spot.previewImage = "imageurl.com";
+      delete spot["SpotImages"];
     }
     return spot;
   });
