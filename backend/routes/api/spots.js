@@ -44,9 +44,44 @@ const validateSpot = [
     .withMessage("Price per day is required"),
   handleValidationErrors,
 ];
+const validateQuery = [
+  check("page")
+    .exists({ checkFalsy: true })
+    .isFloat({ min: 1 })
+    .withMessage("Page must be greater than or equal to 1"),
+  check("size")
+    .exists({ checkFalsy: true })
+    .isFloat({ min: 1 })
+    .withMessage("Size must be greater than or equal to 1"),
+  check("maxLat")
+    .exists({ checkFalsy: true })
+    .isEmpty({ checkFalsy: false })
+    .withMessage("maxLat: Maximum latitude is invalid"),
+  check("minLat")
+    .exists({ checkFalsy: true })
+    .isEmpty({ checkFalsy: false })
+    .withMessage("minLat: Minimum latitude is invalid"),
+  check("minLat")
+    .exists({ checkFalsy: true })
+    .isEmpty({ checkFalsy: false })
+    .withMessage("minLat: Minimum latitude is invalid"),
+  check("minLat")
+    .exists({ checkFalsy: true })
+    .isEmpty({ checkFalsy: false })
+    .withMessage("minLat: Minimum latitude is invalid"),
+  check("minPrice")
+    .exists({ checkFalsy: true })
+    .isFloat({ min: 0 })
+    .withMessage("minPrice: Minimum price must be greater than or equal to 0"),
+  check("maxPrice")
+    .exists({ checkFalsy: true })
+    .isFloat({ min: 0 })
+    .withMessage("minPrice: Maximum price must be greater than or equal to 0"),
+  handleValidationErrors,
+];
 
 // 1. get all spots
-router.get("/", async (req, res) => {
+router.get("/", requireAuth, validateQuery, async (req, res) => {
   let where = {};
   let pagination = {};
   let { page, size } = req.query;
@@ -54,76 +89,55 @@ router.get("/", async (req, res) => {
   if (!size) size = 20;
   if (page > 10) page = 10;
   if (size > 20) size = 20;
+  page = parseInt(page);
+  size = parseInt(size);
   if (page > 0 && size > 0) {
-    pagination.limit = Number(size);
-    pagination.offset = Number(size * (page - 1));
+    pagination.limit = size;
+    pagination.offset = size * (page - 1);
   }
-  console.log(
-    "ayooooooooooooooooooooooooooooooooooooooooooooooooooo",
-    pagination
-  );
 
   let allSpots = await Spot.findAll({
-    attributes: [
-      "id",
-      "ownerId",
-      "address",
-      "city",
-      "state",
-      "country",
-      "lat",
-      "lng",
-      "name",
-      "description",
-      "price",
-      "createdAt",
-      "updatedAt",
-      // [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"], //eagerload w/ pagination no work
-    ],
     where,
     include: [
-      { model: Review, attributes: [] }, //eagerload w/ pagination no work
+      { model: Review, attributes: ["stars"] }, //include to lazy load avg then delete
       {
         model: SpotImage,
-        attributes: [["url", "previewImage"]],
-        // required: true,
+        attributes: ["url"],
+        where: { preview: true },
+        required: false,
       },
     ],
-    // group: ["Spot.id", "Reviews.id", "SpotImages.id"], //eagerload w/ pagination no work
     ...pagination,
   });
 
+  // LAZY LOADING
   let resObj = {};
-  resObj.Spots = allSpots.map(async (spot) => {
-    let stars = 0;
-    const allReviews = await spot.getReviews();
-    const totalReviews = await spot.countReviews();
-    // console.log("total", totalReviews);
-    await allReviews.map((review) => {
-      stars += review.stars;
-    });
-
+  resObj.Spots = allSpots.map((spot) => {
     spot = spot.toJSON();
-
-    //star rating / total ratings
-    const avgRating = Number(stars / totalReviews);
-    spot.avgRating = avgRating;
-    // console.log("avgrating", avgRating);
-
-    if (spot.SpotImages[0]) {
-      spot.previewImage = spot.SpotImages[0].previewImage;
-      delete spot["SpotImages"];
+    if (spot.Reviews.length) {
+      const sum = spot.Reviews.reduce((acc, curr) => {
+        return acc + curr.stars; // curr = object in the array containing stars
+      }, 0); // curr default value
+      spot.avgRating = sum / spot.Reviews.length;
     } else {
-      spot.previewImage = "imageurl.com";
-      delete spot["SpotImages"];
+      spot.avgRating = null;
     }
+
+    if (spot.SpotImages.length) {
+      // must use length not [0]
+      spot.previewImage = spot.SpotImages[0].url;
+    } else {
+      spot.previewImage = null;
+    }
+
+    delete spot["SpotImages"];
+    delete spot["Reviews"];
 
     return spot;
   });
 
   resObj.page = page;
   resObj.size = size;
-  console.log(resObj);
 
   res.json(resObj);
 });
