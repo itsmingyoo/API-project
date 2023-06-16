@@ -48,6 +48,20 @@ const validateSpot = [
 // 1. get all spots
 router.get("/", async (req, res) => {
   let where = {};
+  let pagination = {};
+  let { page, size } = req.query;
+  if (!page) page = 1;
+  if (!size) size = 20;
+  if (page > 10) page = 10;
+  if (size > 20) size = 20;
+  if (page > 0 && size > 0) {
+    pagination.limit = Number(size);
+    pagination.offset = Number(size * (page - 1));
+  }
+  console.log(
+    "ayooooooooooooooooooooooooooooooooooooooooooooooooooo",
+    pagination
+  );
 
   let allSpots = await Spot.findAll({
     attributes: [
@@ -64,34 +78,52 @@ router.get("/", async (req, res) => {
       "price",
       "createdAt",
       "updatedAt",
-      [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"],
+      // [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"], //eagerload w/ pagination no work
     ],
     where,
     include: [
-      { model: Review, attributes: [] },
+      { model: Review, attributes: [] }, //eagerload w/ pagination no work
       {
         model: SpotImage,
         attributes: [["url", "previewImage"]],
-        // where: { preview: true },
-        require: false,
+        // required: true,
       },
     ],
-    group: ["Spot.id", "Reviews.id", "SpotImages.id"],
+    // group: ["Spot.id", "Reviews.id", "SpotImages.id"], //eagerload w/ pagination no work
+    ...pagination,
   });
 
   let resObj = {};
-  resObj.Spots = allSpots.map((spot) => {
+  resObj.Spots = allSpots.map(async (spot) => {
+    let stars = 0;
+    const allReviews = await spot.getReviews();
+    const totalReviews = await spot.countReviews();
+    // console.log("total", totalReviews);
+    await allReviews.map((review) => {
+      stars += review.stars;
+    });
+
     spot = spot.toJSON();
-    // spot.SpotImages[0] points to an array, then you key into previewImage to grab the URL
+
+    //star rating / total ratings
+    const avgRating = Number(stars / totalReviews);
+    spot.avgRating = avgRating;
+    // console.log("avgrating", avgRating);
+
     if (spot.SpotImages[0]) {
       spot.previewImage = spot.SpotImages[0].previewImage;
-      delete spot["SpotImages"]; // must use square bracket with '' to delete a key in an object
+      delete spot["SpotImages"];
     } else {
       spot.previewImage = "imageurl.com";
       delete spot["SpotImages"];
     }
+
     return spot;
   });
+
+  resObj.page = page;
+  resObj.size = size;
+  console.log(resObj);
 
   res.json(resObj);
 });
