@@ -30,14 +30,16 @@ router.get("/current", requireAuth, async (req, res) => {
   });
   const bookingsJSON = allBookings.map((booking) => {
     booking = booking.toJSON();
-    if (booking.Spot.SpotImages !== null || booking.Spot.SpotImages) {
+    if (booking.Spot.SpotImages.length) {
       booking.Spot.previewImage = booking.Spot.SpotImages[0].previewImage;
       // console.log(booking);
       // console.log(booking.Spot.SpotImages[0].previewImage);
-      delete booking.Spot["createdAt"];
-      delete booking.Spot["updatedAt"];
-      delete booking.Spot["SpotImages"];
+    } else {
+      booking.Spot.previewImage = null;
     }
+    delete booking.Spot["createdAt"];
+    delete booking.Spot["updatedAt"];
+    delete booking.Spot["SpotImages"];
     return booking;
   });
   res.json({ Bookings: bookingsJSON });

@@ -296,6 +296,14 @@ router.post("/:spotId/images", async (req, res) => {
 router.put("/:spotId", getCurrentUser, async (req, res) => {
   const ownerId = req.currentUser.data.id;
   const spot = await Spot.findByPk(req.params.spotId);
+
+  if (!spot || spot === null) {
+    res.status(404);
+    return res.json({
+      message: "Spot couldn't be found",
+    });
+  }
+
   let editThisSpot = spot.toJSON();
   if (spot.ownerId === ownerId) {
     const {
@@ -386,8 +394,12 @@ router.get("/:spotId", async (req, res) => {
     group: ["Spot.id", "Reviews.id", "SpotImages.id", "User.id"],
   });
 
-  //   console.log(spot);
-  //   console.log(spot.id);
+  if (!spot || spot === null) {
+    res.status(404);
+    return res.json({
+      message: "Spot couldn't be found",
+    });
+  }
   spot = spot.toJSON();
   if (spot.ownerId !== null && spot.id !== null) {
     spot.Owner = spot.User;
