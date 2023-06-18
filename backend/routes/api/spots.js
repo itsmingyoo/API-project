@@ -1,4 +1,5 @@
 const express = require("express");
+const { Op } = require("sequelize");
 const {
   Spot,
   User,
@@ -54,33 +55,35 @@ const validateQuery = [
       throw new Error("Size must be greater than or equal to 1");
     }
   }),
+  //latlng
   check("maxLat").custom(async (value, { req }) => {
-    if (req.query.maxLat && req.query.maxLat < 0) {
+    if (req.query.maxLat && isNaN(Number(req.query.maxLat))) {
       throw new Error("Maximum latitude is invalid");
     }
   }),
   check("minLat").custom(async (value, { req }) => {
-    if (req.query.minLat && req.query.minLat < 0) {
+    if (req.query.minLat && isNaN(Number(req.query.minLat))) {
       throw new Error("Minimum latitude is invalid");
     }
   }),
   check("maxLng").custom(async (value, { req }) => {
-    if (req.query.maxLng && req.query.maxLng < 0) {
+    if (req.query.maxLng && isNaN(Number(req.query.maxLng))) {
       throw new Error("Maximum longitude is invalid");
     }
   }),
   check("minLng").custom(async (value, { req }) => {
-    if (req.query.minLng && req.query.minLng < 0) {
+    if (req.query.minLng && isNaN(Number(req.query.minLng))) {
       throw new Error("Minimum longitude is invalid");
     }
   }),
+  //price
   check("minPrice").custom(async (value, { req }) => {
-    if (req.query.minPrice && req.query.minPrice < 0) {
+    if (req.query.minPrice && Number(req.query.minPrice) < 0) {
       throw new Error("Minimum price must be greater than or equal to 0");
     }
   }),
   check("maxPrice").custom(async (value, { req }) => {
-    if (req.query.maxPrice && req.query.maxPrice < 0) {
+    if (req.query.maxPrice && Number(req.query.maxPrice) < 0) {
       throw new Error("Maximum price must be greater than or equal to 0");
     }
   }),
@@ -103,13 +106,48 @@ router.get("/", requireAuth, validateQuery, async (req, res) => {
     pagination.limit = size;
     pagination.offset = size * (page - 1);
   }
-
-  // if (minLat) where.minLat = minLat;
-  // if (maxLat) where.maxLat = maxLat;
-  // if (minLng) where.minLng = minLng;
-  // if (maxLng) where.maxLng = maxLng;
-  // if (minPrice && minPrice > 0) where.minPrice = minPrice;
-  // if (maxPrice && maxPrice > 0) where.maxPrice = maxPrice;
+  //Lat
+  if (minLat && maxLat)
+    where.lat = {
+      [Op.lte]: Number(maxLat),
+      [Op.gte]: Number(minLat),
+    };
+  if (minLat && !maxLat)
+    where.lat = {
+      [Op.gte]: Number(minLat),
+    };
+  if (!minLat && maxLat)
+    where.lat = {
+      [Op.lte]: Number(maxLat),
+    };
+  //lng
+  if (minLng && maxLng)
+    where.lng = {
+      [Op.lte]: Number(maxLng),
+      [Op.gte]: Number(minLng),
+    };
+  if (minLng && !maxLng)
+    where.lng = {
+      [Op.gte]: Number(minLng),
+    };
+  if (!minLng && maxLng)
+    where.lng = {
+      [Op.lte]: Number(maxLng),
+    };
+  // price
+  if (minPrice && maxPrice)
+    where.price = {
+      [Op.lte]: Number(maxPrice),
+      [Op.gte]: Number(minPrice),
+    };
+  if (minPrice && !maxPrice)
+    where.price = {
+      [Op.gte]: Number(minPrice),
+    };
+  if (!minPrice && maxPrice)
+    where.price = {
+      [Op.lte]: Number(maxPrice),
+    };
 
   let allSpots = await Spot.findAll({
     where,
