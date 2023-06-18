@@ -196,7 +196,7 @@ router.get("/", requireAuth, validateQuery, async (req, res) => {
 });
 
 // 2. Get all spots owned by current user
-router.get("/current", async (req, res) => {
+router.get("/current", requireAuth, async (req, res) => {
   const findSpots = await Spot.findAll({
     attributes: [
       "id",
@@ -256,7 +256,7 @@ router.get("/current", async (req, res) => {
 });
 
 // 3. Create a Spot
-router.post("/", getCurrentUser, validateSpot, async (req, res) => {
+router.post("/", requireAuth, validateSpot, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
   if (
@@ -286,7 +286,7 @@ router.post("/", getCurrentUser, validateSpot, async (req, res) => {
       },
     });
   }
-  const ownerId = req.currentUser.data.id;
+  const ownerId = req.user.id;
   const newSpot = await Spot.create({
     ownerId,
     address,
@@ -303,7 +303,7 @@ router.post("/", getCurrentUser, validateSpot, async (req, res) => {
 });
 
 // 4. add an image to a spot based on the spot's id
-router.post("/:spotId/images", async (req, res) => {
+router.post("/:spotId/images", requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
   if (!spot || spot === null) {
     res.statusCode = 404;
@@ -331,8 +331,8 @@ router.post("/:spotId/images", async (req, res) => {
 });
 
 // 5. edit a spot
-router.put("/:spotId", getCurrentUser, async (req, res) => {
-  const ownerId = req.currentUser.data.id;
+router.put("/:spotId", requireAuth, async (req, res) => {
+  const ownerId = req.user.id;
   const spot = await Spot.findByPk(req.params.spotId);
 
   if (!spot || spot === null) {
@@ -386,7 +386,7 @@ router.put("/:spotId", getCurrentUser, async (req, res) => {
 });
 
 // 6. delete route
-router.delete("/:spotId", async (req, res) => {
+router.delete("/:spotId", requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
   if (spot === null || !spot.ownerId) {
     return res.json({
@@ -453,7 +453,7 @@ router.get("/:spotId", async (req, res) => {
 });
 
 // 8. create a review for a spotId
-router.post("/:spotId/reviews", async (req, res) => {
+router.post("/:spotId/reviews", requireAuth, async (req, res) => {
   const spot = await Spot.findByPk(req.params.spotId);
   if (!spot) {
     res.status(404);
@@ -603,7 +603,7 @@ router.post("/:spotId/bookings", requireAuth, async (req, res) => {
     });
     res.json(newBooking);
   } else {
-    res.json("You already have a current booking for this spot.");
+    res.json({ message: "You currently own this spot" });
   }
 });
 
