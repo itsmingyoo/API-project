@@ -1,5 +1,4 @@
 const express = require("express");
-const { Op } = require("sequelize");
 const {
   Spot,
   User,
@@ -44,54 +43,116 @@ const validateSpot = [
     .withMessage("Price per day is required"),
   handleValidationErrors,
 ];
+const validateQuery = [
+  check("page").custom(async (value, { req }) => {
+    if (req.query.size && req.query.page < 1) {
+      throw new Error("Page must be greater than or equal to 1");
+    }
+  }),
+  check("size").custom(async (value, { req }) => {
+    if (req.query.size && req.query.size < 1) {
+      throw new Error("Size must be greater than or equal to 1");
+    }
+  }),
+  check("maxLat").custom(async (value, { req }) => {
+    if (req.query.maxLat && req.query.maxLat < 0) {
+      throw new Error("Maximum latitude is invalid");
+    }
+  }),
+  check("minLat").custom(async (value, { req }) => {
+    if (req.query.minLat && req.query.minLat < 0) {
+      throw new Error("Minimum latitude is invalid");
+    }
+  }),
+  check("maxLng").custom(async (value, { req }) => {
+    if (req.query.maxLng && req.query.maxLng < 0) {
+      throw new Error("Maximum longitude is invalid");
+    }
+  }),
+  check("minLng").custom(async (value, { req }) => {
+    if (req.query.minLng && req.query.minLng < 0) {
+      throw new Error("Minimum longitude is invalid");
+    }
+  }),
+  check("minPrice").custom(async (value, { req }) => {
+    if (req.query.minPrice && req.query.minPrice < 0) {
+      throw new Error("Minimum price must be greater than or equal to 0");
+    }
+  }),
+  check("maxPrice").custom(async (value, { req }) => {
+    if (req.query.maxPrice && req.query.maxPrice < 0) {
+      throw new Error("Maximum price must be greater than or equal to 0");
+    }
+  }),
+  handleValidationErrors,
+];
 
 // 1. get all spots
-router.get("/", async (req, res) => {
+router.get("/", requireAuth, validateQuery, async (req, res) => {
   let where = {};
+  let pagination = {};
+  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
+    req.query;
+  page = parseInt(page);
+  size = parseInt(size);
+  if (!page || isNaN(page)) page = 1;
+  if (!size || isNaN(size)) size = 20;
+  if (page > 10) page = 10;
+  if (size > 20) size = 20;
+  if (page > 0 && size > 0) {
+    pagination.limit = size;
+    pagination.offset = size * (page - 1);
+  }
+
+  // if (minLat) where.minLat = minLat;
+  // if (maxLat) where.maxLat = maxLat;
+  // if (minLng) where.minLng = minLng;
+  // if (maxLng) where.maxLng = maxLng;
+  // if (minPrice && minPrice > 0) where.minPrice = minPrice;
+  // if (maxPrice && maxPrice > 0) where.maxPrice = maxPrice;
 
   let allSpots = await Spot.findAll({
-    attributes: [
-      "id",
-      "ownerId",
-      "address",
-      "city",
-      "state",
-      "country",
-      "lat",
-      "lng",
-      "name",
-      "description",
-      "price",
-      "createdAt",
-      "updatedAt",
-      [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"],
-    ],
     where,
     include: [
-      { model: Review, attributes: [] },
+      { model: Review, attributes: ["stars"] }, //include to lazy load avg then delete
       {
         model: SpotImage,
-        attributes: [["url", "previewImage"]],
-        // where: { preview: true }, dont need this
-        require: false,
+        attributes: ["url"],
+        where: { preview: true },
+        required: false,
       },
     ],
-    group: ["Spot.id", "Reviews.id", "SpotImages.id"],
+    ...pagination,
   });
 
+  // LAZY LOADING
   let resObj = {};
   resObj.Spots = allSpots.map((spot) => {
     spot = spot.toJSON();
-    // spot.SpotImages[0] points to an array, then you key into previewImage to grab the URL
-    if (spot.SpotImages[0]) {
-      spot.previewImage = spot.SpotImages[0].previewImage;
-      delete spot["SpotImages"]; // must use square bracket with '' to delete a key in an object
+    if (spot.Reviews.length) {
+      const sum = spot.Reviews.reduce((acc, curr) => {
+        return acc + curr.stars; // curr = object in the array containing stars
+      }, 0); // curr default value
+      spot.avgRating = sum / spot.Reviews.length;
     } else {
-      spot.previewImage = "imageurl.com";
-      delete spot["SpotImages"];
+      spot.avgRating = null;
     }
+
+    if (spot.SpotImages.length) {
+      // must use length not [0]
+      spot.previewImage = spot.SpotImages[0].url;
+    } else {
+      spot.previewImage = null;
+    }
+
+    delete spot["SpotImages"];
+    delete spot["Reviews"];
+
     return spot;
   });
+
+  resObj.page = page;
+  resObj.size = size;
 
   res.json(resObj);
 });
@@ -235,6 +296,14 @@ router.post("/:spotId/images", async (req, res) => {
 router.put("/:spotId", getCurrentUser, async (req, res) => {
   const ownerId = req.currentUser.data.id;
   const spot = await Spot.findByPk(req.params.spotId);
+
+  if (!spot || spot === null) {
+    res.status(404);
+    return res.json({
+      message: "Spot couldn't be found",
+    });
+  }
+
   let editThisSpot = spot.toJSON();
   if (spot.ownerId === ownerId) {
     const {
@@ -325,8 +394,12 @@ router.get("/:spotId", async (req, res) => {
     group: ["Spot.id", "Reviews.id", "SpotImages.id", "User.id"],
   });
 
-  //   console.log(spot);
-  //   console.log(spot.id);
+  if (!spot || spot === null) {
+    res.status(404);
+    return res.json({
+      message: "Spot couldn't be found",
+    });
+  }
   spot = spot.toJSON();
   if (spot.ownerId !== null && spot.id !== null) {
     spot.Owner = spot.User;
