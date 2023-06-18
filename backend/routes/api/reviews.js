@@ -13,7 +13,7 @@ const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const router = express.Router();
 
 // 1. get all reviews for current user
-router.get("/current", async (req, res) => {
+router.get("/current", requireAuth, async (req, res) => {
   const reviews = await Review.findAll({
     attributes: [
       "id",
@@ -62,7 +62,7 @@ router.get("/current", async (req, res) => {
 });
 
 // 2. add image to a review based on the review's id
-router.post("/:reviewId/images", async (req, res) => {
+router.post("/:reviewId/images", requireAuth, async (req, res) => {
   let currReview = await Review.findByPk(req.params.reviewId, {
     include: {
       model: ReviewImage,
