@@ -537,6 +537,13 @@ router.post("/:spotId/bookings", requireAuth, async (req, res) => {
 
   //user input dates
   let { startDate, endDate } = req.body; // string date "yyyy-mm-dd"
+
+  if (!startDate || !endDate) {
+    res.status(404);
+    return res.json({
+      message: "Must provide a valid startDate and endDate",
+    });
+  }
   // convert dates to comparable numbers
   const startDateReq = new Date(startDate).getTime();
   const endDateReq = new Date(endDate).getTime();
