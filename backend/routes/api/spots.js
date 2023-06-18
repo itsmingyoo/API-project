@@ -1,5 +1,4 @@
 const express = require("express");
-const { Op } = require("sequelize");
 const {
   Spot,
   User,
@@ -45,38 +44,46 @@ const validateSpot = [
   handleValidationErrors,
 ];
 const validateQuery = [
-  check("page")
-    .exists({ checkFalsy: true })
-    .isFloat({ min: 1 })
-    .withMessage("Page must be greater than or equal to 1"),
-  check("size")
-    .exists({ checkFalsy: true })
-    .isFloat({ min: 1 })
-    .withMessage("Size must be greater than or equal to 1"),
-  check("maxLat")
-    .exists({ checkFalsy: true })
-    .isEmpty({ checkFalsy: false })
-    .withMessage("maxLat: Maximum latitude is invalid"),
-  check("minLat")
-    .exists({ checkFalsy: true })
-    .isEmpty({ checkFalsy: false })
-    .withMessage("minLat: Minimum latitude is invalid"),
-  check("minLat")
-    .exists({ checkFalsy: true })
-    .isEmpty({ checkFalsy: false })
-    .withMessage("minLat: Minimum latitude is invalid"),
-  check("minLat")
-    .exists({ checkFalsy: true })
-    .isEmpty({ checkFalsy: false })
-    .withMessage("minLat: Minimum latitude is invalid"),
-  check("minPrice")
-    .exists({ checkFalsy: true })
-    .isFloat({ min: 0 })
-    .withMessage("minPrice: Minimum price must be greater than or equal to 0"),
-  check("maxPrice")
-    .exists({ checkFalsy: true })
-    .isFloat({ min: 0 })
-    .withMessage("minPrice: Maximum price must be greater than or equal to 0"),
+  check("page").custom(async (value, { req }) => {
+    if (req.query.size && req.query.page < 1) {
+      throw new Error("Page must be greater than or equal to 1");
+    }
+  }),
+  check("size").custom(async (value, { req }) => {
+    if (req.query.size && req.query.size < 1) {
+      throw new Error("Size must be greater than or equal to 1");
+    }
+  }),
+  check("maxLat").custom(async (value, { req }) => {
+    if (req.query.maxLat && req.query.maxLat < 0) {
+      throw new Error("Maximum latitude is invalid");
+    }
+  }),
+  check("minLat").custom(async (value, { req }) => {
+    if (req.query.minLat && req.query.minLat < 0) {
+      throw new Error("Minimum latitude is invalid");
+    }
+  }),
+  check("maxLng").custom(async (value, { req }) => {
+    if (req.query.maxLng && req.query.maxLng < 0) {
+      throw new Error("Maximum longitude is invalid");
+    }
+  }),
+  check("minLng").custom(async (value, { req }) => {
+    if (req.query.minLng && req.query.minLng < 0) {
+      throw new Error("Minimum longitude is invalid");
+    }
+  }),
+  check("minPrice").custom(async (value, { req }) => {
+    if (req.query.minPrice && req.query.minPrice < 0) {
+      throw new Error("Minimum price must be greater than or equal to 0");
+    }
+  }),
+  check("maxPrice").custom(async (value, { req }) => {
+    if (req.query.maxPrice && req.query.maxPrice < 0) {
+      throw new Error("Maximum price must be greater than or equal to 0");
+    }
+  }),
   handleValidationErrors,
 ];
 
@@ -84,17 +91,25 @@ const validateQuery = [
 router.get("/", requireAuth, validateQuery, async (req, res) => {
   let where = {};
   let pagination = {};
-  let { page, size } = req.query;
-  if (!page) page = 1;
-  if (!size) size = 20;
-  if (page > 10) page = 10;
-  if (size > 20) size = 20;
+  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
+    req.query;
   page = parseInt(page);
   size = parseInt(size);
+  if (!page || isNaN(page)) page = 1;
+  if (!size || isNaN(size)) size = 20;
+  if (page > 10) page = 10;
+  if (size > 20) size = 20;
   if (page > 0 && size > 0) {
     pagination.limit = size;
     pagination.offset = size * (page - 1);
   }
+
+  // if (minLat) where.minLat = minLat;
+  // if (maxLat) where.maxLat = maxLat;
+  // if (minLng) where.minLng = minLng;
+  // if (maxLng) where.maxLng = maxLng;
+  // if (minPrice && minPrice > 0) where.minPrice = minPrice;
+  // if (maxPrice && maxPrice > 0) where.maxPrice = maxPrice;
 
   let allSpots = await Spot.findAll({
     where,
