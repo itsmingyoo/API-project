@@ -1,4 +1,5 @@
 const express = require("express");
+const { Op } = require("sequelize");
 const { Spot, SpotImage, Booking } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
@@ -61,6 +62,17 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
       message: "Booking must belong to user.",
     });
   }
+
+  // let spot = await Spot.findByPk(book.spotId);
+
+  // let allBookings = await spot.getBookings({
+  //   where: {
+  //     id: {
+  //       [Op.ne]: book.id,
+  //     },
+  //   },
+  // });
+  // return res.json(allBookings);
 
   book = book.toJSON();
 
