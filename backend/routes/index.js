@@ -7,6 +7,41 @@ const apiRouter = require("./api");
 
 router.use("/api", apiRouter);
 
+// ... after `router.use('/api', apiRouter);`
+
+// Static routes
+// Serve React build files in production
+if (process.env.NODE_ENV === "production") {
+  const path = require("path");
+  // Serve the frontend's index.html file at the root route
+  router.get("/", (req, res) => {
+    res.cookie("XSRF-TOKEN", req.csrfToken());
+    return res.sendFile(
+      path.resolve(__dirname, "../../frontend", "build", "index.html")
+    );
+  });
+
+  // Serve the static assets in the frontend's build folder
+  router.use(express.static(path.resolve("../frontend/build")));
+
+  // Serve the frontend's index.html file at all other routes NOT starting with /api
+  router.get(/^(?!\/?api).*/, (req, res) => {
+    res.cookie("XSRF-TOKEN", req.csrfToken());
+    return res.sendFile(
+      path.resolve(__dirname, "../../frontend", "build", "index.html")
+    );
+  });
+}
+
+// Add a XSRF-TOKEN cookie in development
+// this is another way to get XSRF-TOKEN cookie on your frontend app bc React frontend is on a diff server than the Express backend - only accessible in development and will restore the XSRF-TOKEN cookie
+if (process.env.NODE_ENV !== "production") {
+  router.get("/api/csrf/restore", (req, res) => {
+    res.cookie("XSRF-TOKEN", req.csrfToken());
+    return res.json({});
+  });
+}
+
 // This is the test route for initializing your app
 // router.get("/hello/world", function (req, res) {
 //   res.cookie("XSRF-TOKEN", req.csrfToken()); // requires matching tokens

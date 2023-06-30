@@ -22,10 +22,10 @@ router.use("/review-images", reviewImagesRouter);
 
 router.use("/bookings", bookingsRouter);
 
-// test route
-router.post("/test", function (req, res) {
-  res.json({ requestBody: req.body });
-});
+// test route - removed this after implementing the csrfFetch for the frontend
+// router.post("/test", function (req, res) {
+//   res.json({ requestBody: req.body });
+// });
 
 /* TESTING SET-TOKEN-COOKIE, RESTOREUSER, REQUIRE-AUTH
 // test route for restoreUser
