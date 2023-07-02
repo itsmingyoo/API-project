@@ -12,6 +12,7 @@ import App from "./App";
 import configureStore from "./store";
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 import * as sessionActions from "./store/session";
+import * as spotsActions from "./store/spots";
 
 const store = configureStore();
 
@@ -21,7 +22,18 @@ if (process.env.NODE_ENV !== "production") {
   window.csrfFetch = csrfFetch;
   window.store = store;
   window.sessionActions = sessionActions;
+  window.spotsActions = spotsActions;
 }
+// window.store.dispatch(window.sessionActions.logout());
+// window.store.dispatch(
+//   window.sessionActions.signup({
+//     username: "NewUser",
+//     firstName: "New",
+//     lastName: "User",
+//     email: "new@user.io",
+//     password: "password",
+//   })
+// );
 
 // Wrap the application with the Modal provider and render the Modal component
 // after the App component so that all the Modal content will be layered as

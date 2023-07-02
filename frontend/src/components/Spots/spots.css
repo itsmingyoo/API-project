@@ -1,0 +1,21 @@
+div {
+    border: 1px dotted white
+}
+
+img {
+    width: 200px;
+    height: 100px;
+}
+
+#spots-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#spot__item-info {
+    display: flex;
+}
+
+#spot__item-price{
+    display: flex;
+}
