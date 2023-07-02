@@ -30,3 +30,9 @@ img {
     display: flex;
     padding-left: 5px;
 }
+
+@media screen and (max-width: 1023px) {
+    #spot-item-container {
+        flex-basis: auto;
+    }
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { thunkGetSpots } from "../../store/spots";
 import SpotItem from "./SpotItem";
 
@@ -20,9 +20,9 @@ function AllSpots({ spots }) {
       {/* <h2>All Spots Test</h2> */}
       {spots.map((spot) => (
         <div key={spot.id} id="spot-item-container">
-          <Link to={`/spots/${spot.id}`} title={spot.name}>
+          <NavLink to={`/spots/${spot.id}`} title={spot.name}>
             <SpotItem spot={spot} />
-          </Link>
+          </NavLink>
         </div>
       ))}
       {/* <RenderComponentsHere /> */}
