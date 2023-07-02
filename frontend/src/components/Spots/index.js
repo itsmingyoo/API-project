@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { thunkGetSpots } from "../../store/spots";
 import SpotItem from "./SpotItem";
 
 import "./spots.css";
 
-function AllSpots() {
+function AllSpots({ spots }) {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(thunkGetSpots());
-  }, []);
+  //   useEffect(() => {
+  //     dispatch(thunkGetSpots());
+  //   }, []);
 
-  const allSpots = useSelector((state) => Object.values(state.spots));
-  if (!allSpots.length > 0) return null;
-  //   console.log("all spots array", allSpots);
+  //   const allSpots = useSelector((state) => Object.values(state.spots));
+  if (!spots.length > 0) return null;
+  //   console.log("all spots array", spots);
   return (
     <div id="spots-container">
       {/* <h2>All Spots Test</h2> */}
-      {allSpots.map((spot) => (
-        <div key={spot.id}>
-          <SpotItem spot={spot}>{spot.name}</SpotItem>
+      {spots.map((spot) => (
+        <div key={spot.id} id="spot-item-container">
+          <Link to={`/spots/${spot.id}`} title={spot.name}>
+            <SpotItem spot={spot} />
+          </Link>
         </div>
       ))}
       {/* <RenderComponentsHere /> */}
