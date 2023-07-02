@@ -35,6 +35,43 @@ img {
     text-decoration: none;
 }
 
+#spot-details__images {
+    display: flex;
+    justify-content: space-around;
+}
+
+.review-image {
+    width: 100%;
+    height: 100%;
+}
+
+#review-image__right {
+    display: flex;
+    flex-wrap: wrap;
+    width: 49%;
+    height: 100%;
+    padding: 0px 4px;
+    padding-top: 8px;
+}
+
+#review-image__left {
+    display: flex;
+    width: 50%;
+    height: 100%;
+    align-items: center;
+    padding: 2px 3px;
+}
+
+/* #review-image__1 {
+    width: 40%;
+} */
+
+#review-image__2, #review-image__3, #review-image__4, #review-image__5 {
+    width: 48%;
+    height: 50%;
+    padding: 3px 3px;
+}
+
 @media screen and (max-width: 1023px) {
     #spot-item-container {
         flex-basis: auto;

@@ -2,7 +2,8 @@ import { csrfFetch } from "./csrf";
 
 // action names
 const GET_SPOTS_ACTION = "spots/getSpotsAction";
-const GET_SPOT_ID = "spots/getSpotId";
+const GET_SPOT_ID_ACTION = "spots/getSpotIdAction";
+const GET_REVIEWS_ACTION = "spots/getReviewsAction";
 
 // actions
 const getSpotsAction = (spots) => {
@@ -13,9 +14,16 @@ const getSpotsAction = (spots) => {
   };
 };
 
-const getSpotId = (spot) => {
+const getSpotIdAction = (spot) => {
   return {
-    type: GET_SPOT_ID,
+    type: GET_SPOT_ID_ACTION,
+    spot,
+  };
+};
+
+const getReviewsAction = (spot) => {
+  return {
+    type: GET_REVIEWS_ACTION,
     spot,
   };
 };
@@ -32,7 +40,14 @@ export const thunkGetSpots = () => async (dispatch) => {
 export const thunkGetSpotId = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`);
   const data = await res.json();
-  dispatch(getSpotId(data));
+  dispatch(getSpotIdAction(data));
+  return res;
+};
+
+export const thunkGetReviews = (spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
+  const data = await res.json();
+  dispatch(getReviewsAction(data));
   return res;
 };
 
@@ -49,9 +64,14 @@ const spotsReducer = (state = {}, action) => {
       // console.log("all spots state", newState);
       return newState;
     }
-    case GET_SPOT_ID: {
+    case GET_SPOT_ID_ACTION: {
       newState = { ...state };
       newState.spot = action.spot;
+      return newState;
+    }
+    case GET_REVIEWS_ACTION: {
+      newState = { ...state };
+      newState.reviews = action.spot;
       return newState;
     }
     default:
