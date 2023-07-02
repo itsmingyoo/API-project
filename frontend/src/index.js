@@ -24,6 +24,7 @@ if (process.env.NODE_ENV !== "production") {
   window.sessionActions = sessionActions;
   window.spotsActions = spotsActions;
 }
+// window.store.dispatch(window.spotsActions.thunkGetSpotId(1))
 // window.store.dispatch(window.sessionActions.logout());
 // window.store.dispatch(
 //   window.sessionActions.signup({
