@@ -16,7 +16,7 @@ function AllSpots() {
   //   console.log("all spots array", allSpots);
   return (
     <div id="spots-container">
-      <h2>All Spots Test</h2>
+      {/* <h2>All Spots Test</h2> */}
       {allSpots.map((spot) => (
         <div key={spot.id}>
           <SpotItem spot={spot}>{spot.name}</SpotItem>
