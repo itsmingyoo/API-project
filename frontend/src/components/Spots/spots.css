@@ -62,14 +62,53 @@ img {
     padding: 2px 3px;
 }
 
-/* #review-image__1 {
-    width: 40%;
-} */
-
 #review-image {
     width: 48%;
     height: 50%;
     padding: 3px 3px;
+}
+
+#spot-details__container-description {
+    display: flex;
+    padding: 1rem;
+}
+
+#spot-details__owner-description {
+    flex-basis: 70%;
+    padding-right: 10px;
+}
+
+#spot-details__container-reservation {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 25%;
+    height: 40%;
+    border: 2px solid black;
+    padding: 10px 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+#spot-detail__price-rating {
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px dotted blue */
+}
+
+#spot-details__reserve-button {
+    padding: .6rem;
+    border: 1px solid black;
+    box-shadow: 4px 4px 4px black;
+    color: white;
+    background-color: red;
+}
+
+.spot-details__text {
+    font-weight: bold;
+}
+
+.spot-detail__avgRating {
+    margin-right: 8px;
 }
 
 @media screen and (max-width: 1023px) {

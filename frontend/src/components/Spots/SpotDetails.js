@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { thunkGetReviews, thunkGetSpotId } from "../../store/spots";
-// import "./spots.css";
+import { LoremIpsum, loremIpsum } from "react-lorem-ipsum";
 
 function SpotDetails() {
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ function SpotDetails() {
   }, [spotId, dispatch]);
 
   // console.log("reviews obj", spotReviewsArr);
-  // console.log("this is spot", spot);
+  console.log("this is spot", spot);
   if (!spotReviewsArr) return null;
   if (!spot) return null;
   const firstImage = spotReviewsArr[0].ReviewImages[0];
@@ -52,6 +52,35 @@ function SpotDetails() {
               />
             </div>
           ))}
+        </div>
+      </div>
+      <div id="spot-details__container-description">
+        <div id="spot-details__owner-description">
+          <h2>
+            Hosted by {spot.Owner.firstName} {spot.Owner.firstName}
+          </h2>
+          <div id="spot-details__spot-description">
+            <div className="spot-details__text">
+              <LoremIpsum />
+            </div>
+            <div className="spot-details__text">
+              <LoremIpsum />
+            </div>
+          </div>
+        </div>
+        <div id="spot-details__container-reservation">
+          <div id="spot-detail__price-rating">
+            <div>
+              <span>${spot.price}</span>
+            </div>
+            <div>
+              <span className="spot-detail__avgRating">
+                ★{spot.avgRating} ·
+              </span>
+              <span>{spot.numReviews} review(s)</span>
+            </div>
+          </div>
+          <button id="spot-details__reserve-button">Reserve</button>
         </div>
       </div>
     </div>
