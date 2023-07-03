@@ -16,19 +16,24 @@ function SpotDetails() {
     dispatch(thunkGetReviews(spotId));
   }, [spotId, dispatch]);
 
-  // console.log("reviews obj", spotReviewsArr);
-  console.log("this is spot", spot);
+  // console.log("this is spot", spot);
   if (!spotReviewsArr) return null;
   if (!spot) return null;
-  const firstImage = spotReviewsArr[0].ReviewImages[0];
-  const fourImages = [];
+  console.log("reviews Arr", spotReviewsArr);
 
-  for (let i = 1; i < 5; i++) {
-    const image = spotReviewsArr[0].ReviewImages[i];
-    fourImages.push(image);
+  const firstImage = [];
+  const fourImages = [];
+  if (spotReviewsArr.ReviewImages && spotReviewsArr.ReviewImages.length > 0) {
+    firstImage.push(spotReviewsArr[0].ReviewImages[0]);
+    for (let i = 1; i < 5; i++) {
+      const image = spotReviewsArr[0].ReviewImages[i];
+      if (image !== null || image !== undefined) {
+        fourImages.push(image);
+      }
+    }
+    // console.log("first image", firstImage);
+    // console.log("four image", fourImages);
   }
-  // console.log("first image", firstImage);
-  // console.log("four image", fourImages);
 
   return (
     <div id="spot-details__container">
@@ -44,14 +49,18 @@ function SpotDetails() {
           <img src={firstImage.url} />
         </div>
         <div id="review-image__right">
-          {fourImages.map((image) => (
-            <div key={image.id} id={`review-image`}>
-              <img
-                src={image.url}
-                className={`review-image__${image.id} review-image`}
-              />
-            </div>
-          ))}
+          {fourImages.length > 0 &&
+            fourImages.map((image) => (
+              <div key={image.id} id={`review-image`}>
+                <img
+                  src={image.url}
+                  className={`review-image__${image.id} review-image`}
+                />
+              </div>
+            ))}
+          {(!fourImages || fourImages.length === 0) && (
+            <div>Images Coming Soon!</div>
+          )}
         </div>
       </div>
       <div id="spot-details__container-description">
