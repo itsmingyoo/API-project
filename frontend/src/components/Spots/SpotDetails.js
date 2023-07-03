@@ -19,7 +19,7 @@ function SpotDetails() {
   // console.log("this is spot", spot);
   if (!spotReviewsArr) return null;
   if (!spot) return null;
-  console.log("reviews Arr", spotReviewsArr);
+  // console.log("reviews Arr", spotReviewsArr);
 
   const firstImage = [];
   const fourImages = [];
@@ -43,10 +43,17 @@ function SpotDetails() {
           {spot.city}, {spot.state}, {spot.country}
         </div>
       </div>
-      {/* images */}
-      <div id="spot-details__images">
+
+      {/* images component */}
+      <div id="spot-details__container-images">
         <div id="review-image__left">
-          <img src={firstImage.url} />
+          {firstImage.length > 0 ? (
+            <img src={firstImage.url} />
+          ) : (
+            <div className="spot-details__coming-soon-main">
+              Image Coming Soon!
+            </div>
+          )}
         </div>
         <div id="review-image__right">
           {fourImages.length > 0 &&
@@ -59,10 +66,24 @@ function SpotDetails() {
               </div>
             ))}
           {(!fourImages || fourImages.length === 0) && (
-            <div>Images Coming Soon!</div>
+            <>
+              <div className="spot-details__coming-soon">
+                Image Coming Soon!
+              </div>
+              <div className="spot-details__coming-soon">
+                Image Coming Soon!
+              </div>
+              <div className="spot-details__coming-soon">
+                Image Coming Soon!
+              </div>
+              <div className="spot-details__coming-soon">
+                Image Coming Soon!
+              </div>
+            </>
           )}
         </div>
       </div>
+      {/* description component */}
       <div id="spot-details__container-description">
         <div id="spot-details__owner-description">
           <h2>
@@ -90,6 +111,26 @@ function SpotDetails() {
             </div>
           </div>
           <button id="spot-details__reserve-button">Reserve</button>
+        </div>
+      </div>
+
+      <hr></hr>
+
+      {/* reviews component */}
+      <div id="spot-details__container-reviews">
+        {/* Star rating && # of Reviews */}
+        <div>
+          <span className="spot-detail__avgRating">★{spot.avgRating} ·</span>
+          <span>{spot.numReviews} review(s)</span>
+        </div>
+        {/* Reviews - First name, Date, Review - 'POST REVIEW' button hidden for users not logged in */}
+        <div id="spot-details__user-review">
+          <div>Firstname</div>
+          <div>Month Year</div>
+          <div>
+            Review Paragraph:
+            <LoremIpsum />
+          </div>
         </div>
       </div>
     </div>
