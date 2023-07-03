@@ -91,7 +91,7 @@ const validateQuery = [
 ];
 
 // 1. get all spots
-router.get("/", requireAuth, validateQuery, async (req, res) => {
+router.get("/", validateQuery, async (req, res) => {
   let where = {};
   let pagination = {};
   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
