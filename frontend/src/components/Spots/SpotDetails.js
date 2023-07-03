@@ -19,11 +19,11 @@ function SpotDetails() {
   // console.log("this is spot", spot);
   if (!spotReviewsArr) return null;
   if (!spot) return null;
-  // console.log("reviews Arr", spotReviewsArr);
+  // console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
 
   const firstImage = [];
   const fourImages = [];
-  if (spotReviewsArr.ReviewImages && spotReviewsArr.ReviewImages.length > 0) {
+  if (spotReviewsArr[0].ReviewImages.length) {
     firstImage.push(spotReviewsArr[0].ReviewImages[0]);
     for (let i = 1; i < 5; i++) {
       const image = spotReviewsArr[0].ReviewImages[i];
@@ -31,9 +31,9 @@ function SpotDetails() {
         fourImages.push(image);
       }
     }
-    // console.log("first image", firstImage);
-    // console.log("four image", fourImages);
   }
+  // console.log("first image", firstImage);
+  // console.log("four image", fourImages);
 
   return (
     <div id="spot-details__container">
@@ -48,7 +48,7 @@ function SpotDetails() {
       <div id="spot-details__container-images">
         <div id="review-image__left">
           {firstImage.length > 0 ? (
-            <img src={firstImage.url} />
+            <img src={firstImage[0].url} />
           ) : (
             <div className="spot-details__coming-soon-main">
               Image Coming Soon!
