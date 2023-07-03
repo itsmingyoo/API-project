@@ -35,7 +35,7 @@ img {
     text-decoration: none;
 }
 
-#spot-details__images {
+#spot-details__container-images {
     display: flex;
     justify-content: space-around;
 }
@@ -101,6 +101,25 @@ img {
     box-shadow: 4px 4px 4px black;
     color: white;
     background-color: red;
+}
+
+.spot-details__coming-soon-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 425px;
+    border: 1px solid black;
+}
+
+.spot-details__coming-soon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45%;
+    height: 200px;
+    margin: 4px;
+    border: 1px solid black;
 }
 
 .spot-details__text {
