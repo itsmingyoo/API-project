@@ -1,6 +1,7 @@
 import { csrfFetch } from "./csrf";
 
 // action names
+const CREATE_SPOT_ACTION = "spots/createSpotAction";
 const GET_SPOTS_ACTION = "spots/getSpotsAction";
 const GET_SPOT_ID_ACTION = "spots/getSpotIdAction";
 const GET_REVIEWS_ACTION = "spots/getReviewsAction";
@@ -28,6 +29,13 @@ const getReviewsAction = (reviews) => {
   };
 };
 
+const createSpotAction = (formData) => {
+  return {
+    type: CREATE_SPOT_ACTION,
+    formData,
+  };
+};
+
 // thunks
 export const thunkGetSpots = () => async (dispatch) => {
   const res = await csrfFetch("/api/spots");
@@ -44,6 +52,29 @@ export const thunkGetSpotId = (spotId) => async (dispatch) => {
   return res;
 };
 
+export const thunkCreateSpot = (formData) => async (dispatch) => {
+  const { address, city, state, country, lat, lng, name, description, price } =
+    formData;
+  const res = await csrfFetch("/api/spots", {
+    method: "POST",
+    body: JSON.stringify({
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+    }),
+  });
+
+  const data = await res.json();
+  dispatch(createSpotAction(data));
+  return res;
+};
+
 export const thunkGetReviews = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
   const data = await res.json();
@@ -51,13 +82,18 @@ export const thunkGetReviews = (spotId) => async (dispatch) => {
   return res;
 };
 
-// reducer
-const spotsReducer = (state = {}, action) => {
+// reducer - initialState = spots : { fill in your kvp }
+let initialState = {
+  allSpots: {},
+  singleSpot: {},
+};
+const spotsReducer = (state = initialState, action) => {
+  console.log("state=====", state);
   let newState;
   switch (action.type) {
     case GET_SPOTS_ACTION: {
       // console.log("get spots reducer", action);
-      newState = {};
+      newState = { ...state };
       action.spots.forEach((spot) => {
         newState[spot.id] = spot;
       });
@@ -73,6 +109,13 @@ const spotsReducer = (state = {}, action) => {
       newState = { ...state, Reviews: [] };
       action.reviews.forEach((review) => newState.Reviews.push(review));
       // console.log("this is the new state", newState);
+      return newState;
+    }
+    case CREATE_SPOT_ACTION: {
+      newState = { ...state, [action.formData.id]: { ...action.formData } };
+      // console.log("this is formdata", action.formData);
+      // newState[action.formData.id] = action.formData;
+      // newState.spots = {[action.formData.id]: { ...action.formData }};
       return newState;
     }
     default:

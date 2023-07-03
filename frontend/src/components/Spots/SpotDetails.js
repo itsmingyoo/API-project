@@ -14,11 +14,12 @@ function SpotDetails() {
   useEffect(() => {
     dispatch(thunkGetSpotId(spotId));
     dispatch(thunkGetReviews(spotId));
+
+    // cleanup function : allows the clearing of the cache so when you go from spots/1 to home to spots/2 it doesnt do that "pause" which shows the prev state then load the next state; so if you add the function here, you're good to go
   }, [spotId, dispatch]);
 
   // console.log("this is spot", spot);
-  if (!spotReviewsArr) return null;
-  if (!spot) return null;
+  if (!spotReviewsArr || !spot) return null;
   // console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
 
   const firstImage = [];

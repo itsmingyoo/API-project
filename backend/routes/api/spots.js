@@ -99,9 +99,9 @@ router.get("/", validateQuery, async (req, res) => {
   page = parseInt(page);
   size = parseInt(size);
   if (!page || isNaN(page)) page = 1;
-  if (!size || isNaN(size)) size = 20;
+  if (!size || isNaN(size)) size = 25;
   if (page > 10) page = 10;
-  if (size > 20) size = 20;
+  if (size > 20) size = 25;
   if (page > 0 && size > 0) {
     pagination.limit = size;
     pagination.offset = size * (page - 1);
