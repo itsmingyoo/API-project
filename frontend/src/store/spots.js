@@ -21,10 +21,10 @@ const getSpotIdAction = (spot) => {
   };
 };
 
-const getReviewsAction = (spot) => {
+const getReviewsAction = (reviews) => {
   return {
     type: GET_REVIEWS_ACTION,
-    spot,
+    reviews,
   };
 };
 
@@ -70,8 +70,9 @@ const spotsReducer = (state = {}, action) => {
       return newState;
     }
     case GET_REVIEWS_ACTION: {
-      newState = { ...state };
-      newState.reviews = action.spot;
+      newState = { ...state, Reviews: [] };
+      action.reviews.forEach((review) => newState.Reviews.push(review));
+      // console.log("this is the new state", newState);
       return newState;
     }
     default:
