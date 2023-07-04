@@ -87,22 +87,23 @@ let initialState = {
   allSpots: {},
   singleSpot: {},
 };
+
 const spotsReducer = (state = initialState, action) => {
-  console.log("state=====", state);
+  // console.log("state=====", state);
   let newState;
   switch (action.type) {
     case GET_SPOTS_ACTION: {
       // console.log("get spots reducer", action);
       newState = { ...state };
       action.spots.forEach((spot) => {
-        newState[spot.id] = spot;
+        newState.allSpots[spot.id] = spot;
       });
       // console.log("all spots state", newState);
       return newState;
     }
     case GET_SPOT_ID_ACTION: {
       newState = { ...state };
-      newState.spot = action.spot;
+      newState.singleSpot = action.spot;
       return newState;
     }
     case GET_REVIEWS_ACTION: {

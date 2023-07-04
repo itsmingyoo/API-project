@@ -14,7 +14,7 @@ function App() {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
     dispatch(thunkGetSpots());
   }, [dispatch]);
-  const spots = useSelector((state) => Object.values(state.spots));
+  const spots = useSelector((state) => Object.values(state.spots.allSpots));
   return (
     <>
       <Navigation isLoaded={isLoaded} />

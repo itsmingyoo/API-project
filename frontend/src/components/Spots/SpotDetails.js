@@ -10,7 +10,7 @@ function SpotDetails() {
   spotId = parseInt(spotId);
 
   const spotReviewsArr = useSelector((state) => state.spots.Reviews);
-  const spot = useSelector((state) => state.spots.spot);
+  const spot = useSelector((state) => state.spots.singleSpot);
   useEffect(() => {
     dispatch(thunkGetSpotId(spotId));
     dispatch(thunkGetReviews(spotId));
