@@ -89,16 +89,13 @@ let initialState = {
 };
 
 const spotsReducer = (state = initialState, action) => {
-  // console.log("state=====", state);
   let newState;
   switch (action.type) {
     case GET_SPOTS_ACTION: {
-      // console.log("get spots reducer", action);
       newState = { ...state };
       action.spots.forEach((spot) => {
         newState.allSpots[spot.id] = spot;
       });
-      // console.log("all spots state", newState);
       return newState;
     }
     case GET_SPOT_ID_ACTION: {
@@ -109,14 +106,10 @@ const spotsReducer = (state = initialState, action) => {
     case GET_REVIEWS_ACTION: {
       newState = { ...state, Reviews: [] };
       action.reviews.forEach((review) => newState.Reviews.push(review));
-      // console.log("this is the new state", newState);
       return newState;
     }
     case CREATE_SPOT_ACTION: {
       newState = { ...state, [action.formData.id]: { ...action.formData } };
-      // console.log("this is formdata", action.formData);
-      // newState[action.formData.id] = action.formData;
-      // newState.spots = {[action.formData.id]: { ...action.formData }};
       return newState;
     }
     default:

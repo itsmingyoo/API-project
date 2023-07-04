@@ -95,7 +95,7 @@ img {
     /* border: 1px dotted blue */
 }
 
-#spot-details__reserve-button {
+#spot-details__reserve-button, #create-spot-button{
     padding: .6rem;
     border: 1px solid black;
     box-shadow: 4px 4px 4px black;
@@ -128,6 +128,41 @@ img {
 
 .spot-detail__avgRating {
     margin-right: 8px;
+}
+
+#form__main-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#form__city-state {
+    display: flex;
+    flex-direction: row;
+}
+
+.form__city-state {
+    display: flex;
+    flex-direction: column;
+}
+
+#form__lat-lng {
+    display: flex;
+    flex-direction: row;
+}
+
+.form__lat-lng {
+    display: flex;
+    flex-direction: column;
+}
+
+#form__owner-description {
+    height: 200px;
+    width: 100%;
+}
+
+#form__place-photos {
+    display: flex;
+    flex-direction: column;
 }
 
 @media screen and (max-width: 1023px) {
