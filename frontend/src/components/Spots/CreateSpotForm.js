@@ -4,13 +4,26 @@ import { thunkCreateSpot } from "../../store/spots";
 import { useHistory } from "react-router-dom";
 import "./spots.css";
 
-function CreateSpot(formData) {
+function CreateSpot() {
   // useSelector to grab user input info
   // useEffect -> dispatch -> thunk that grabs user info
   // onSubmit button - sends data to backend, preventDefault, history.push(redirect)
   // create form
   const history = useHistory();
   const dispatch = useDispatch();
+  // set these in order top-down
+  const [country, setCountry] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
+  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
   //   useEffect(() => {
   //     dispatch(thunkCreateSpot(formData));
   //   }, [dispatch]);
@@ -27,9 +40,27 @@ function CreateSpot(formData) {
   //     };
   //   }, [count]);
 
+  useEffect(() => {
+    const errors = {};
+    if (country.length < 2)
+      errors["country"] = "Country must be 2 or more characters";
+    // useSelector to grab existing addresses in order to compare if they are unique in the system or not
+  });
   const onSubmit = (e) => {
     e.preventDefault();
-    // setHasSubmitted(true)
+    setHasSubmitted(true);
+    const formData = {
+      country,
+      address,
+      city,
+      state,
+      lat,
+      lng,
+      description,
+      title,
+      price,
+      previewImage,
+    };
     dispatch(thunkCreateSpot(formData));
     console.log("formData");
     history.push("/"); //should redirect to the new spot with the spot details
@@ -39,7 +70,7 @@ function CreateSpot(formData) {
   return (
     <div>
       <hr></hr>
-      <form id="form__main-container">
+      <form id="form__main-container" onSubmit={onSubmit}>
         <h1>Create a new Spot</h1>
         <div>
           <h2>Where's your place located?</h2>
@@ -49,27 +80,67 @@ function CreateSpot(formData) {
           </p>
         </div>
         <label>Country</label>
-        <input type="text" name="country" placeholder="Country" />
+        <input
+          type="text"
+          name="country"
+          placeholder="Country"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          required
+        />
         <label>Street Address</label>
-        <input type="text" name="address" placeholder="Address" />
+        <input
+          type="text"
+          name="address"
+          placeholder="Address"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          required
+        />
         <div id="form__city-state">
           <div className="form__city-state">
             <label>City</label>
-            <input type="text" name="city" placeholder="City" />
+            <input
+              type="text"
+              name="city"
+              placeholder="City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              required
+            />
           </div>
           <div className="form__city-state">
             <label>State</label>
-            <input type="text" name="state" placeholder="STATE" />
+            <input
+              type="text"
+              name="state"
+              placeholder="STATE"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              required
+            />
           </div>
         </div>
         <div id="form__lat-lng">
           <div className="form__lat-lng">
             <label>Latitude</label>
-            <input type="text" name="lat" placeholder="Latitude" />
+            <input
+              type="text"
+              name="lat"
+              placeholder="Latitude"
+              value={lat}
+              onChange={(e) => setLat(e.target.value)}
+            />
           </div>
           <div className="form__lat-lng">
             <label>Longitude</label>
-            <input type="text" name="lng" placeholder="Longitude" />
+            <input
+              type="text"
+              name="lng"
+              placeholder="Longitude"
+              value={lng}
+              onChange={(e) => setLng(e.target.value)}
+            />
           </div>
         </div>
         <hr></hr>
@@ -85,6 +156,9 @@ function CreateSpot(formData) {
               type="text"
               name="description"
               placeholder="Please write at least 30 characters"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
             />
           </div>
         </div>
@@ -95,7 +169,14 @@ function CreateSpot(formData) {
             Catch guests' attention with a spot title that highlights what makes
             your place special.
           </p>
-          <input type="text" name="title" placeholder="Name of your spot" />
+          <input
+            type="text"
+            name="title"
+            placeholder="Name of your spot"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
         </div>
         <div id="form__place-price">
           <h2>Set a base price for your spot</h2>
@@ -109,6 +190,9 @@ function CreateSpot(formData) {
               type="text"
               name="price"
               placeholder="Price per night (USD)"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              required
             />
           </div>
         </div>
@@ -119,13 +203,21 @@ function CreateSpot(formData) {
             type="text"
             name="preview-link"
             placeholder="Preview Image Url"
+            value={previewImage}
+            onChange={(e) => setPreviewImage(e.target.value)}
+            required
           />
           <input type="text" name="image-url" placeholder="Image URL" />
           <input type="text" name="image-url" placeholder="Image URL" />
           <input type="text" name="image-url" placeholder="Image URL" />
           <input type="text" name="image-url" placeholder="Image URL" />
         </div>
-        <button id="create-spot-button">Create Spot</button>
+        <button
+          id="create-spot-button"
+          disabled={Object.keys(validationErrors).length > 0}
+        >
+          Create Spot
+        </button>
       </form>
     </div>
   );
