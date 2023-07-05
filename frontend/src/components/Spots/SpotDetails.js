@@ -16,35 +16,21 @@ function SpotDetails() {
   //spotReviewsArr is an array of obj: ReviewImages: [], User: {}, etc
   const spotReviewsArr = useSelector((state) => state.spots.Reviews);
   const spot = useSelector((state) => state.spots.singleSpot);
+  const sessionUser = useSelector((state) => state.session.user);
 
-  // if spot doesn't match the spotId then dont render - this will fix the issue of loading a stale state
   useEffect(() => {
     dispatch(thunkGetSpotId(spotId));
     dispatch(thunkGetReviews(spotId));
-
-    // cleanup function : allows the clearing of the cache so when you go from spots/1 to home to spots/2 it doesnt do that "pause" which shows the prev state then load the next state; so if you add the function here, you're good to go
-    // return () => dispatch(clearSpotDetailsAction());
   }, [spotId, dispatch]);
 
   // console.log("this is spot", spot);
-  if (!spotReviewsArr || !spot || spot.id !== spotId) return null;
-  console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
+  if (!spotReviewsArr || !spot || spot.id !== spotId || !sessionUser)
+    return null;
+  // console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
 
   // object: fit-cover css???
   const firstImage = spot.SpotImages?.[0].url;
   const fourImages = []; // array of obj, must key into url kvp
-
-  /* review-images - keep here till needed
-  if (spotReviewsArr[0].ReviewImages.length) {
-    firstImage.push(spotReviewsArr[0].ReviewImages[0]);
-    for (let i = 1; i < 5; i++) {
-      const image = spotReviewsArr[0].ReviewImages[i];
-      if (image !== null || image !== undefined) {
-        fourImages.push(image);
-      }
-    }
-  }
-  */
 
   if (spot.SpotImages.length > 1) {
     for (let i = 1; i < 5; i++) {
@@ -59,10 +45,12 @@ function SpotDetails() {
 
   return (
     <div id="spot-details__container">
-      <div id="spot-detail__name">{spot.name}</div>
+      <h2 id="spot-detail__name">{spot.name}</h2>
       <div id="spot-details__location">
         <div>
-          {spot.city}, {spot.state}, {spot.country}
+          <h4>
+            {spot.city}, {spot.state}, {spot.country}
+          </h4>
         </div>
       </div>
 
@@ -105,42 +93,6 @@ function SpotDetails() {
             </>
           )}
         </div>
-        {/* <div id="review-image__left">
-          {firstImage.length > 0 ? (
-            <img src={firstImage[0].url} />
-          ) : (
-            <div className="spot-details__coming-soon-main">
-              Image Coming Soon!
-            </div>
-          )}
-        </div> */}
-        {/* <div id="review-image__right">
-          {fourImages.length > 0 &&
-            fourImages.map((image) => (
-              <div key={image.id} id={`review-image`}>
-                <img
-                  src={image.url}
-                  className={`review-image__${image.id} review-image`}
-                />
-              </div>
-            ))}
-          {(!fourImages || fourImages.length === 0) && (
-            <>
-              <div className="spot-details__coming-soon">
-                Image Coming Soon!
-              </div>
-              <div className="spot-details__coming-soon">
-                Image Coming Soon!
-              </div>
-              <div className="spot-details__coming-soon">
-                Image Coming Soon!
-              </div>
-              <div className="spot-details__coming-soon">
-                Image Coming Soon!
-              </div>
-            </>
-          )}
-        </div> */}
       </div>
       {/* description component */}
       <div id="spot-details__container-description">
@@ -186,6 +138,9 @@ function SpotDetails() {
         <div>
           <span className="spot-detail__avgRating">★{spot.avgRating} ·</span>
           <span>{spot.numReviews} review(s)</span>
+          {sessionUser && (
+            <button id="spot-detail__create-review">Post Your Review</button>
+          )}
         </div>
         {/* Reviews - First name, Date, Review - 'POST REVIEW' button hidden for users not logged in */}
         <div id="spot-details__user-review">
@@ -212,7 +167,9 @@ function SpotDetails() {
               const reviewMonthName = monthNames[reviewMonth];
               return (
                 <div key={review.User.id} id="user-review__container">
-                  <div>{review["User"]["firstName"]}</div>
+                  <div id="user-review__first-name">
+                    {review["User"]["firstName"]}
+                  </div>
                   <div>
                     {reviewMonthName} {reviewYear}
                   </div>

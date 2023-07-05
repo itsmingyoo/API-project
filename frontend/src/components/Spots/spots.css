@@ -195,6 +195,17 @@ img {
     flex-direction: column;
 }
 
+/* User Review */
+#user-review__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#user-review__first-name {
+    font-weight: bold;
+}
+
 @media screen and (max-width: 1023px) {
     #spot-item-container {
         flex-basis: auto;
