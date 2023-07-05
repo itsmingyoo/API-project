@@ -50,6 +50,9 @@ function CreateSpot() {
     if (description.length < 30 && description.length > 0) {
       errors["description"] = "Description must be at least 30 characters";
     }
+    if (previewImage.length > 0 && !previewImage.includes(".com")) {
+      errors["previewImage"] = "Preview Image must be a valid URL";
+    }
     setValidationErrors(errors);
   }, [country, address, city, state, description, title, price, previewImage]);
 
@@ -202,7 +205,7 @@ function CreateSpot() {
           <div id="form__price">
             $
             <input
-              type="text"
+              type="number"
               name="price"
               placeholder="Price per night (USD)"
               value={price}
@@ -216,7 +219,7 @@ function CreateSpot() {
           <h2>Liven up your spot with photos</h2>
           <p>Submit a link to at least one </p>
           <input
-            type="text"
+            type="url"
             name="preview-link"
             placeholder="Preview Image Url"
             value={previewImage}
@@ -226,10 +229,10 @@ function CreateSpot() {
           {validationErrors.previewImage && (
             <p>{validationErrors.previewImage}</p>
           )}
-          <input type="text" name="image-url" placeholder="Image URL" />
-          <input type="text" name="image-url" placeholder="Image URL" />
-          <input type="text" name="image-url" placeholder="Image URL" />
-          <input type="text" name="image-url" placeholder="Image URL" />
+          <input type="url" name="image-url" placeholder="Image URL" />
+          <input type="url" name="image-url" placeholder="Image URL" />
+          <input type="url" name="image-url" placeholder="Image URL" />
+          <input type="url" name="image-url" placeholder="Image URL" />
         </div>
         <button
           id="create-spot-button"
