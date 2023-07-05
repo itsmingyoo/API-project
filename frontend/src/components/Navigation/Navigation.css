@@ -1,3 +1,18 @@
 .hidden {
     display: none
 }
+
+#header-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+}
+
+#header-content__home {
+    text-decoration: none;
+    color: black
+}
+
+#header-content__create-spot {
+    color: black;
+}

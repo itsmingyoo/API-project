@@ -5,6 +5,7 @@ const CREATE_SPOT_ACTION = "spots/createSpotAction";
 const GET_SPOTS_ACTION = "spots/getSpotsAction";
 const GET_SPOT_ID_ACTION = "spots/getSpotIdAction";
 const GET_REVIEWS_ACTION = "spots/getReviewsAction";
+const CLEAR_SPOT_DETAILS = "spots/clearSpotDetailsAction";
 
 // actions
 const getSpotsAction = (spots) => {
@@ -34,6 +35,11 @@ const createSpotAction = (formData) => {
     type: CREATE_SPOT_ACTION,
     formData,
   };
+};
+
+// CLEANUP FUNCTION - DOESN'T REQUIRE A THUNK
+export const clearSpotDetailsAction = () => {
+  return { type: CLEAR_SPOT_DETAILS };
 };
 
 // thunks
@@ -110,6 +116,12 @@ const spotsReducer = (state = initialState, action) => {
     }
     case CREATE_SPOT_ACTION: {
       newState = { ...state, [action.formData.id]: { ...action.formData } };
+      return newState;
+    }
+    // NON-THUNK RESET-FUNCTION FOR SPOT-DETAILS
+    case CLEAR_SPOT_DETAILS: {
+      newState = { ...state };
+      newState.singleSpot = {};
       return newState;
     }
     default:

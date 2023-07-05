@@ -1,7 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { thunkGetReviews, thunkGetSpotId } from "../../store/spots";
+import {
+  thunkGetReviews,
+  thunkGetSpotId,
+  clearSpotDetailsAction,
+} from "../../store/spots";
 import { LoremIpsum, loremIpsum } from "react-lorem-ipsum";
 
 function SpotDetails() {
@@ -16,6 +20,8 @@ function SpotDetails() {
     dispatch(thunkGetReviews(spotId));
 
     // cleanup function : allows the clearing of the cache so when you go from spots/1 to home to spots/2 it doesnt do that "pause" which shows the prev state then load the next state; so if you add the function here, you're good to go
+    // return () => dispatch(clearSpotDetailsAction());
+    // maybe attach this onto the 'home' button bc it errors while on the page, should just run this cleanup function when redirecting out of the spotdetails page and into the all spots page
   }, [spotId, dispatch]);
 
   // console.log("this is spot", spot);

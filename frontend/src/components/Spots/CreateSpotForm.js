@@ -32,7 +32,7 @@ function CreateSpot(formData) {
     // setHasSubmitted(true)
     dispatch(thunkCreateSpot(formData));
     console.log("formData");
-    history.push("/");
+    history.push("/"); //should redirect to the new spot with the spot details
   };
 
   // TODO for <hr> line, cant display in the form so workaround with border-top attribute
