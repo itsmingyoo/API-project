@@ -42,10 +42,17 @@ function CreateSpot() {
 
   useEffect(() => {
     const errors = {};
-    if (country.length < 2)
-      errors["country"] = "Country must be 2 or more characters";
+    if (country.length < 0) errors["country"] = "Country is required";
     // useSelector to grab existing addresses in order to compare if they are unique in the system or not
-  });
+    if (state.length > 2 || state.length < 2) {
+      errors["state"] = "State must be 2 characters";
+    }
+    if (description.length < 30 && description.length > 0) {
+      errors["description"] = "Description must be at least 30 characters";
+    }
+    setValidationErrors(errors);
+  }, [country, address, city, state, description, title, price, previewImage]);
+
   const onSubmit = (e) => {
     e.preventDefault();
     setHasSubmitted(true);
@@ -62,7 +69,7 @@ function CreateSpot() {
       previewImage,
     };
     dispatch(thunkCreateSpot(formData));
-    console.log("formData");
+    console.log(formData);
     history.push("/"); //should redirect to the new spot with the spot details
   };
 
@@ -88,6 +95,7 @@ function CreateSpot() {
           onChange={(e) => setCountry(e.target.value)}
           required
         />
+        {validationErrors.country && <p>{validationErrors.country}</p>}
         <label>Street Address</label>
         <input
           type="text"
@@ -97,6 +105,7 @@ function CreateSpot() {
           onChange={(e) => setAddress(e.target.value)}
           required
         />
+        {validationErrors.address && <p>{validationErrors.address}</p>}
         <div id="form__city-state">
           <div className="form__city-state">
             <label>City</label>
@@ -108,6 +117,7 @@ function CreateSpot() {
               onChange={(e) => setCity(e.target.value)}
               required
             />
+            {validationErrors.city && <p>{validationErrors.city}</p>}
           </div>
           <div className="form__city-state">
             <label>State</label>
@@ -119,6 +129,7 @@ function CreateSpot() {
               onChange={(e) => setState(e.target.value)}
               required
             />
+            {validationErrors.state && <p>{validationErrors.state}</p>}
           </div>
         </div>
         <div id="form__lat-lng">
@@ -160,6 +171,9 @@ function CreateSpot() {
               onChange={(e) => setDescription(e.target.value)}
               required
             />
+            {validationErrors.description && (
+              <p>{validationErrors.description}</p>
+            )}
           </div>
         </div>
         <hr></hr>
@@ -177,6 +191,7 @@ function CreateSpot() {
             onChange={(e) => setTitle(e.target.value)}
             required
           />
+          {validationErrors.title && <p>{validationErrors.title}</p>}
         </div>
         <div id="form__place-price">
           <h2>Set a base price for your spot</h2>
@@ -194,6 +209,7 @@ function CreateSpot() {
               onChange={(e) => setPrice(e.target.value)}
               required
             />
+            {validationErrors.price && <p>{validationErrors.price}</p>}
           </div>
         </div>
         <div id="form__place-photos">
@@ -207,6 +223,9 @@ function CreateSpot() {
             onChange={(e) => setPreviewImage(e.target.value)}
             required
           />
+          {validationErrors.previewImage && (
+            <p>{validationErrors.previewImage}</p>
+          )}
           <input type="text" name="image-url" placeholder="Image URL" />
           <input type="text" name="image-url" placeholder="Image URL" />
           <input type="text" name="image-url" placeholder="Image URL" />
