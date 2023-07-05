@@ -13,6 +13,7 @@ function SpotDetails() {
   let { spotId } = useParams();
   spotId = parseInt(spotId);
 
+  //spotReviewsArr is an array of obj: ReviewImages: [], User: {}, etc
   const spotReviewsArr = useSelector((state) => state.spots.Reviews);
   const spot = useSelector((state) => state.spots.singleSpot);
 
@@ -23,27 +24,29 @@ function SpotDetails() {
 
     // cleanup function : allows the clearing of the cache so when you go from spots/1 to home to spots/2 it doesnt do that "pause" which shows the prev state then load the next state; so if you add the function here, you're good to go
     // return () => dispatch(clearSpotDetailsAction());
-    // maybe attach this onto the 'home' button bc it errors while on the page, should just run this cleanup function when redirecting out of the spotdetails page and into the all spots page
   }, [spotId, dispatch]);
 
   // console.log("this is spot", spot);
   if (!spotReviewsArr || !spot || spot.id !== spotId) return null;
-  // console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
+  console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
 
   // object: fit-cover css???
   const firstImage = spot.SpotImages?.[0].url;
   const fourImages = []; // array of obj, must key into url kvp
-  // if (spotReviewsArr[0].ReviewImages.length) {
-  //   firstImage.push(spotReviewsArr[0].ReviewImages[0]);
-  //   for (let i = 1; i < 5; i++) {
-  //     const image = spotReviewsArr[0].ReviewImages[i];
-  //     if (image !== null || image !== undefined) {
-  //       fourImages.push(image);
-  //     }
-  //   }
-  // }
+
+  /* review-images - keep here till needed
+  if (spotReviewsArr[0].ReviewImages.length) {
+    firstImage.push(spotReviewsArr[0].ReviewImages[0]);
+    for (let i = 1; i < 5; i++) {
+      const image = spotReviewsArr[0].ReviewImages[i];
+      if (image !== null || image !== undefined) {
+        fourImages.push(image);
+      }
+    }
+  }
+  */
+
   if (spot.SpotImages.length > 1) {
-    // firstImage.push(spotReviewsArr[0].ReviewImages[0]);
     for (let i = 1; i < 5; i++) {
       const image = spot.SpotImages[i];
       if (image !== null || image !== undefined) {
@@ -181,12 +184,37 @@ function SpotDetails() {
         </div>
         {/* Reviews - First name, Date, Review - 'POST REVIEW' button hidden for users not logged in */}
         <div id="spot-details__user-review">
-          <div>Firstname</div>
-          <div>Month Year</div>
-          <div>
-            Review Paragraph:
-            <LoremIpsum />
-          </div>
+          {spotReviewsArr.length > 0 &&
+            spotReviewsArr.map((review) => {
+              const reviewDate = review["createdAt"].split("-");
+              // console.log("in map for reviewDate", reviewDate);
+              const monthNames = {
+                "01": "January",
+                "02": "February",
+                "03": "March",
+                "04": "April",
+                "05": "May",
+                "06": "June",
+                "07": "July",
+                "08": "August",
+                "09": "September",
+                10: "October",
+                11: "November",
+                12: "December",
+              };
+              const reviewYear = reviewDate[0];
+              const reviewMonth = reviewDate[1];
+              const reviewMonthName = monthNames[reviewMonth];
+              return (
+                <div key={review.User.id} id="user-review__container">
+                  <div>{review["User"]["firstName"]}</div>
+                  <div>
+                    {reviewMonthName} {reviewYear}
+                  </div>
+                  <div>{review["review"]}</div>
+                </div>
+              );
+            })}
         </div>
       </div>
     </div>
