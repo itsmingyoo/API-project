@@ -15,6 +15,8 @@ function SpotDetails() {
 
   const spotReviewsArr = useSelector((state) => state.spots.Reviews);
   const spot = useSelector((state) => state.spots.singleSpot);
+
+  // if spot doesn't match the spotId then dont render - this will fix the issue of loading a stale state
   useEffect(() => {
     dispatch(thunkGetSpotId(spotId));
     dispatch(thunkGetReviews(spotId));
@@ -25,15 +27,25 @@ function SpotDetails() {
   }, [spotId, dispatch]);
 
   // console.log("this is spot", spot);
-  if (!spotReviewsArr || !spot) return null;
+  if (!spotReviewsArr || !spot || spot.id !== spotId) return null;
   // console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
 
-  const firstImage = [];
-  const fourImages = [];
-  if (spotReviewsArr[0].ReviewImages.length) {
-    firstImage.push(spotReviewsArr[0].ReviewImages[0]);
+  // object: fit-cover css???
+  const firstImage = spot.SpotImages?.[0].url;
+  const fourImages = []; // array of obj, must key into url kvp
+  // if (spotReviewsArr[0].ReviewImages.length) {
+  //   firstImage.push(spotReviewsArr[0].ReviewImages[0]);
+  //   for (let i = 1; i < 5; i++) {
+  //     const image = spotReviewsArr[0].ReviewImages[i];
+  //     if (image !== null || image !== undefined) {
+  //       fourImages.push(image);
+  //     }
+  //   }
+  // }
+  if (spot.SpotImages.length > 1) {
+    // firstImage.push(spotReviewsArr[0].ReviewImages[0]);
     for (let i = 1; i < 5; i++) {
-      const image = spotReviewsArr[0].ReviewImages[i];
+      const image = spot.SpotImages[i];
       if (image !== null || image !== undefined) {
         fourImages.push(image);
       }
@@ -53,7 +65,44 @@ function SpotDetails() {
 
       {/* images component */}
       <div id="spot-details__container-images">
-        <div id="review-image__left">
+        <div id="spot-image__left">
+          {firstImage ? (
+            <img src={firstImage} />
+          ) : (
+            <div className="spot-details__coming-soon-main">
+              Image Coming Soon!
+            </div>
+          )}
+        </div>
+        <div id="spot-image__right">
+          {fourImages.length > 0 &&
+            fourImages.map((image) => (
+              <div key={image.id} id={`spot-image`}>
+                {/* {console.log("inside map", image)} */}
+                <img
+                  src={image.url}
+                  className={`spot-image__${image.id} spot-image`}
+                />
+              </div>
+            ))}
+          {(!fourImages || fourImages.length === 0) && (
+            <>
+              <div className="spot-details__coming-soon">
+                Image Coming Soon!
+              </div>
+              <div className="spot-details__coming-soon">
+                Image Coming Soon!
+              </div>
+              <div className="spot-details__coming-soon">
+                Image Coming Soon!
+              </div>
+              <div className="spot-details__coming-soon">
+                Image Coming Soon!
+              </div>
+            </>
+          )}
+        </div>
+        {/* <div id="review-image__left">
           {firstImage.length > 0 ? (
             <img src={firstImage[0].url} />
           ) : (
@@ -61,8 +110,8 @@ function SpotDetails() {
               Image Coming Soon!
             </div>
           )}
-        </div>
-        <div id="review-image__right">
+        </div> */}
+        {/* <div id="review-image__right">
           {fourImages.length > 0 &&
             fourImages.map((image) => (
               <div key={image.id} id={`review-image`}>
@@ -88,7 +137,7 @@ function SpotDetails() {
               </div>
             </>
           )}
-        </div>
+        </div> */}
       </div>
       {/* description component */}
       <div id="spot-details__container-description">
