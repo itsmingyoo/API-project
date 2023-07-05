@@ -169,7 +169,12 @@ function SpotDetails() {
               <span>{spot.numReviews} review(s)</span>
             </div>
           </div>
-          <button id="spot-details__reserve-button">Reserve</button>
+          <button
+            id="spot-details__reserve-button"
+            onClick={() => alert("Feature Coming Soon...")}
+          >
+            Reserve
+          </button>
         </div>
       </div>
 
