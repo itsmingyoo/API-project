@@ -59,26 +59,18 @@ export const thunkGetSpotId = (spotId) => async (dispatch) => {
 };
 
 export const thunkCreateSpot = (formData) => async (dispatch) => {
-  const { address, city, state, country, lat, lng, name, description, price } =
-    formData;
-  const res = await csrfFetch("/api/spots", {
-    method: "POST",
-    body: JSON.stringify({
-      address,
-      city,
-      state,
-      country,
-      lat,
-      lng,
-      name,
-      description,
-      price,
-    }),
-  });
+  try {
+    const res = await csrfFetch("/api/spots", {
+      method: "POST",
+      body: JSON.stringify({ formData }),
+    });
 
-  const data = await res.json();
-  dispatch(createSpotAction(data));
-  return res;
+    const data = await res.json();
+    dispatch(createSpotAction(data));
+    return res;
+  } catch (e) {
+    return await e.json();
+  }
 };
 
 export const thunkGetReviews = (spotId) => async (dispatch) => {

@@ -16,7 +16,7 @@ function CreateSpot() {
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [description, setDescription] = useState("");
-  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [previewImage, setPreviewImage] = useState("");
   const [imageOne, setImageOne] = useState("");
@@ -95,38 +95,51 @@ function CreateSpot() {
     city,
     state,
     description,
-    title,
+    name,
     price,
     previewImage,
-    allSpots,
     imageOne,
     imageTwo,
     imageThree,
     imageFour,
   ]);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    setHasSubmitted(true);
     const formData = {
       country,
       address,
       city,
       state,
-      lat,
-      lng,
+      lat: Math.random(),
+      lng: Math.random(),
       description,
-      title,
-      price,
+      name,
+      price: Number(price),
       previewImage,
       imageOne,
       imageTwo,
       imageThree,
       imageFour,
     };
-    dispatch(thunkCreateSpot(formData));
-    console.log(formData);
-    history.push("/"); //should redirect to the new spot with the spot details
+    const res = await dispatch(thunkCreateSpot(formData));
+
+    const dispatchErrors = {};
+    if (address === "") dispatchErrors["address"] = res.errors.address;
+    if (city === "") dispatchErrors["city"] = res.errors.city;
+    if (state === "") dispatchErrors["state"] = res.errors.state;
+    if (country === "") dispatchErrors["country"] = res.errors.country;
+    if (name === "") dispatchErrors["name"] = res.errors.name;
+    if (description === "" || description.length < 30)
+      dispatchErrors["description"] = res.errors.description;
+    if (price === "" || isNaN(Number(price)))
+      dispatchErrors["price"] = res.errors.price;
+    setValidationErrors(dispatchErrors);
+
+    if (dispatchErrors.length === 0 || !dispatchErrors) {
+      setHasSubmitted(true);
+      history.push("/"); //should redirect to the new spot with the spot details
+    }
   };
 
   // TODO for <hr> line, cant display in the form so workaround with border-top attribute
@@ -152,7 +165,6 @@ function CreateSpot() {
           placeholder="Country"
           value={country}
           onChange={(e) => setCountry(e.target.value)}
-          required
         />
         <label>
           Street Address{" "}
@@ -164,7 +176,6 @@ function CreateSpot() {
           placeholder="Address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          required
         />
         <div id="form__city-state">
           <div className="form__city-state">
@@ -178,7 +189,6 @@ function CreateSpot() {
               placeholder="City"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              required
             />
           </div>
           <div className="form__city-state">
@@ -192,7 +202,6 @@ function CreateSpot() {
               placeholder="STATE"
               value={state}
               onChange={(e) => setState(e.target.value)}
-              required
             />
           </div>
         </div>
@@ -233,7 +242,6 @@ function CreateSpot() {
               placeholder="Please write at least 30 characters"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              required
             />
             {validationErrors.description && (
               <p>{validationErrors.description}</p>
@@ -249,13 +257,12 @@ function CreateSpot() {
           </p>
           <input
             type="text"
-            name="title"
+            name="name"
             placeholder="Name of your spot"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
-          {validationErrors.title && <p>{validationErrors.title}</p>}
+          {validationErrors.name && <p>{validationErrors.name}</p>}
         </div>
         <div id="form__place-price">
           <h2>Set a base price for your spot</h2>
@@ -271,7 +278,6 @@ function CreateSpot() {
               placeholder="Price per night (USD)"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              required
             />
             {validationErrors.price && <p>{validationErrors.price}</p>}
           </div>
@@ -285,7 +291,6 @@ function CreateSpot() {
             placeholder="Preview Image Url"
             value={previewImage}
             onChange={(e) => setPreviewImage(e.target.value)}
-            required
           />
           {validationErrors.previewImage && (
             <p>{validationErrors.previewImage}</p>
@@ -319,12 +324,7 @@ function CreateSpot() {
             onChange={(e) => setImageFour(e.target.value)}
           />
         </div>
-        <button
-          id="create-spot-button"
-          disabled={Object.keys(validationErrors).length > 0}
-        >
-          Create Spot
-        </button>
+        <button id="create-spot-button">Create Spot</button>
       </form>
     </div>
   );
