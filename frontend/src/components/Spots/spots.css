@@ -206,6 +206,10 @@ img {
     font-weight: bold;
 }
 
+.errors {
+    color: red;
+}
+
 @media screen and (max-width: 1023px) {
     #spot-item-container {
         flex-basis: auto;

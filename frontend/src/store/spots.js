@@ -62,7 +62,8 @@ export const thunkCreateSpot = (formData) => async (dispatch) => {
   try {
     const res = await csrfFetch("/api/spots", {
       method: "POST",
-      body: JSON.stringify({ formData }),
+      // headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
     });
 
     const data = await res.json();
@@ -107,7 +108,13 @@ const spotsReducer = (state = initialState, action) => {
       return newState;
     }
     case CREATE_SPOT_ACTION: {
-      newState = { ...state, [action.formData.id]: { ...action.formData } };
+      newState = {
+        ...state,
+        allSpots: {
+          ...state.allSpots,
+          [action.formData.id]: action.formData,
+        },
+      };
       return newState;
     }
     // NON-THUNK RESET-FUNCTION FOR SPOT-DETAILS

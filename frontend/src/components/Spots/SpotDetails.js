@@ -25,7 +25,7 @@ function SpotDetails() {
   // console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
 
   // object: fit-cover css???
-  const firstImage = spot.SpotImages?.[0].url;
+  const firstImage = spot ? spot?.SpotImages?.[0]?.url : [];
   const fourImages = []; // array of obj, must key into url kvp
 
   if (spot.SpotImages.length > 1) {

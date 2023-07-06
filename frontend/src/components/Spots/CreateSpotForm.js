@@ -23,7 +23,6 @@ function CreateSpot() {
   const [imageTwo, setImageTwo] = useState("");
   const [imageThree, setImageThree] = useState("");
   const [imageFour, setImageFour] = useState("");
-  const [hasSubmitted, setHasSubmitted] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   //   useEffect(() => {
   //     dispatch(thunkCreateSpot(formData));
@@ -111,16 +110,11 @@ function CreateSpot() {
       address,
       city,
       state,
-      lat: Math.random(),
-      lng: Math.random(),
+      lat: 31,
+      lng: 31,
       description,
       name,
       price: Number(price),
-      previewImage,
-      imageOne,
-      imageTwo,
-      imageThree,
-      imageFour,
     };
     const res = await dispatch(thunkCreateSpot(formData));
 
@@ -130,16 +124,16 @@ function CreateSpot() {
     if (state === "") dispatchErrors["state"] = res.errors.state;
     if (country === "") dispatchErrors["country"] = res.errors.country;
     if (name === "") dispatchErrors["name"] = res.errors.name;
-    if (description === "" || description.length < 30)
+    if (description === "")
       dispatchErrors["description"] = res.errors.description;
-    if (price === "" || isNaN(Number(price)))
-      dispatchErrors["price"] = res.errors.price;
+    if (price === "") dispatchErrors["price"] = res.errors.price;
     setValidationErrors(dispatchErrors);
+    console.log("inside onSubmit", res, dispatchErrors, !validationErrors);
 
-    if (dispatchErrors.length === 0 || !dispatchErrors) {
-      setHasSubmitted(true);
-      history.push("/"); //should redirect to the new spot with the spot details
+    if (Object.values(validationErrors).length === 0) {
+      history.push(`/`); //should redirect to the new spot with the spot details
     }
+    // history.push("/");
   };
 
   // TODO for <hr> line, cant display in the form so workaround with border-top attribute
@@ -157,7 +151,9 @@ function CreateSpot() {
         </div>
         <label>
           Country{" "}
-          {validationErrors.country && <span>{validationErrors.country}</span>}
+          {validationErrors.country && (
+            <span className="errors">{validationErrors.country}</span>
+          )}
         </label>
         <input
           type="text"
@@ -168,7 +164,9 @@ function CreateSpot() {
         />
         <label>
           Street Address{" "}
-          {validationErrors.address && <span>{validationErrors.address}</span>}
+          {validationErrors.address && (
+            <span className="errors">{validationErrors.address}</span>
+          )}
         </label>
         <input
           type="text"
@@ -181,7 +179,9 @@ function CreateSpot() {
           <div className="form__city-state">
             <label>
               City{" "}
-              {validationErrors.city && <span>{validationErrors.city}</span>}
+              {validationErrors.city && (
+                <span className="errors">{validationErrors.city}</span>
+              )}
             </label>
             <input
               type="text"
@@ -194,7 +194,9 @@ function CreateSpot() {
           <div className="form__city-state">
             <label>
               State{" "}
-              {validationErrors.state && <span>{validationErrors.state}</span>}
+              {validationErrors.state && (
+                <span className="errors">{validationErrors.state}</span>
+              )}
             </label>
             <input
               type="text"
@@ -244,7 +246,7 @@ function CreateSpot() {
               onChange={(e) => setDescription(e.target.value)}
             />
             {validationErrors.description && (
-              <p>{validationErrors.description}</p>
+              <p className="errors">{validationErrors.description}</p>
             )}
           </div>
         </div>
@@ -262,7 +264,9 @@ function CreateSpot() {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          {validationErrors.name && <p>{validationErrors.name}</p>}
+          {validationErrors.name && (
+            <p className="errors">{validationErrors.name}</p>
+          )}
         </div>
         <div id="form__place-price">
           <h2>Set a base price for your spot</h2>
@@ -279,7 +283,9 @@ function CreateSpot() {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
-            {validationErrors.price && <p>{validationErrors.price}</p>}
+            {validationErrors.price && (
+              <p className="errors">{validationErrors.price}</p>
+            )}
           </div>
         </div>
         <div id="form__place-photos">
@@ -293,7 +299,7 @@ function CreateSpot() {
             onChange={(e) => setPreviewImage(e.target.value)}
           />
           {validationErrors.previewImage && (
-            <p>{validationErrors.previewImage}</p>
+            <p className="errors">{validationErrors.previewImage}</p>
           )}
           <input
             type="url"
