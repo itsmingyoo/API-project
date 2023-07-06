@@ -5,6 +5,7 @@ const CREATE_SPOT_ACTION = "spots/createSpotAction";
 const GET_SPOTS_ACTION = "spots/getSpotsAction";
 const GET_SPOT_ID_ACTION = "spots/getSpotIdAction";
 const GET_REVIEWS_ACTION = "spots/getReviewsAction";
+const GET_USER_REVIEWS_ACTION = "spots/getUserReviewsAction";
 const CLEAR_SPOT_DETAILS = "spots/clearSpotDetailsAction";
 
 // actions
@@ -38,6 +39,13 @@ const createSpotAction = (formData, image) => {
   };
 };
 
+const getUserReviewsAction = (userId) => {
+  return {
+    type: GET_USER_REVIEWS_ACTION,
+    userId,
+  };
+};
+
 // CLEANUP FUNCTION - DOESN'T REQUIRE A THUNK
 export const clearSpotDetailsAction = () => {
   return { type: CLEAR_SPOT_DETAILS };
@@ -66,9 +74,9 @@ export const thunkCreateSpot = (formData, image) => async (dispatch) => {
       body: JSON.stringify(formData),
     });
 
-    console.log("in the thunk image", image); //returns url
+    // console.log("in the thunk image", image); //returns url
     const newSpot = await res.json();
-    console.log("in the thunk newSpot", newSpot);
+    // console.log("in the thunk newSpot", newSpot);
     let newImage = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
       method: "POST",
       body: JSON.stringify({
@@ -90,6 +98,14 @@ export const thunkGetReviews = (spotId) => async (dispatch) => {
   const data = await res.json();
   dispatch(getReviewsAction(data));
   return res;
+};
+
+export const thunkGetUserReviews = (userId) => async (dispatch) => {
+  let user = await csrfFetch("/api/spots/current");
+  user = await user.json();
+  console.log("this is the user", user);
+  dispatch(getUserReviewsAction(user.id));
+  return user;
 };
 
 // reducer - initialState = spots : { fill in your kvp }
@@ -129,6 +145,10 @@ const spotsReducer = (state = initialState, action) => {
           },
         },
       };
+      return newState;
+    }
+    case GET_USER_REVIEWS_ACTION: {
+      newState = { ...state };
       return newState;
     }
     // NON-THUNK RESET-FUNCTION FOR SPOT-DETAILS
