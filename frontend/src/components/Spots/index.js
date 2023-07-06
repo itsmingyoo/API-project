@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { thunkGetSpots } from "../../store/spots";
 import SpotItem from "./SpotItem";
 
 import "./spots.css";
 
 function AllSpots({ spots }) {
-  // const dispatch = useDispatch();
-  //   useEffect(() => {
-  //     dispatch(thunkGetSpots());
-  //   }, []);
-  //   const allSpots = useSelector((state) => Object.values(state.spots));
   if (!spots.length > 0) return null;
-  //   console.log("all spots array", spots);
   return (
     <div id="spots-container">
       {spots.map((spot) => (
