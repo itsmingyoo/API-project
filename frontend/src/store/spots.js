@@ -30,10 +30,11 @@ const getReviewsAction = (reviews) => {
   };
 };
 
-const createSpotAction = (formData) => {
+const createSpotAction = (formData, image) => {
   return {
     type: CREATE_SPOT_ACTION,
-    formData,
+    payload: formData,
+    image,
   };
 };
 
@@ -58,17 +59,27 @@ export const thunkGetSpotId = (spotId) => async (dispatch) => {
   return res;
 };
 
-export const thunkCreateSpot = (formData) => async (dispatch) => {
+export const thunkCreateSpot = (formData, image) => async (dispatch) => {
   try {
     const res = await csrfFetch("/api/spots", {
       method: "POST",
-      // headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
 
-    const data = await res.json();
-    dispatch(createSpotAction(data));
-    return res;
+    console.log("in the thunk image", image); //returns url
+    const newSpot = await res.json();
+    console.log("in the thunk newSpot", newSpot);
+    let newImage = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
+      method: "POST",
+      body: JSON.stringify({
+        url: image,
+        preview: true,
+      }),
+    });
+
+    newImage = await newImage.json();
+    await dispatch(createSpotAction(newSpot, newImage));
+    return newSpot;
   } catch (e) {
     return await e.json();
   }
@@ -112,7 +123,10 @@ const spotsReducer = (state = initialState, action) => {
         ...state,
         allSpots: {
           ...state.allSpots,
-          [action.formData.id]: action.formData,
+          [action.payload.id]: {
+            ...action.payload,
+            previewImage: action.image,
+          },
         },
       };
       return newState;

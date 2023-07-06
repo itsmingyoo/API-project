@@ -53,11 +53,11 @@ function CreateSpot() {
       else if (res.length === 0) return true;
     };
     if (!isValidAddress(allSpots, address)) {
-      errors["address"] = "Unique address is required";
+      errors["address"] = "Address must be unique";
     }
 
     if (state.length > 2 || state.length < 2) {
-      errors["state"] = "State must be 2 characters";
+      errors["state"] = "State must be capitalized and 2 characters";
     }
 
     if (description.length < 30 && description.length > 0) {
@@ -116,7 +116,8 @@ function CreateSpot() {
       name,
       price: Number(price),
     };
-    const res = await dispatch(thunkCreateSpot(formData));
+    const res = await dispatch(thunkCreateSpot(formData, previewImage));
+    // console.log("in the submit, res", res);
 
     const dispatchErrors = {};
     if (address === "") dispatchErrors["address"] = res.errors.address;
@@ -128,12 +129,11 @@ function CreateSpot() {
       dispatchErrors["description"] = res.errors.description;
     if (price === "") dispatchErrors["price"] = res.errors.price;
     setValidationErrors(dispatchErrors);
-    console.log("inside onSubmit", res, dispatchErrors, !validationErrors);
+    // console.log("inside onSubmit", res, dispatchErrors, !validationErrors);
 
     if (Object.values(validationErrors).length === 0) {
-      history.push(`/`); //should redirect to the new spot with the spot details
+      history.push(`/spots/${res.id}`); //should redirect to the new spot with the spot details
     }
-    // history.push("/");
   };
 
   // TODO for <hr> line, cant display in the form so workaround with border-top attribute
