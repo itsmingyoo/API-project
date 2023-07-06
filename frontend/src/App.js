@@ -6,6 +6,7 @@ import { thunkGetSpots } from "./store/spots";
 import Navigation from "./components/Navigation";
 import AllSpots from "./components/Spots";
 import SpotDetails from "./components/Spots/SpotDetails";
+import CreateSpot from "./components/Spots/CreateSpotForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ function App() {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
     dispatch(thunkGetSpots());
   }, [dispatch]);
-  const spots = useSelector((state) => Object.values(state.spots));
+  const spots = useSelector((state) => Object.values(state.spots.allSpots));
   return (
     <>
       <Navigation isLoaded={isLoaded} />
@@ -22,6 +23,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <AllSpots spots={spots} />
+          </Route>
+          <Route exact path="/spots">
+            <CreateSpot spots={spots} />
           </Route>
           <Route path="/spots/:spotId">
             <SpotDetails spots={spots} />

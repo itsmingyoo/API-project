@@ -8,8 +8,8 @@ if (process.env.NODE_ENV === "production") {
 
 const test = [
   {
-    spotId: 1,
-    userId: 1,
+    spotId: 3,
+    userId: 2,
     review: "THANK YOU1",
     stars: 1,
   },
@@ -38,13 +38,13 @@ const test = [
     stars: 4,
   },
   {
-    spotId: 6,
+    spotId: 1,
     userId: 4,
     review: "Cozy and inspiring atmosphere.",
     stars: 4,
   },
   {
-    spotId: 7,
+    spotId: 1,
     userId: 5,
     review: "Hidden gem for hackers and coders.",
     stars: 5,

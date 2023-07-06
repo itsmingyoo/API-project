@@ -40,12 +40,13 @@ img {
     justify-content: space-around;
 }
 
-.review-image {
+/* .review-image {
     width: 100%;
     height: 100%;
-}
+} */
 
-#review-image__right {
+
+/* #review-image__right {
     display: flex;
     flex-wrap: wrap;
     width: 49%;
@@ -60,12 +61,41 @@ img {
     height: 100%;
     align-items: center;
     padding: 2px 3px;
-}
+} */
 
-#review-image {
+/* #review-image {
     width: 48%;
     height: 50%;
     padding: 3px 3px;
+} */
+
+/* REFACTORED CSS FOR SPOT-DETAILS IMAGES */
+.spot-image {
+    width: 100%;
+    height: 100%;
+}
+
+#spot-image {
+    width: 48%;
+    height: 50%;
+    padding: 3px 3px;
+}
+
+#spot-image__right {
+    display: flex;
+    flex-wrap: wrap;
+    width: 49%;
+    height: 100%;
+    padding: 0px 4px;
+    padding-top: 8px;
+}
+
+#spot-image__left {
+    display: flex;
+    width: 50%;
+    height: 100%;
+    align-items: center;
+    padding: 2px 3px;
 }
 
 #spot-details__container-description {
@@ -95,7 +125,7 @@ img {
     /* border: 1px dotted blue */
 }
 
-#spot-details__reserve-button {
+#spot-details__reserve-button, #create-spot-button{
     padding: .6rem;
     border: 1px solid black;
     box-shadow: 4px 4px 4px black;
@@ -128,6 +158,56 @@ img {
 
 .spot-detail__avgRating {
     margin-right: 8px;
+}
+
+#form__main-container {
+    display: flex;
+    flex-direction: column;
+}
+
+#form__city-state {
+    display: flex;
+    flex-direction: row;
+}
+
+.form__city-state {
+    display: flex;
+    flex-direction: column;
+}
+
+#form__lat-lng {
+    display: flex;
+    flex-direction: row;
+}
+
+.form__lat-lng {
+    display: flex;
+    flex-direction: column;
+}
+
+#form__owner-description {
+    height: 200px;
+    width: 100%;
+}
+
+#form__place-photos {
+    display: flex;
+    flex-direction: column;
+}
+
+/* User Review */
+#user-review__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#user-review__first-name {
+    font-weight: bold;
+}
+
+.errors {
+    color: red;
 }
 
 @media screen and (max-width: 1023px) {
