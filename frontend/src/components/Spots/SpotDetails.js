@@ -1,12 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import {
-  thunkGetReviews,
-  thunkGetSpotId,
-  clearSpotDetailsAction,
-} from "../../store/spots";
-import { LoremIpsum, loremIpsum } from "react-lorem-ipsum";
+import { thunkGetReviews, thunkGetSpotId } from "../../store/spots";
+import { LoremIpsum } from "react-lorem-ipsum";
 
 function SpotDetails() {
   const dispatch = useDispatch();
@@ -58,7 +54,7 @@ function SpotDetails() {
       <div id="spot-details__container-images">
         <div id="spot-image__left">
           {firstImage ? (
-            <img src={firstImage} />
+            <img src={firstImage} alt="spot-details__preview" />
           ) : (
             <div className="spot-details__coming-soon-main">
               Image Coming Soon!
@@ -73,6 +69,7 @@ function SpotDetails() {
                 <img
                   src={image.url}
                   className={`spot-image__${image.id} spot-image`}
+                  alt={`spot-image__${image.id}`}
                 />
               </div>
             ))}

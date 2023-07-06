@@ -89,7 +89,21 @@ function CreateSpot() {
     }
 
     setValidationErrors(errors);
-  }, [country, address, city, state, description, title, price, previewImage]);
+  }, [
+    country,
+    address,
+    city,
+    state,
+    description,
+    title,
+    price,
+    previewImage,
+    allSpots,
+    imageOne,
+    imageTwo,
+    imageThree,
+    imageFour,
+  ]);
 
   const onSubmit = (e) => {
     e.preventDefault();
