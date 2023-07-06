@@ -5,12 +5,9 @@ import { useHistory } from "react-router-dom";
 import "./spots.css";
 
 function CreateSpot() {
-  // useSelector to grab user input info
-  // useEffect -> dispatch -> thunk that grabs user info
-  // onSubmit button - sends data to backend, preventDefault, history.push(redirect)
-  // create form
   const history = useHistory();
   const dispatch = useDispatch();
+  const allSpots = useSelector((state) => Object.values(state.spots.allSpots));
   // set these in order top-down
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
@@ -22,6 +19,10 @@ function CreateSpot() {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [previewImage, setPreviewImage] = useState("");
+  const [imageOne, setImageOne] = useState("");
+  const [imageTwo, setImageTwo] = useState("");
+  const [imageThree, setImageThree] = useState("");
+  const [imageFour, setImageFour] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   //   useEffect(() => {
@@ -43,16 +44,50 @@ function CreateSpot() {
   useEffect(() => {
     const errors = {};
     if (country.length < 0) errors["country"] = "Country is required";
-    // useSelector to grab existing addresses in order to compare if they are unique in the system or not
+
+    // helper func for unique address
+    const isValidAddress = (array, address) => {
+      const res = array.filter((index) => {
+        return index["address"] === address;
+      });
+      if (res.length > 0) return false;
+      else if (res.length === 0) return true;
+    };
+    if (!isValidAddress(allSpots, address)) {
+      errors["address"] = "Unique address is required";
+    }
+
     if (state.length > 2 || state.length < 2) {
       errors["state"] = "State must be 2 characters";
     }
+
     if (description.length < 30 && description.length > 0) {
       errors["description"] = "Description must be at least 30 characters";
     }
-    if (previewImage.length > 0 && !previewImage.includes(".com")) {
-      errors["previewImage"] = "Preview Image must be a valid URL";
+
+    // helper function to check valid url
+    let isURL = (url) => {
+      if (url.endsWith(".jpeg")) return true;
+      if (url.endsWith(".jpg")) return true;
+      if (url.endsWith(".png")) return true;
+      else return false;
+    };
+    if (previewImage.length > 0 && !isURL(previewImage)) {
+      errors["previewImage"] = "Preview image is required";
     }
+    if (imageOne.length > 0 && !isURL(imageOne)) {
+      errors["imageOne"] = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+    if (imageTwo.length > 0 && !isURL(imageTwo)) {
+      errors["imageTwo"] = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+    if (imageThree.length > 0 && !isURL(imageThree)) {
+      errors["imageThree"] = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+    if (imageFour.length > 0 && !isURL(imageFour)) {
+      errors["imageFour"] = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+
     setValidationErrors(errors);
   }, [country, address, city, state, description, title, price, previewImage]);
 
@@ -70,6 +105,10 @@ function CreateSpot() {
       title,
       price,
       previewImage,
+      imageOne,
+      imageTwo,
+      imageThree,
+      imageFour,
     };
     dispatch(thunkCreateSpot(formData));
     console.log(formData);
@@ -89,7 +128,10 @@ function CreateSpot() {
             reservation.
           </p>
         </div>
-        <label>Country</label>
+        <label>
+          Country{" "}
+          {validationErrors.country && <span>{validationErrors.country}</span>}
+        </label>
         <input
           type="text"
           name="country"
@@ -98,8 +140,10 @@ function CreateSpot() {
           onChange={(e) => setCountry(e.target.value)}
           required
         />
-        {validationErrors.country && <p>{validationErrors.country}</p>}
-        <label>Street Address</label>
+        <label>
+          Street Address{" "}
+          {validationErrors.address && <span>{validationErrors.address}</span>}
+        </label>
         <input
           type="text"
           name="address"
@@ -108,10 +152,12 @@ function CreateSpot() {
           onChange={(e) => setAddress(e.target.value)}
           required
         />
-        {validationErrors.address && <p>{validationErrors.address}</p>}
         <div id="form__city-state">
           <div className="form__city-state">
-            <label>City</label>
+            <label>
+              City{" "}
+              {validationErrors.city && <span>{validationErrors.city}</span>}
+            </label>
             <input
               type="text"
               name="city"
@@ -120,10 +166,12 @@ function CreateSpot() {
               onChange={(e) => setCity(e.target.value)}
               required
             />
-            {validationErrors.city && <p>{validationErrors.city}</p>}
           </div>
           <div className="form__city-state">
-            <label>State</label>
+            <label>
+              State{" "}
+              {validationErrors.state && <span>{validationErrors.state}</span>}
+            </label>
             <input
               type="text"
               name="state"
@@ -132,7 +180,6 @@ function CreateSpot() {
               onChange={(e) => setState(e.target.value)}
               required
             />
-            {validationErrors.state && <p>{validationErrors.state}</p>}
           </div>
         </div>
         <div id="form__lat-lng">
@@ -229,10 +276,34 @@ function CreateSpot() {
           {validationErrors.previewImage && (
             <p>{validationErrors.previewImage}</p>
           )}
-          <input type="url" name="image-url" placeholder="Image URL" />
-          <input type="url" name="image-url" placeholder="Image URL" />
-          <input type="url" name="image-url" placeholder="Image URL" />
-          <input type="url" name="image-url" placeholder="Image URL" />
+          <input
+            type="url"
+            name="image-url"
+            placeholder="Image URL"
+            value={imageOne}
+            onChange={(e) => setImageOne(e.target.value)}
+          />
+          <input
+            type="url"
+            name="image-url"
+            placeholder="Image URL"
+            value={imageTwo}
+            onChange={(e) => setImageTwo(e.target.value)}
+          />
+          <input
+            type="url"
+            name="image-url"
+            placeholder="Image URL"
+            value={imageThree}
+            onChange={(e) => setImageThree(e.target.value)}
+          />
+          <input
+            type="url"
+            name="image-url"
+            placeholder="Image URL"
+            value={imageFour}
+            onChange={(e) => setImageFour(e.target.value)}
+          />
         </div>
         <button
           id="create-spot-button"
