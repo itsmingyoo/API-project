@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { thunkGetReviews, thunkGetSpotId } from "../../store/spots";
+import { thunkGetSpotReviews, thunkGetSpotId } from "../../store/spots";
 import { LoremIpsum } from "react-lorem-ipsum";
 import SpotReviews from "./SpotReviews";
 

@@ -5,7 +5,7 @@ const CREATE_SPOT_ACTION = "spots/createSpotAction";
 const GET_SPOTS_ACTION = "spots/getSpotsAction";
 const GET_SPOT_ID_ACTION = "spots/getSpotIdAction";
 const GET_REVIEWS_ACTION = "spots/getReviewsAction";
-const GET_USER_REVIEWS_ACTION = "spots/getUserReviewsAction";
+const GET_USER_SPOTS_ACTION = "spots/getUserSpotsAction";
 const CLEAR_SPOT_DETAILS = "spots/clearSpotDetailsAction";
 
 // actions
@@ -39,9 +39,9 @@ const createSpotAction = (formData, image) => {
   };
 };
 
-const getUserReviewsAction = (userId) => {
+const getUserSpotsAction = (userId) => {
   return {
-    type: GET_USER_REVIEWS_ACTION,
+    type: GET_USER_SPOTS_ACTION,
     userId,
   };
 };
@@ -93,18 +93,18 @@ export const thunkCreateSpot = (formData, image) => async (dispatch) => {
   }
 };
 
-export const thunkGetReviews = (spotId) => async (dispatch) => {
+export const thunkGetSpotReviews = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
   const data = await res.json();
   dispatch(getReviewsAction(data));
   return res;
 };
 
-export const thunkGetUserReviews = (userId) => async (dispatch) => {
+export const thunkGetUserSpots = (userId) => async (dispatch) => {
   let user = await csrfFetch("/api/spots/current");
   user = await user.json();
   console.log("this is the user", user);
-  dispatch(getUserReviewsAction(user.id));
+  dispatch(getUserSpotsAction(user.id));
   return user;
 };
 
@@ -147,7 +147,7 @@ const spotsReducer = (state = initialState, action) => {
       };
       return newState;
     }
-    case GET_USER_REVIEWS_ACTION: {
+    case GET_USER_SPOTS_ACTION: {
       newState = { ...state };
       return newState;
     }

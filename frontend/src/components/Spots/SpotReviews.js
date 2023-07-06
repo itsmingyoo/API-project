@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { thunkGetReviews } from "../../store/spots";
+import { thunkGetSpotReviews } from "../../store/spots";
 
 function SpotReviews({ spot }) {
   const dispatch = useDispatch();
   const spotReviewsArr = useSelector((state) => state.spots.Reviews);
 
   useEffect(() => {
-    dispatch(thunkGetReviews(spot.id));
+    dispatch(thunkGetSpotReviews(spot.id));
   }, [dispatch]);
 
   if (!spotReviewsArr) return null;
