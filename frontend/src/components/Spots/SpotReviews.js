@@ -47,6 +47,14 @@ function SpotReviews({ spot }) {
                 <button>Post Your Review</button>
                 <div>Be the first to post a review!</div>
               </>
+            ) : // logged in && not owner && hasreview
+            userHasReview && !isOwner && sessionUser ? (
+              <>
+                <span className="spot-detail__avgRating">
+                  ★{spot.avgRating} ·
+                </span>
+                <span>{spot.numReviews} reviews</span>
+              </>
             ) : // logged in && not owner && multiple has reviews
             spotReviewsArr.length > 1 && !isOwner && sessionUser ? (
               <>
