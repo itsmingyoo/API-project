@@ -1,16 +1,11 @@
 import React, { useEffect } from "react";
 import { useModal } from "../../context/Modal";
 import { useDispatch } from "react-redux";
-import {
-  thunkDeleteUserSpot,
-  thunkGetSpotId,
-  thunkGetUserSpots,
-} from "../../store/spots";
+import { thunkDeleteUserSpot, thunkGetUserSpots } from "../../store/spots";
 
 function DeleteModalButton({ spot }) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
-  // console.log("this is spot", spot.id);
   const onClick = (e) => {
     e.preventDefault();
     dispatch(thunkDeleteUserSpot(spot.id))
