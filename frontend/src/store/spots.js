@@ -6,6 +6,7 @@ const GET_SPOTS_ACTION = "spots/getSpotsAction";
 const GET_SPOT_ID_ACTION = "spots/getSpotIdAction";
 const GET_SPOT_REVIEWS_ACTION = "spots/getReviewsAction";
 const GET_USER_SPOTS_ACTION = "spots/getUserSpotsAction";
+const DELETE_USER_SPOT_ACTION = "spots/deleteUserSpotAction";
 const CLEAR_SPOT_DETAILS = "spots/clearSpotDetailsAction";
 
 // actions
@@ -44,6 +45,13 @@ const getUserSpotsAction = (userSpots) => {
   return {
     type: GET_USER_SPOTS_ACTION,
     userSpots,
+  };
+};
+
+const deleteUserSpotAction = (spot) => {
+  return {
+    type: DELETE_USER_SPOT_ACTION,
+    spot,
   };
 };
 
@@ -101,13 +109,22 @@ export const thunkGetSpotReviews = (spotId) => async (dispatch) => {
   return res;
 };
 
-export const thunkGetUserSpots = (userId) => async (dispatch) => {
+export const thunkGetUserSpots = () => async (dispatch) => {
   let userSpots = await csrfFetch("/api/spots/current");
   userSpots = await userSpots.json();
   // console.log("this is the userSpots thunk after fetch", userSpots);
   // console.log("this is userId in the thunk parameter", userId);
   dispatch(getUserSpotsAction(userSpots));
   return userSpots;
+};
+
+export const thunkDeleteUserSpot = (spotId) => async (dispatch) => {
+  let userSpot = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "DELETE",
+  });
+  userSpot = await userSpot.json();
+  dispatch(deleteUserSpotAction(userSpot));
+  return userSpot;
 };
 
 // reducer - initialState = spots : { fill in your kvp }
@@ -129,6 +146,7 @@ const spotsReducer = (state = initialState, action) => {
     case GET_SPOT_ID_ACTION: {
       newState = { ...state };
       newState.singleSpot = action.spot;
+      console.log("getspotid reducer, id grabbed was: ", action.spot);
       return newState;
     }
     case GET_SPOT_REVIEWS_ACTION: {
@@ -156,6 +174,20 @@ const spotsReducer = (state = initialState, action) => {
       //   (spot) => (newState.ownerSpots[spot.id] = spot)
       // );
       newState.ownerSpots = [...action.userSpots.Spots];
+      return newState;
+    }
+    case DELETE_USER_SPOT_ACTION: {
+      newState = { ...state };
+      delete newState.allSpots[action.spot.id];
+      const indexToDelete = newState.ownerSpots.findIndex(
+        (spot) => Number(spot.id) === Number(action.spot.id)
+      );
+
+      if (indexToDelete !== -1) {
+        newState.ownerSpots.splice(indexToDelete, 1);
+      }
+
+      newState.singleSpot = {};
       return newState;
     }
     // NON-THUNK RESET-FUNCTION FOR SPOT-DETAILS

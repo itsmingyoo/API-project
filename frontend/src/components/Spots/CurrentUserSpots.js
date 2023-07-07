@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkGetUserSpots } from "../../store/spots";
+import DeleteModalButton from "./DeleteSpotModal";
+import OpenModalButton from "../OpenModalButton";
 
 function CurrentUserSpots() {
   const dispatch = useDispatch();
@@ -37,7 +39,10 @@ function CurrentUserSpots() {
               <div id="user-spot__price">${spot.price} night</div>
               <div id="user-spot__update-delete">
                 <button>Update</button>
-                <button>Delete</button>
+                <OpenModalButton
+                  buttonText="Delete"
+                  modalComponent={<DeleteModalButton spot={spot} />}
+                />
               </div>
             </div>
           ))
