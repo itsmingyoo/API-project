@@ -4,14 +4,15 @@ import { thunkGetUserSpots } from "../../store/spots";
 import DeleteModalButton from "./DeleteSpotModal";
 import OpenModalButton from "../OpenModalButton";
 
-function CurrentUserSpots() {
+function CurrentUserSpots({ spots }) {
+  console.log("this is spots in currentuserspots", spots);
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const userSpots = useSelector((state) => state.spots.ownerSpots);
   // console.log("this is userSpots in component", userSpots);
 
   useEffect(() => {
-    dispatch(thunkGetUserSpots(sessionUser.id));
+    dispatch(thunkGetUserSpots());
   }, [dispatch]);
 
   if (!sessionUser || !userSpots) return null;

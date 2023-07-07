@@ -247,18 +247,6 @@ const test = [
     description: "The central hub for coding",
     price: 210.99,
   },
-  {
-    ownerId: 6,
-    address: "321 Oak Street",
-    city: "San Francisco",
-    state: "CA",
-    country: "United States of America",
-    lat: 37.7645358,
-    lng: -122.4730327,
-    name: "Dev Den",
-    description: "A cozy space for developers",
-    price: 185.99,
-  },
 ];
 module.exports = {
   async up(queryInterface, Sequelize) {

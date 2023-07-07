@@ -182,11 +182,9 @@ const spotsReducer = (state = initialState, action) => {
       const indexToDelete = newState.ownerSpots.findIndex(
         (spot) => Number(spot.id) === Number(action.spot.id)
       );
-
       if (indexToDelete !== -1) {
         newState.ownerSpots.splice(indexToDelete, 1);
       }
-
       newState.singleSpot = {};
       return newState;
     }
