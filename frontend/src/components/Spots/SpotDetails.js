@@ -93,6 +93,7 @@ function SpotDetails() {
             <div className="spot-details__text">{spot.description}</div>
           </div>
         </div>
+
         <div id="spot-details__container-reservation">
           <div id="spot-detail__price-rating">
             <div>

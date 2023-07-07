@@ -22,11 +22,11 @@ const getUserReviewsAction = (reviews) => {
 };
 
 export const thunkGetSpotReviews = (spotId) => async (dispatch) => {
-  const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
-  const data = await res.json();
-  console.log("get spot reviews", data);
-  dispatch(getSpotReviewsAction(data));
-  return data;
+  let reviews = await csrfFetch(`/api/spots/${spotId}/reviews`);
+  reviews = await reviews.json();
+  // console.log("get spot reviews", reviews);
+  dispatch(getSpotReviewsAction(reviews));
+  return reviews;
 };
 
 export const thunkGetUserReviews = () => async (dispatch) => {
@@ -52,7 +52,7 @@ const reviewsReducer = (state = initialState, action) => {
     }
     case GET_USER_REVIEWS_ACTION: {
       newState = { ...state };
-      console.log("reducer user reviews", action.reviews);
+      // console.log("reducer user reviews", action.reviews);
       action.reviews.forEach((review) => (newState.user[review.id] = review));
       return newState;
     }
