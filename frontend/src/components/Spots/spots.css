@@ -210,6 +210,18 @@ img {
     color: red;
 }
 
+#user-spot__main {
+    display: flex;
+}
+
+#manage-spots__main {
+    display: flex;
+}
+
+#user-spot__content {
+    margin: 5px;
+}
+
 @media screen and (max-width: 1023px) {
     #spot-item-container {
         flex-basis: auto;

@@ -4,7 +4,9 @@ import { csrfFetch } from "./csrf";
 const CREATE_SPOT_ACTION = "spots/createSpotAction";
 const GET_SPOTS_ACTION = "spots/getSpotsAction";
 const GET_SPOT_ID_ACTION = "spots/getSpotIdAction";
-const GET_REVIEWS_ACTION = "spots/getReviewsAction";
+const GET_SPOT_REVIEWS_ACTION = "spots/getReviewsAction";
+const GET_USER_SPOTS_ACTION = "spots/getUserSpotsAction";
+const DELETE_USER_SPOT_ACTION = "spots/deleteUserSpotAction";
 const CLEAR_SPOT_DETAILS = "spots/clearSpotDetailsAction";
 
 // actions
@@ -23,9 +25,9 @@ const getSpotIdAction = (spot) => {
   };
 };
 
-const getReviewsAction = (reviews) => {
+const getSpotReviewsAction = (reviews) => {
   return {
-    type: GET_REVIEWS_ACTION,
+    type: GET_SPOT_REVIEWS_ACTION,
     reviews,
   };
 };
@@ -35,6 +37,21 @@ const createSpotAction = (formData, image) => {
     type: CREATE_SPOT_ACTION,
     payload: formData,
     image,
+  };
+};
+
+const getUserSpotsAction = (userSpots) => {
+  // console.log("userspots action running");
+  return {
+    type: GET_USER_SPOTS_ACTION,
+    userSpots,
+  };
+};
+
+const deleteUserSpotAction = (spot) => {
+  return {
+    type: DELETE_USER_SPOT_ACTION,
+    spot,
   };
 };
 
@@ -66,9 +83,9 @@ export const thunkCreateSpot = (formData, image) => async (dispatch) => {
       body: JSON.stringify(formData),
     });
 
-    console.log("in the thunk image", image); //returns url
+    // console.log("in the thunk image", image); //returns url
     const newSpot = await res.json();
-    console.log("in the thunk newSpot", newSpot);
+    // console.log("in the thunk newSpot", newSpot);
     let newImage = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
       method: "POST",
       body: JSON.stringify({
@@ -85,11 +102,29 @@ export const thunkCreateSpot = (formData, image) => async (dispatch) => {
   }
 };
 
-export const thunkGetReviews = (spotId) => async (dispatch) => {
+export const thunkGetSpotReviews = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
   const data = await res.json();
-  dispatch(getReviewsAction(data));
+  dispatch(getSpotReviewsAction(data));
   return res;
+};
+
+export const thunkGetUserSpots = () => async (dispatch) => {
+  let userSpots = await csrfFetch("/api/spots/current");
+  userSpots = await userSpots.json();
+  // console.log("this is the userSpots thunk after fetch", userSpots);
+  // console.log("this is userId in the thunk parameter", userId);
+  dispatch(getUserSpotsAction(userSpots));
+  return userSpots;
+};
+
+export const thunkDeleteUserSpot = (spotId) => async (dispatch) => {
+  let userSpot = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "DELETE",
+  });
+  userSpot = await userSpot.json();
+  dispatch(deleteUserSpotAction(userSpot));
+  return userSpot;
 };
 
 // reducer - initialState = spots : { fill in your kvp }
@@ -111,9 +146,10 @@ const spotsReducer = (state = initialState, action) => {
     case GET_SPOT_ID_ACTION: {
       newState = { ...state };
       newState.singleSpot = action.spot;
+      console.log("getspotid reducer, id grabbed was: ", action.spot);
       return newState;
     }
-    case GET_REVIEWS_ACTION: {
+    case GET_SPOT_REVIEWS_ACTION: {
       newState = { ...state, Reviews: [] };
       action.reviews.forEach((review) => newState.Reviews.push(review));
       return newState;
@@ -129,6 +165,27 @@ const spotsReducer = (state = initialState, action) => {
           },
         },
       };
+      return newState;
+    }
+    case GET_USER_SPOTS_ACTION: {
+      newState = { ...state };
+      // newState.ownerSpots = {};
+      // action.userSpots.Spots.forEach(
+      //   (spot) => (newState.ownerSpots[spot.id] = spot)
+      // );
+      newState.ownerSpots = [...action.userSpots.Spots];
+      return newState;
+    }
+    case DELETE_USER_SPOT_ACTION: {
+      newState = { ...state };
+      delete newState.allSpots[action.spot.id];
+      const indexToDelete = newState.ownerSpots.findIndex(
+        (spot) => Number(spot.id) === Number(action.spot.id)
+      );
+      if (indexToDelete !== -1) {
+        newState.ownerSpots.splice(indexToDelete, 1);
+      }
+      newState.singleSpot = {};
       return newState;
     }
     // NON-THUNK RESET-FUNCTION FOR SPOT-DETAILS
