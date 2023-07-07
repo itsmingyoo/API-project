@@ -9,26 +9,20 @@ function SpotDetails() {
   const dispatch = useDispatch();
   let { spotId } = useParams();
   spotId = parseInt(spotId);
-
-  //spotReviewsArr is an array of obj: ReviewImages: [], User: {}, etc
-  // const spotReviewsArr = useSelector((state) => state.spots.Reviews);
   const spot = useSelector((state) => state.spots.singleSpot);
   const sessionUser = useSelector((state) => state.session.user);
 
   useEffect(() => {
     dispatch(thunkGetSpotId(spotId));
-    // dispatch(thunkGetReviews(spotId));
   }, [spotId, dispatch]);
 
-  // console.log("this is spot", spot);
   if (!spot || spot.id !== spotId) return null;
-  // console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
 
   // object: fit-cover css???
   const firstImage = spot ? spot?.SpotImages?.[0]?.url : [];
   const fourImages = []; // array of obj, must key into url kvp
 
-  if (spot.SpotImages.length > 1) {
+  if (spot.SpotImages?.length > 1) {
     for (let i = 1; i < 5; i++) {
       const image = spot.SpotImages[i];
       if (image !== null || image !== undefined) {
@@ -36,8 +30,6 @@ function SpotDetails() {
       }
     }
   }
-  // console.log("first image", firstImage);
-  // console.log("four image", fourImages);
 
   return (
     <div id="spot-details__container">
@@ -98,12 +90,7 @@ function SpotDetails() {
             Hosted by {spot.Owner.firstName} {spot.Owner.lastName}
           </h2>
           <div id="spot-details__spot-description">
-            <div className="spot-details__text">
-              <LoremIpsum />
-            </div>
-            <div className="spot-details__text">
-              <LoremIpsum />
-            </div>
+            <div className="spot-details__text">{spot.description}</div>
           </div>
         </div>
         <div id="spot-details__container-reservation">

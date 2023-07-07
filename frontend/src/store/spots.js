@@ -6,6 +6,7 @@ const GET_SPOTS_ACTION = "spots/getSpotsAction";
 const GET_SPOT_ID_ACTION = "spots/getSpotIdAction";
 const GET_SPOT_REVIEWS_ACTION = "spots/getReviewsAction";
 const GET_USER_SPOTS_ACTION = "spots/getUserSpotsAction";
+const UPDATE_USER_SPOT_ACTION = "spots/updateUserSpotAction";
 const DELETE_USER_SPOT_ACTION = "spots/deleteUserSpotAction";
 const CLEAR_SPOT_DETAILS = "spots/clearSpotDetailsAction";
 
@@ -55,6 +56,14 @@ const deleteUserSpotAction = (spot) => {
   };
 };
 
+const updateUserSpotAction = (userData, owner) => {
+  return {
+    type: UPDATE_USER_SPOT_ACTION,
+    userData,
+    owner,
+  };
+};
+
 // CLEANUP FUNCTION - DOESN'T REQUIRE A THUNK
 export const clearSpotDetailsAction = () => {
   return { type: CLEAR_SPOT_DETAILS };
@@ -73,7 +82,7 @@ export const thunkGetSpotId = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`);
   const data = await res.json();
   dispatch(getSpotIdAction(data));
-  return res;
+  return data;
 };
 
 export const thunkCreateSpot = (formData, image) => async (dispatch) => {
@@ -93,8 +102,8 @@ export const thunkCreateSpot = (formData, image) => async (dispatch) => {
         preview: true,
       }),
     });
-
     newImage = await newImage.json();
+
     await dispatch(createSpotAction(newSpot, newImage));
     return newSpot;
   } catch (e) {
@@ -127,6 +136,27 @@ export const thunkDeleteUserSpot = (spotId) => async (dispatch) => {
   return userSpot;
 };
 
+export const thunkUpdateUserSpot =
+  (spotId, updatedData) => async (dispatch) => {
+    try {
+      let newData = await csrfFetch(`/api/spots/${spotId}`, {
+        method: "PUT",
+        body: JSON.stringify(updatedData),
+      });
+      newData = await newData.json();
+
+      let owner = await csrfFetch(`/api/spots/${spotId}`);
+      owner = await owner.json();
+      owner = await owner.Owner;
+      // console.log("in the thunk - newData.json() ===> ", newData);
+      // console.log("in the thunk - owner.json() ===> ", owner);
+      dispatch(updateUserSpotAction(newData));
+      return newData;
+    } catch (e) {
+      return await e.json();
+    }
+  };
+
 // reducer - initialState = spots : { fill in your kvp }
 let initialState = {
   allSpots: {},
@@ -146,7 +176,7 @@ const spotsReducer = (state = initialState, action) => {
     case GET_SPOT_ID_ACTION: {
       newState = { ...state };
       newState.singleSpot = action.spot;
-      console.log("getspotid reducer, id grabbed was: ", action.spot);
+      // console.log("getspotid reducer, id grabbed was: ", action.spot);
       return newState;
     }
     case GET_SPOT_REVIEWS_ACTION: {
@@ -192,6 +222,13 @@ const spotsReducer = (state = initialState, action) => {
     case CLEAR_SPOT_DETAILS: {
       newState = { ...state };
       newState.singleSpot = {};
+      return newState;
+    }
+    case UPDATE_USER_SPOT_ACTION: {
+      newState = { ...state };
+      // console.log("reducer new form data", action.userData);
+      newState.allSpots[action.userData.id] = action.userData;
+      newState.singleSpot = { Owner: { ...action.owner }, ...action.userData };
       return newState;
     }
     default:
