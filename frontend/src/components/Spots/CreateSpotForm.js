@@ -125,14 +125,17 @@ function CreateSpot() {
     if (state === "") dispatchErrors["state"] = res.errors.state;
     if (country === "") dispatchErrors["country"] = res.errors.country;
     if (name === "") dispatchErrors["name"] = res.errors.name;
-    if (description === "")
-      dispatchErrors["description"] = res.errors.description;
+    if (description === "" || description.length < 30)
+      dispatchErrors["description"] =
+        res.errors.description || "Description must be at least 30 characters";
     if (price === "") dispatchErrors["price"] = res.errors.price;
+    if (previewImage === "")
+      dispatchErrors["previewImage"] = "Preview image is required";
     setValidationErrors(dispatchErrors);
     // console.log("inside onSubmit", res, dispatchErrors, !validationErrors);
 
-    if (Object.values(validationErrors).length === 0) {
-      history.push(`/spots/${res.id}`); //should redirect to the new spot with the spot details
+    if (Object.values(validationErrors).length === 0 && res.id) {
+      history.push(`/spots/${res.id}`);
     }
   };
 

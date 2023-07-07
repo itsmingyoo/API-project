@@ -5,7 +5,7 @@ import DeleteModalButton from "./DeleteSpotModal";
 import OpenModalButton from "../OpenModalButton";
 
 function CurrentUserSpots({ spots }) {
-  console.log("this is spots in currentuserspots", spots);
+  // console.log("this is spots in currentuserspots", spots);
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const userSpots = useSelector((state) => state.spots.ownerSpots);
