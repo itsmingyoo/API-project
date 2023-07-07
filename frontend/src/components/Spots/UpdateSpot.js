@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { thunkCreateSpot } from "../../store/spots";
-import { useHistory } from "react-router-dom";
+import { thunkGetSpotId, thunkUpdateUserSpot } from "../../store/spots";
+import { useHistory, useParams } from "react-router-dom";
 import "./spots.css";
 
-function CreateSpot() {
+function UpdateSpot() {
   const history = useHistory();
   const dispatch = useDispatch();
   const allSpots = useSelector((state) => Object.values(state.spots.allSpots));
+
+  const { spotId } = useParams();
+  const allSpotsObj = useSelector((state) => state.spots.allSpots);
+
+  //   console.log("spotId from params", spotId);
+  //   console.log("currSpot", currSpot);
+  //   console.log("allSpotsObj", allSpotsObj);
+
   // set these in order top-down
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
@@ -24,37 +32,40 @@ function CreateSpot() {
   const [imageThree, setImageThree] = useState("");
   const [imageFour, setImageFour] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
-  //   useEffect(() => {
-  //     dispatch(thunkCreateSpot(formData));
-  //   }, [dispatch]);
 
-  //   useEffect(() => {
-  //     let myInterval = setInterval(() => {
-  //       console.log(`UseEffect3 with interval number ${count} is running`);
-  //     }, 1000);
-  //     return () => {
-  //       console.log(
-  //         `UseEffect3 cleanup ran.\nsetInterval number ${count} is being cleared out`
-  //       );
-  //       clearInterval(myInterval);
-  //     };
-  //   }, [count]);
+  useEffect(() => {
+    async function oldData() {
+      const currSpot = await dispatch(thunkGetSpotId(spotId));
+      //   console.log("currspot on mount", currSpot);
+      setCountry(currSpot.country);
+      setAddress(currSpot.address);
+      setCity(currSpot.city);
+      setState(currSpot.state);
+      //   setLat(currSpot.lat);
+      //   setLng(currSpot.lng);
+      setDescription(currSpot.description);
+      setName(currSpot.name);
+      setPrice(currSpot.price);
+      //   setPreviewImage(currSpot.previewImage);
+    }
+    oldData();
+  }, [spotId, dispatch]);
 
   useEffect(() => {
     const errors = {};
     if (country.length < 0) errors["country"] = "Country is required";
 
     // helper func for unique address
-    const isValidAddress = (array, address) => {
-      const res = array.filter((index) => {
-        return index["address"] === address;
-      });
-      if (res.length > 0) return false;
-      else if (res.length === 0) return true;
-    };
-    if (!isValidAddress(allSpots, address)) {
-      errors["address"] = "Address must be unique";
-    }
+    // const isValidAddress = (array, address) => {
+    //   const res = array.filter((index) => {
+    //     return index["address"] === address;
+    //   });
+    //   if (res.length > 0) return false;
+    //   else if (res.length === 0) return true;
+    // };
+    // if (!isValidAddress(allSpots, address)) {
+    //   errors["address"] = "Address must be unique";
+    // }
 
     if (state.length > 2 || state.length < 2) {
       errors["state"] = "State must be capitalized and 2 characters";
@@ -103,6 +114,8 @@ function CreateSpot() {
     imageFour,
   ]);
 
+  if (!spotId || !allSpotsObj) return null;
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = {
@@ -116,8 +129,8 @@ function CreateSpot() {
       name,
       price: Number(price),
     };
-    const res = await dispatch(thunkCreateSpot(formData, previewImage));
-    // console.log("in the submit, res", res);
+    const res = await dispatch(thunkUpdateUserSpot(Number(spotId), formData));
+    console.log("in the submit, res", res);
 
     const dispatchErrors = {};
     if (address === "") dispatchErrors["address"] = res.errors.address;
@@ -129,11 +142,11 @@ function CreateSpot() {
       dispatchErrors["description"] =
         res.errors.description || "Description must be at least 30 characters";
     if (price === "") dispatchErrors["price"] = res.errors.price;
-    if (previewImage === "")
-      dispatchErrors["previewImage"] = "Preview image is required";
+    // if (previewImage === "")
+    //   dispatchErrors["previewImage"] = "Preview image is required";
     setValidationErrors(dispatchErrors);
     // console.log("inside onSubmit", res, dispatchErrors, !validationErrors);
-
+    // console.log(Object.values(validationErrors).length, validationErrors);
     if (Object.values(validationErrors).length === 0 && res.id) {
       history.push(`/spots/${res.id}`);
     }
@@ -339,4 +352,4 @@ function CreateSpot() {
   );
 }
 
-export default CreateSpot;
+export default UpdateSpot;
