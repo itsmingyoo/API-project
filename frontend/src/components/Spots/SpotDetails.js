@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { thunkGetSpotReviews, thunkGetSpotId } from "../../store/spots";
+import { thunkGetSpotId } from "../../store/spots";
 import { LoremIpsum } from "react-lorem-ipsum";
 import SpotReviews from "./SpotReviews";
 
@@ -21,7 +21,7 @@ function SpotDetails() {
   }, [spotId, dispatch]);
 
   // console.log("this is spot", spot);
-  if (!spot || spot.id !== spotId || !sessionUser) return null;
+  if (!spot || spot.id !== spotId) return null;
   // console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
 
   // object: fit-cover css???
@@ -95,7 +95,7 @@ function SpotDetails() {
       <div id="spot-details__container-description">
         <div id="spot-details__owner-description">
           <h2>
-            Hosted by {spot.Owner.firstName} {spot.Owner.firstName}
+            Hosted by {spot.Owner.firstName} {spot.Owner.lastName}
           </h2>
           <div id="spot-details__spot-description">
             <div className="spot-details__text">
