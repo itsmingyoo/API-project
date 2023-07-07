@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { thunkGetReviews, thunkGetSpotId } from "../../store/spots";
+import { thunkGetSpotReviews, thunkGetSpotId } from "../../store/spots";
 import { LoremIpsum } from "react-lorem-ipsum";
+import SpotReviews from "./SpotReviews";
 
 function SpotDetails() {
   const dispatch = useDispatch();
@@ -10,18 +11,17 @@ function SpotDetails() {
   spotId = parseInt(spotId);
 
   //spotReviewsArr is an array of obj: ReviewImages: [], User: {}, etc
-  const spotReviewsArr = useSelector((state) => state.spots.Reviews);
+  // const spotReviewsArr = useSelector((state) => state.spots.Reviews);
   const spot = useSelector((state) => state.spots.singleSpot);
   const sessionUser = useSelector((state) => state.session.user);
 
   useEffect(() => {
     dispatch(thunkGetSpotId(spotId));
-    dispatch(thunkGetReviews(spotId));
+    // dispatch(thunkGetReviews(spotId));
   }, [spotId, dispatch]);
 
   // console.log("this is spot", spot);
-  if (!spotReviewsArr || !spot || spot.id !== spotId || !sessionUser)
-    return null;
+  if (!spot || spot.id !== spotId || !sessionUser) return null;
   // console.log("reviews Arr", spotReviewsArr, spotReviewsArr.length);
 
   // object: fit-cover css???
@@ -139,42 +139,8 @@ function SpotDetails() {
             <button id="spot-detail__create-review">Post Your Review</button>
           )}
         </div>
-        {/* Reviews - First name, Date, Review - 'POST REVIEW' button hidden for users not logged in */}
-        <div id="spot-details__user-review">
-          {spotReviewsArr.length > 0 &&
-            spotReviewsArr.map((review) => {
-              const reviewDate = review["createdAt"].split("-");
-              // console.log("in map for reviewDate", reviewDate);
-              const monthNames = {
-                "01": "January",
-                "02": "February",
-                "03": "March",
-                "04": "April",
-                "05": "May",
-                "06": "June",
-                "07": "July",
-                "08": "August",
-                "09": "September",
-                10: "October",
-                11: "November",
-                12: "December",
-              };
-              const reviewYear = reviewDate[0];
-              const reviewMonth = reviewDate[1];
-              const reviewMonthName = monthNames[reviewMonth];
-              return (
-                <div key={review.User.id} id="user-review__container">
-                  <div id="user-review__first-name">
-                    {review["User"]["firstName"]}
-                  </div>
-                  <div>
-                    {reviewMonthName} {reviewYear}
-                  </div>
-                  <div>{review["review"]}</div>
-                </div>
-              );
-            })}
-        </div>
+
+        <SpotReviews spot={spot} />
       </div>
     </div>
   );
