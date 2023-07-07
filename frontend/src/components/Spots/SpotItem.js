@@ -8,7 +8,7 @@ function SpotItem({ spot }) {
         <div>
           {spot.city}, {spot.state}
         </div>
-        {spot.avgRating ? <div>★ {spot.avgRating}</div> : <div>★ 5.0</div>}
+        {spot.avgRating ? <div>★ {spot.avgRating}</div> : <div>★ New</div>}
       </div>
       <div id="spot__item-price">${spot.price}</div>
     </>

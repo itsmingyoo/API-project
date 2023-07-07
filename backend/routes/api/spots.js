@@ -338,7 +338,6 @@ router.put("/:spotId", requireAuth, async (req, res) => {
     });
   }
 
-  let editThisSpot = spot.toJSON();
   if (spot.ownerId === ownerId) {
     const {
       address,
@@ -351,17 +350,17 @@ router.put("/:spotId", requireAuth, async (req, res) => {
       description,
       price,
     } = req.body;
-    if (address) editThisSpot.address = address;
-    if (city) editThisSpot.city = city;
-    if (state) editThisSpot.state = state;
-    if (country) editThisSpot.country = country;
-    if (lat) editThisSpot.lat = lat;
-    if (lng) editThisSpot.lng = lng;
-    if (name) editThisSpot.name = name;
-    if (description) editThisSpot.description = description;
-    if (price) editThisSpot.price = price;
-    await editThisSpot.save; // save is not a function (*(((*((*(*(*))))))))
-    res.json(editThisSpot);
+    if (address) spot.address = address;
+    if (city) spot.city = city;
+    if (state) spot.state = state;
+    if (country) spot.country = country;
+    if (lat) spot.lat = lat;
+    if (lng) spot.lng = lng;
+    if (name) spot.name = name;
+    if (description) spot.description = description;
+    if (price) spot.price = price;
+    await spot.save(); // save is not a function (*(((*((*(*(*))))))))
+    res.json(spot);
   } else {
     res.statusCode = 400;
     res.json({
