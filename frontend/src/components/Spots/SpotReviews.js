@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { thunkGetSpotReviews } from "../../store/reviews";
 import CreateReviewModal from "./CreateReviewModal";
 import OpenModalButton from "../OpenModalButton";
+import DeleteReviewModalButton from "./DeleteReviewModal";
 
 function SpotReviews({ spot }) {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ function SpotReviews({ spot }) {
   const sessionUser = useSelector((state) => state.session.user);
 
   // console.log("spot.id", spot.id);
-  console.log("spotReviewsArr", spotReviewsArr);
+  // console.log("spotReviewsArr", spotReviewsArr);
   // console.log("spot", spot);
 
   useEffect(() => {
@@ -30,9 +31,9 @@ function SpotReviews({ spot }) {
       ? true
       : false;
   const spotHasReviews = spotReviewsArr.length > 0 ? true : false;
-  console.log("isOwner", isOwner);
-  console.log("userHasReview", userHasReview);
-  console.log("spotHasReviews", spotHasReviews);
+  // console.log("isOwner", isOwner);
+  // console.log("userHasReview", userHasReview);
+  // console.log("spotHasReviews", spotHasReviews);
 
   // not owner of spot && no review matching user => show post a review button
 
@@ -107,7 +108,7 @@ function SpotReviews({ spot }) {
         <div id="spot-details__user-review">
           {spotReviewsArr?.length > 0 &&
             spotReviewsArr?.map((review) => {
-              console.log("each review in spot reviews map", review);
+              // console.log("each review in spot reviews map", review);
               const reviewDate = review["createdAt"].split("-");
               // console.log("in map for reviewDate", reviewDate);
               const monthNames = {
@@ -136,6 +137,14 @@ function SpotReviews({ spot }) {
                     {reviewMonthName} {reviewYear}
                   </div>
                   <div>{review["review"]}</div>
+                  {sessionUser.id === review.userId && (
+                    <div>
+                      <OpenModalButton
+                        buttonText="Delete"
+                        modalComponent={<DeleteReviewModalButton spot={spot} />}
+                      />
+                    </div>
+                  )}
                 </div>
               );
             })}

@@ -17,14 +17,14 @@ function CreateReviewModal({ spot }) {
       review,
       stars,
     };
-    console.log("this is data object to send and spot.id", spot.id, data);
+    // console.log("this is data object to send and spot.id", spot.id, data);
     dispatch(thunkCreateReview(spot.id, data))
       .then(() => dispatch(thunkGetSpotId(spot.id)))
       .then(() => dispatch(thunkGetSpotReviews(spot.id))) // dispatch an action to force a re-render of the user's spots
       .then(closeModal);
-    console.log("dispatched create review");
+    // console.log("dispatched create review");
   };
-  let disabled = review === "";
+  let disabled = review.length < 10;
   return (
     <>
       <div>
