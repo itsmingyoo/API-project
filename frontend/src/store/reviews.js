@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const GET_SPOT_REVIEWS_ACTION = "reviews/getSpotReviewsAction";
 const GET_USER_REVIEWS_ACTION = "reviews/getUserReviewsAction";
+const CREATE_REVIEW_ACTION = "reviews/createReviewAction";
 // reviews/current GET - done
 // reviews/${review.id}/images POST
 // reviews/${review.id} DELETE
@@ -18,6 +19,13 @@ const getUserReviewsAction = (reviews) => {
   return {
     type: GET_USER_REVIEWS_ACTION,
     reviews,
+  };
+};
+
+const createReviewAction = (review) => {
+  return {
+    type: CREATE_REVIEW_ACTION,
+    review,
   };
 };
 
@@ -38,6 +46,22 @@ export const thunkGetUserReviews = () => async (dispatch) => {
   return userReviews;
 };
 
+export const thunkCreateReview = (spotId, review) => async (dispatch) => {
+  try {
+    let newReview = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+      method: "POST",
+      body: JSON.stringify(review),
+    });
+    newReview = await newReview.json();
+    dispatch(createReviewAction(newReview));
+    console.log("thunk create review", newReview);
+    dispatch(thunkGetSpotReviews(spotId));
+    return newReview;
+  } catch (e) {
+    return await e.json();
+  }
+};
+
 //initialState = review = {spot, user}
 const initialState = { spot: {}, user: {} };
 const reviewsReducer = (state = initialState, action) => {
@@ -54,6 +78,12 @@ const reviewsReducer = (state = initialState, action) => {
       newState = { ...state };
       // console.log("reducer user reviews", action.reviews);
       action.reviews.forEach((review) => (newState.user[review.id] = review));
+      return newState;
+    }
+    case CREATE_REVIEW_ACTION: {
+      newState = { ...state };
+      console.log("action.review in the reducer", action.review);
+      newState.spot[action.review.id] = action.review;
       return newState;
     }
     default:

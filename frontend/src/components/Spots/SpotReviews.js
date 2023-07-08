@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { thunkGetSpotReviews } from "../../store/reviews";
+import CreateReviewModal from "./CreateReviewModal";
+import OpenModalButton from "../OpenModalButton";
 
 function SpotReviews({ spot }) {
   const dispatch = useDispatch();
@@ -10,14 +12,14 @@ function SpotReviews({ spot }) {
   const sessionUser = useSelector((state) => state.session.user);
 
   // console.log("spot.id", spot.id);
-  // console.log("spotReviewsArr", spotReviewsArr);
+  console.log("spotReviewsArr", spotReviewsArr);
   // console.log("spot", spot);
 
   useEffect(() => {
     dispatch(thunkGetSpotReviews(spot.id));
   }, [dispatch]);
 
-  if (!spotReviewsArr) return null;
+  if (!spotReviewsArr || spotReviewsArr === undefined) return null;
 
   // boolean values to hide/show post a review button
   // owner of spot => hide post a review button
@@ -43,8 +45,11 @@ function SpotReviews({ spot }) {
             //logged in && not owner && no reviews
             !spotHasReviews && !isOwner && sessionUser ? (
               <>
-                <span>Star NEW</span>
-                <button>Post Your Review</button>
+                <span>★ NEW</span>
+                <OpenModalButton
+                  buttonText="Post Your Review"
+                  modalComponent={<CreateReviewModal spot={spot} />}
+                />
                 <div>Be the first to post a review!</div>
               </>
             ) : // logged in && not owner && hasreview
@@ -55,6 +60,17 @@ function SpotReviews({ spot }) {
                 </span>
                 <span>{spot.numReviews} reviews</span>
               </>
+            ) : !userHasReview && !isOwner && sessionUser ? (
+              <>
+                <span className="spot-detail__avgRating">
+                  ★{spot.avgRating} ·
+                </span>
+                <span>{spot.numReviews} reviews</span>
+                <OpenModalButton
+                  buttonText="Post Your Review"
+                  modalComponent={<CreateReviewModal spot={spot} />}
+                />
+              </>
             ) : // logged in && not owner && multiple has reviews
             spotReviewsArr.length > 1 && !isOwner && sessionUser ? (
               <>
@@ -62,7 +78,10 @@ function SpotReviews({ spot }) {
                   ★{spot.avgRating} ·
                 </span>
                 <span>{spot.numReviews} reviews</span>
-                <button>Post Your Review</button>
+                <OpenModalButton
+                  buttonText="Post Your Review"
+                  modalComponent={<CreateReviewModal spot={spot} />}
+                />
               </>
             ) : // not logged in && 1 review
             spotReviewsArr.length === 1 && !isOwner && !sessionUser ? (
@@ -86,8 +105,9 @@ function SpotReviews({ spot }) {
           }
         </div>
         <div id="spot-details__user-review">
-          {spotReviewsArr.length > 0 &&
-            spotReviewsArr.map((review) => {
+          {spotReviewsArr?.length > 0 &&
+            spotReviewsArr?.map((review) => {
+              console.log("each review in spot reviews map", review);
               const reviewDate = review["createdAt"].split("-");
               // console.log("in map for reviewDate", reviewDate);
               const monthNames = {
@@ -108,9 +128,9 @@ function SpotReviews({ spot }) {
               const reviewMonth = reviewDate[1];
               const reviewMonthName = monthNames[reviewMonth];
               return (
-                <div key={review.User.id} id="user-review__container">
+                <div key={review?.id} id="user-review__container">
                   <div id="user-review__first-name">
-                    {review["User"]["firstName"]}
+                    {review?.User?.firstName}
                   </div>
                   <div>
                     {reviewMonthName} {reviewYear}
