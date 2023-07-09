@@ -48,10 +48,8 @@ function ProfileButton({ user }) {
       <div className={ulClassName} ref={ulRef}>
         {user ? (
           <div id="profile-container">
-            <div>{user.username}</div>
-            <div>
-              {user.firstName} {user.lastName}
-            </div>
+            {/* <div>{user.username}</div> */}
+            <div>Hello, {user.firstName}</div>
             <div>{user.email}</div>
             <div>
               <NavLink to="/spots/current" id="manage-spots">
@@ -65,18 +63,22 @@ function ProfileButton({ user }) {
             </div>
           </div>
         ) : (
-          <>
-            <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
-          </>
+          <div>
+            <div id="login-signup-modal">
+              <OpenModalMenuItem
+                itemText="Log In"
+                onItemClick={closeMenu}
+                modalComponent={<LoginFormModal />}
+              />
+            </div>
+            <div id="login-signup-modal">
+              <OpenModalMenuItem
+                itemText="Sign Up"
+                onItemClick={closeMenu}
+                modalComponent={<SignupFormModal />}
+              />
+            </div>
+          </div>
         )}
       </div>
     </>

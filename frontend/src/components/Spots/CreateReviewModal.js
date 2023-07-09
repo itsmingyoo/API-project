@@ -31,7 +31,7 @@ function CreateReviewModal({ spot }) {
   };
   // console.log("this is stars", stars);
 
-  let disabled = review.length < 10;
+  let disabled = review.length < 10 || !stars;
   return (
     <>
       <div>

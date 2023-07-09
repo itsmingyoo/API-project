@@ -38,3 +38,7 @@
     font-size: 24px;
     font-weight: bolder;
 }
+
+#login-signup-modal:hover {
+    cursor: pointer;
+}

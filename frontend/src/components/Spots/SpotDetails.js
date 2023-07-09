@@ -98,16 +98,14 @@ function SpotDetails() {
         <div id="spot-details__container-reservation">
           <div id="spot-detail__price-rating">
             <div>
-              <span>${spot.price}</span>
+              <span className="big-bold">${spot.price}</span>
             </div>
             <div>
-              <span className="spot-detail__avgRating">
-                ★{spot.avgRating} ·
-              </span>
+              <span className="big-bold">★{spot.avgRating} ·</span>
               {spot.numReviews === 1 ? (
-                <span>{spot.numReviews} review</span>
+                <span className="big-bold">{spot.numReviews} review</span>
               ) : (
-                <span>{spot.numReviews} reviews</span>
+                <span className="big-bold">{spot.numReviews} reviews</span>
               )}
             </div>
           </div>

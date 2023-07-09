@@ -134,7 +134,10 @@ img {
 #spot-detail__price-rating {
     display: flex;
     justify-content: space-between;
-    /* border: 1px dotted blue */
+    align-items: center;
+    /* border: 1px dotted blue; */
+    align-content: center;
+    padding-bottom: 7px;
 }
 
 #spot-details__reserve-button, #create-spot-button{
@@ -180,6 +183,15 @@ img {
 #spot-details__location-text {
     font-size: 14px;
     margin-left: 20px;
+}
+
+#spot__item-price-night {
+    display: flex;
+
+}
+
+#spot__item-price-night> label {
+    font-size: 18px;
 }
 
 #form__main-container {
@@ -244,8 +256,12 @@ img {
     margin: 5px;
 }
 
-#create-review__button {
-    /* padding: .6rem; */
+#user-spot__link {
+    text-decoration: none;
+}
+
+#create-review__button > button {
+    padding: .2rem;
     border: 1px solid black;
     box-shadow: 4px 4px 4px black;
     color: white;
@@ -255,6 +271,10 @@ img {
 
 #user-review__container {
     margin: 10px;
+}
+
+#stars-name {
+    margin-left: 5px;
 }
 
 

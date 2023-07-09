@@ -17,6 +17,19 @@ body {
     font-size: 14px;
 }
 
+#modal-content {
+    border-radius: 15px;
+    box-shadow: 4px 4px 4px black;
+}
+
+.button {
+    padding: .6rem;
+    border: 1px solid black;
+    box-shadow: 4px 4px 4px black;
+    color: white;
+    background-color: red;
+}
+
 /* TODO STYLES
 Heading: 24pt, bold
 Subheading: 18pt, bold

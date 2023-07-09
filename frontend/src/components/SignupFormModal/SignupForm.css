@@ -1,0 +1,32 @@
+h1 {
+    text-align: center;
+}
+
+#signup-form__container {
+    border-radius: 15px
+}
+
+#signup-form__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+#signup-form__content > * {
+    margin-bottom: 10px;
+}
+
+label > input {
+    margin-left: 10px;
+}
+
+#signup-form__button {
+    padding: 5px 40px;
+    color: white;
+    background-color: red;
+}
+
+#disabled {
+    background-color: lightgray;
+}

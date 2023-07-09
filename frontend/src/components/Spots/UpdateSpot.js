@@ -157,7 +157,7 @@ function UpdateSpot() {
     <div>
       <hr></hr>
       <form id="form__main-container" onSubmit={onSubmit}>
-        <h1>Create a new Spot</h1>
+        <h1>Update Your Spot</h1>
         <div>
           <h2>Where's your place located?</h2>
           <p>
@@ -346,7 +346,7 @@ function UpdateSpot() {
             onChange={(e) => setImageFour(e.target.value)}
           />
         </div>
-        <button id="create-spot-button">Create Spot</button>
+        <button id="create-spot-button">Update Your Spot</button>
       </form>
     </div>
   );

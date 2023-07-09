@@ -6,12 +6,22 @@ function SpotItem({ spot }) {
         <img src={spot?.previewImage} alt="previewImage" />
       </div>
       <div id="spot__item-info">
-        <div>
+        <div className="big-bold">
           {spot.city}, {spot.state}
         </div>
-        {spot.avgRating ? <div>★ {spot.avgRating}</div> : <div>★ New</div>}
+        {spot.avgRating ? (
+          <div className="big-bold">★ {spot.avgRating}</div>
+        ) : (
+          <div className="big-bold">★ New</div>
+        )}
       </div>
-      <div id="spot__item-price">${spot.price}</div>
+      <div id="spot__item-price-night">
+        <span id="spot__item-price" className="big-bold">
+          ${`${spot.price}  `}
+          &nbsp;
+        </span>
+        <label>night</label>
+      </div>
     </>
   );
 }
