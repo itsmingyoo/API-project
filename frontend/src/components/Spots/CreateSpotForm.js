@@ -105,6 +105,12 @@ function CreateSpot() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    const spotImages = [];
+    if (imageOne && imageOne !== "") spotImages.push(imageOne);
+    if (imageTwo && imageTwo !== "") spotImages.push(imageTwo);
+    if (imageThree && imageThree !== "") spotImages.push(imageThree);
+    if (imageFour && imageFour !== "") spotImages.push(imageFour);
+
     const formData = {
       country,
       address,
@@ -116,7 +122,9 @@ function CreateSpot() {
       name,
       price: Number(price),
     };
-    const res = await dispatch(thunkCreateSpot(formData, previewImage));
+    const res = await dispatch(
+      thunkCreateSpot(formData, previewImage, spotImages)
+    );
     // console.log("in the submit, res", res);
 
     const dispatchErrors = {};
@@ -311,6 +319,9 @@ function CreateSpot() {
             value={imageOne}
             onChange={(e) => setImageOne(e.target.value)}
           />
+          {validationErrors.imageOne && (
+            <p className="errors">{validationErrors.imageOne}</p>
+          )}
           <input
             type="url"
             name="image-url"
@@ -318,6 +329,9 @@ function CreateSpot() {
             value={imageTwo}
             onChange={(e) => setImageTwo(e.target.value)}
           />
+          {validationErrors.imageTwo && (
+            <p className="errors">{validationErrors.imageTwo}</p>
+          )}
           <input
             type="url"
             name="image-url"
@@ -325,6 +339,9 @@ function CreateSpot() {
             value={imageThree}
             onChange={(e) => setImageThree(e.target.value)}
           />
+          {validationErrors.imageThree && (
+            <p className="errors">{validationErrors.imageThree}</p>
+          )}
           <input
             type="url"
             name="image-url"
@@ -332,6 +349,9 @@ function CreateSpot() {
             value={imageFour}
             onChange={(e) => setImageFour(e.target.value)}
           />
+          {validationErrors.imageFour && (
+            <p className="errors">{validationErrors.imageFour}</p>
+          )}
         </div>
         <button id="create-spot-button">Create Spot</button>
       </form>

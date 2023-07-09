@@ -20,6 +20,7 @@ function SpotDetails() {
 
   if (!spot || !Object.values(spot).length || spot.id !== spotId) return null;
 
+  // console.log("this is spot we are working with", spot);
   // object: fit-cover css???
   const firstImage = spot ? spot?.SpotImages?.[0]?.url : [];
   const fourImages = []; // array of obj, must key into url kvp
