@@ -1,0 +1,20 @@
+  input[type="number"] {
+    max-width: 30px;
+  }
+
+  .rating-input {
+    display: flex;
+    margin-right: 4px;
+  }
+
+  .review-item {
+    display: flex;
+  }
+
+  .rating-input .filled {
+    color: saddlebrown;
+  }
+
+  .rating-input .empty {
+    color: burlywood;
+  }
