@@ -106,7 +106,11 @@ function SpotDetails() {
               <span className="spot-detail__avgRating">
                 ★{spot.avgRating} ·
               </span>
-              <span>{spot.numReviews} review(s)</span>
+              {spot.numReviews === 1 ? (
+                <span>{spot.numReviews} review</span>
+              ) : (
+                <span>{spot.numReviews} reviews</span>
+              )}
             </div>
           </div>
           <button

@@ -24,6 +24,19 @@ function LoginFormModal() {
         }
       });
   };
+  const demo = () => {
+    setErrors({});
+    return dispatch(
+      sessionActions.login({ credential: "FakeUser1", password: "password2" })
+    )
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
+  };
 
   return (
     <>
@@ -49,6 +62,7 @@ function LoginFormModal() {
         </label>
         {errors.credential && <p>{errors.credential}</p>}
         <button type="submit">Log In</button>
+        <p onClick={demo}>Demo User</p>
       </form>
     </>
   );
