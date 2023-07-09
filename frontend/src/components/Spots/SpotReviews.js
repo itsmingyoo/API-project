@@ -137,7 +137,7 @@ function SpotReviews({ spot }) {
                     {reviewMonthName} {reviewYear}
                   </div>
                   <div>{review["review"]}</div>
-                  {sessionUser.id === review.userId && (
+                  {sessionUser?.id === review?.userId && (
                     <div>
                       <OpenModalButton
                         buttonText="Delete"
