@@ -141,7 +141,12 @@ function SpotReviews({ spot }) {
                     <div>
                       <OpenModalButton
                         buttonText="Delete"
-                        modalComponent={<DeleteReviewModalButton spot={spot} />}
+                        modalComponent={
+                          <DeleteReviewModalButton
+                            spot={spot}
+                            review={review}
+                          />
+                        }
                       />
                     </div>
                   )}

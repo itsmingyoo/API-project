@@ -3,19 +3,20 @@ import { useModal } from "../../context/Modal";
 import { useDispatch } from "react-redux";
 import { thunkCreateReview, thunkGetSpotReviews } from "../../store/reviews";
 import { thunkGetSpotId } from "../../store/spots";
+import StarRatingInput from "./StarRatingInput";
 
 function CreateReviewModal({ spot }) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
   const [review, setReview] = useState("");
-  const [stars, setStars] = useState(5);
+  const [stars, setStars] = useState("");
 
-  console.log(`YOU ARE WORKING WITH THIS ===`, spot);
+  // console.log(`YOU ARE WORKING WITH THIS ===`, spot);
   const onClick = (e) => {
     e.preventDefault();
     const data = {
       review,
-      stars,
+      stars: Number(stars),
     };
     // console.log("this is data object to send and spot.id", spot.id, data);
     dispatch(thunkCreateReview(spot.id, data))
@@ -24,6 +25,12 @@ function CreateReviewModal({ spot }) {
       .then(closeModal);
     // console.log("dispatched create review");
   };
+
+  const onChange = (number) => {
+    setStars(parseInt(number));
+  };
+  // console.log("this is stars", stars);
+
   let disabled = review.length < 10;
   return (
     <>
@@ -35,7 +42,12 @@ function CreateReviewModal({ spot }) {
           value={review}
           onChange={(e) => setReview(e.target.value)}
         ></input>
-        <div>5 star elements : Stars</div>
+        <StarRatingInput
+          disabled={false}
+          onChange={onChange}
+          stars={stars}
+          spot={spot}
+        />
         <button onClick={onClick} disabled={disabled}>
           Submit Your Review
         </button>

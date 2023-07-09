@@ -76,7 +76,7 @@ export const thunkDeleteReview = (reviewId) => async (dispatch) => {
   });
   del = await del.json();
   dispatch(deleteReviewAction(reviewId));
-  console.log("this is del", reviewId);
+  // console.log("this is del", reviewId);
   return del;
 };
 
@@ -106,7 +106,11 @@ const reviewsReducer = (state = initialState, action) => {
     }
     case DELETE_REVIEW_ACTION: {
       newState = { ...state };
-      console.log("reducer action.reviewId", action.reviewId);
+      console.log(
+        "reducer action.reviewId",
+        action.reviewId,
+        typeof action.reviewId
+      );
       delete newState.spot[action.reviewId];
       return newState;
     }

@@ -1,20 +1,19 @@
 import React, { useEffect } from "react";
 import { useModal } from "../../context/Modal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { thunkDeleteReview, thunkGetSpotReviews } from "../../store/reviews";
 import { thunkGetSpotId } from "../../store/spots";
 
-function DeleteReviewModalButton({ spot }) {
+function DeleteReviewModalButton({ spot, review }) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
-  const onClick = (e) => {
+  const onClick = async (e) => {
     e.preventDefault();
-    dispatch(thunkDeleteReview(spot.id))
+    dispatch(thunkDeleteReview(review.id))
       .then(() => dispatch(thunkGetSpotId(spot.id)))
       .then(() => dispatch(thunkGetSpotReviews(spot.id)))
       .then(closeModal);
   };
-
   return (
     <>
       <div>
