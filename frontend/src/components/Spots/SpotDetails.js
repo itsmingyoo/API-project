@@ -4,16 +4,18 @@ import { useEffect } from "react";
 import { thunkGetSpotId } from "../../store/spots";
 import { LoremIpsum } from "react-lorem-ipsum";
 import SpotReviews from "./SpotReviews";
+import { thunkGetSpotReviews } from "../../store/reviews";
 
 function SpotDetails() {
   const dispatch = useDispatch();
   let { spotId } = useParams();
   spotId = parseInt(spotId);
   const spot = useSelector((state) => state.spots.singleSpot);
-  const sessionUser = useSelector((state) => state.session.user);
+  // const sessionUser = useSelector((state) => state.session.user);
 
   useEffect(() => {
     dispatch(thunkGetSpotId(spotId));
+    dispatch(thunkGetSpotReviews(spotId));
   }, [spotId, dispatch]);
 
   if (!spot || !Object.values(spot).length || spot.id !== spotId) return null;
