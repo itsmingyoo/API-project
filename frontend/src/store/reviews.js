@@ -40,7 +40,6 @@ const deleteReviewAction = (reviewId) => {
 export const thunkGetSpotReviews = (spotId) => async (dispatch) => {
   let reviews = await csrfFetch(`/api/spots/${spotId}/reviews`);
   reviews = await reviews.json();
-  // console.log("get spot reviews", reviews);
   dispatch(getSpotReviewsAction(reviews));
   return reviews;
 };
@@ -48,8 +47,6 @@ export const thunkGetSpotReviews = (spotId) => async (dispatch) => {
 export const thunkGetUserReviews = () => async (dispatch) => {
   let userReviews = await csrfFetch(`/api/reviews/current`);
   userReviews = await userReviews.json();
-
-  console.log("thunk userReviews", userReviews.Reviews);
   dispatch(getUserReviewsAction(userReviews.Reviews));
   return userReviews;
 };
@@ -62,7 +59,6 @@ export const thunkCreateReview = (spotId, review) => async (dispatch) => {
     });
     newReview = await newReview.json();
     dispatch(createReviewAction(newReview));
-    // console.log("thunk create review", newReview);
     dispatch(thunkGetSpotReviews(spotId));
     return newReview;
   } catch (e) {
@@ -76,7 +72,6 @@ export const thunkDeleteReview = (reviewId) => async (dispatch) => {
   });
   del = await del.json();
   dispatch(deleteReviewAction(reviewId));
-  // console.log("this is del", reviewId);
   return del;
 };
 
@@ -94,23 +89,16 @@ const reviewsReducer = (state = initialState, action) => {
     }
     case GET_USER_REVIEWS_ACTION: {
       newState = { ...state };
-      // console.log("reducer user reviews", action.reviews);
       action.reviews.forEach((review) => (newState.user[review.id] = review));
       return newState;
     }
     case CREATE_REVIEW_ACTION: {
       newState = { ...state };
-      // console.log("action.review in the reducer", action.review);
       newState.spot[action.review.id] = action.review;
       return newState;
     }
     case DELETE_REVIEW_ACTION: {
       newState = { ...state };
-      console.log(
-        "reducer action.reviewId",
-        action.reviewId,
-        typeof action.reviewId
-      );
       delete newState.spot[action.reviewId];
       return newState;
     }

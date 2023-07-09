@@ -27,7 +27,7 @@ const StarRatingInput = ({ stars, disabled, onChange }) => {
           if (!disabled) onChange(1);
         }}
       >
-        <i class="fa-solid fa-star"></i>
+        <i className="fa-solid fa-star"></i>
       </div>
       <div
         className={activeStars >= 2 ? "filled" : "empty"}
@@ -41,7 +41,7 @@ const StarRatingInput = ({ stars, disabled, onChange }) => {
           if (!disabled) onChange(2);
         }}
       >
-        <i class="fa-solid fa-star"></i>
+        <i className="fa-solid fa-star"></i>
       </div>
       <div
         className={activeStars >= 3 ? "filled" : "empty"}
@@ -55,7 +55,7 @@ const StarRatingInput = ({ stars, disabled, onChange }) => {
           if (!disabled) onChange(3);
         }}
       >
-        <i class="fa-solid fa-star"></i>
+        <i className="fa-solid fa-star"></i>
       </div>
       <div
         className={activeStars >= 4 ? "filled" : "empty"}
@@ -69,7 +69,7 @@ const StarRatingInput = ({ stars, disabled, onChange }) => {
           if (!disabled) onChange(4);
         }}
       >
-        <i class="fa-solid fa-star"></i>
+        <i className="fa-solid fa-star"></i>
       </div>
       <div
         className={activeStars >= 5 ? "filled" : "empty"}
@@ -83,7 +83,7 @@ const StarRatingInput = ({ stars, disabled, onChange }) => {
           if (!disabled) onChange(5);
         }}
       >
-        <i class="fa-solid fa-star"></i>
+        <i className="fa-solid fa-star"></i>
       </div>
     </div>
   );
