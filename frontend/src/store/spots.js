@@ -171,7 +171,7 @@ const spotsReducer = (state = initialState, action) => {
           ...state.allSpots,
           [action.payload.id]: {
             ...action.payload,
-            previewImage: action.image,
+            previewImage: action.image.url,
           },
         },
       };

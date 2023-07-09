@@ -1,8 +1,14 @@
 function SpotItem({ spot }) {
+  if (!spot.previewImage) return null;
   return (
     <>
       <div id="spot-img">
-        <img src={spot.previewImage} alt="previewImage" />
+        {console.log(
+          "this is spot.previewImage in spotitem",
+          spot.previewImage,
+          spot
+        )}
+        <img src={spot?.previewImage} alt="previewImage" />
       </div>
       <div id="spot__item-info">
         <div>
