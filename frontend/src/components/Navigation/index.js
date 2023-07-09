@@ -12,10 +12,12 @@ function Navigation({ isLoaded }) {
     <div id="header-container">
       <div id="header-content">
         <div>
+          <i className="fa-light fa-tent">ICON HERE</i>
           <NavLink exact to="/" id="header-content__home">
-            <h2>AirBlobandBlob Logo</h2>
+            <div id="header-logo">AirBlob&Blob</div>
           </NavLink>
         </div>
+
         {isLoaded && (
           <div id="header-content__buttons">
             {sessionUser && (

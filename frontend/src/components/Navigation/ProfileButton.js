@@ -45,25 +45,25 @@ function ProfileButton({ user }) {
       <button onClick={openMenu}>
         <i className="fas fa-user-circle" />
       </button>
-      <ul className={ulClassName} ref={ulRef}>
+      <div className={ulClassName} ref={ulRef}>
         {user ? (
-          <>
-            <li>{user.username}</li>
-            <li>
+          <div id="profile-container">
+            <div>{user.username}</div>
+            <div>
               {user.firstName} {user.lastName}
-            </li>
-            <li>{user.email}</li>
-            <li>
+            </div>
+            <div>{user.email}</div>
+            <div>
               <NavLink to="/spots/current" id="manage-spots">
                 Manage Spots
               </NavLink>
-            </li>
-            <li>
+            </div>
+            <div>
               <button onClick={logout}>
                 <NavLink to="/">Log Out</NavLink>
               </button>
-            </li>
-          </>
+            </div>
+          </div>
         ) : (
           <>
             <OpenModalMenuItem
@@ -78,7 +78,7 @@ function ProfileButton({ user }) {
             />
           </>
         )}
-      </ul>
+      </div>
     </>
   );
 }

@@ -1,0 +1,20 @@
+#login-form__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-form__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10%;
+}
+
+#login-form__button {
+    padding: .6rem;
+    border: 1px solid black;
+    box-shadow: 4px 4px 4px black;
+    color: white;
+    background-color: red;
+}

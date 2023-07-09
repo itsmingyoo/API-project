@@ -75,6 +75,10 @@ img {
     height: 100%;
 }
 
+#spot-img > img {
+    border-radius: 15px;
+}
+
 #spot-image {
     width: 48%;
     height: 50%;
@@ -90,12 +94,20 @@ img {
     padding-top: 8px;
 }
 
+#spot-image > img {
+    border-radius: 15px;
+}
+
 #spot-image__left {
     display: flex;
     width: 50%;
     height: 100%;
     align-items: center;
     padding: 2px 3px;
+}
+
+#spot-image__left > img {
+    border-radius: 15px;
 }
 
 #spot-details__container-description {
@@ -153,11 +165,21 @@ img {
 }
 
 .spot-details__text {
-    font-weight: bold;
+    font-size: 14px;
+    margin-top: 5px;
 }
 
 .spot-detail__avgRating {
     margin-right: 8px;
+}
+
+#spot-detail__name {
+    margin-left: 20px;
+}
+
+#spot-details__location-text {
+    font-size: 14px;
+    margin-left: 20px;
 }
 
 #form__main-container {
@@ -221,6 +243,21 @@ img {
 #user-spot__content {
     margin: 5px;
 }
+
+#create-review__button {
+    /* padding: .6rem; */
+    border: 1px solid black;
+    box-shadow: 4px 4px 4px black;
+    color: white;
+    background-color: red;
+    margin: 5px;
+}
+
+#user-review__container {
+    margin: 10px;
+}
+
+
 
 @media screen and (max-width: 1023px) {
     #spot-item-container {

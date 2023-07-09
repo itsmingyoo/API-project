@@ -1,4 +1,21 @@
 /* TODO Add site wide styles */
+body {
+    background-color: #999999;
+}
+
+.huge-bold {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.big-bold {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.normal {
+    font-size: 14px;
+}
 
 /* TODO STYLES
 Heading: 24pt, bold
