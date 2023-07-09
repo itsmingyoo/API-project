@@ -406,8 +406,24 @@ router.get("/:spotId", async (req, res) => {
   let spot = await Spot.findByPk(req.params.spotId, {
     attributes: {
       include: [
-        [sequelize.fn("COUNT", sequelize.col("stars")), "numReviews"],
-        [sequelize.fn("AVG", sequelize.col("stars")), "avgRating"],
+        // [sequelize.fn("COUNT", sequelize.col("Review.stars")), "numReviews"],
+        // [sequelize.fn("AVG", sequelize.col("Review.stars")), "avgRating"],
+        [
+          sequelize.fn(
+            "ROUND",
+            sequelize.fn("COUNT", sequelize.col("Reviews.stars")),
+            1
+          ),
+          "numReviews",
+        ],
+        [
+          sequelize.fn(
+            "ROUND",
+            sequelize.fn("AVG", sequelize.col("Reviews.stars")),
+            1
+          ),
+          "avgRating",
+        ],
       ],
     },
     include: [
@@ -424,7 +440,8 @@ router.get("/:spotId", async (req, res) => {
         attributes: ["id", "firstName", "lastName"],
       },
     ],
-    group: ["Spot.id", "Reviews.id", "SpotImages.id", "User.id"],
+    // group: ["Spot.id", "Reviews.id", "SpotImages.id", "User.id"], // prior to trying to fix numReviews & avgRating
+    group: ["Spot.id", "SpotImages.id", "User.id"],
   });
 
   if (!spot || spot === null) {
