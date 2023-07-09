@@ -16,13 +16,13 @@ function SpotDetails() {
     dispatch(thunkGetSpotId(spotId));
   }, [spotId, dispatch]);
 
-  if (!spot || spot.id !== spotId) return null;
+  if (!spot || !Object.values(spot).length || spot.id !== spotId) return null;
 
   // object: fit-cover css???
   const firstImage = spot ? spot?.SpotImages?.[0]?.url : [];
   const fourImages = []; // array of obj, must key into url kvp
 
-  if (spot.SpotImages?.length > 1) {
+  if (spot?.SpotImages?.length > 1) {
     for (let i = 1; i < 5; i++) {
       const image = spot.SpotImages[i];
       if (image !== null || image !== undefined) {
@@ -56,12 +56,12 @@ function SpotDetails() {
         <div id="spot-image__right">
           {fourImages.length > 0 &&
             fourImages.map((image) => (
-              <div key={image.id} id={`spot-image`}>
+              <div key={image?.id} id={`spot-image`}>
                 {/* {console.log("inside map", image)} */}
                 <img
                   src={image.url}
-                  className={`spot-image__${image.id} spot-image`}
-                  alt={`spot-image__${image.id}`}
+                  className={`spot-image__${image?.id} spot-image`}
+                  alt={`spot-image__${image?.id}`}
                 />
               </div>
             ))}
