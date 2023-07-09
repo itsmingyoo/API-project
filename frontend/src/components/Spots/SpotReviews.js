@@ -19,11 +19,8 @@ function SpotReviews({ spot }) {
   useEffect(() => {
     dispatch(thunkGetSpotReviews(spot.id));
   }, [dispatch]);
-
   if (!spotReviewsArr || spotReviewsArr === undefined) return null;
 
-  // boolean values to hide/show post a review button
-  // owner of spot => hide post a review button
   const isOwner = sessionUser?.id === spot.ownerId ? true : false;
   const userHasReview =
     spotReviewsArr.filter((spotReview) => spotReview.userId === sessionUser?.id)
@@ -34,8 +31,6 @@ function SpotReviews({ spot }) {
   // console.log("isOwner", isOwner);
   // console.log("userHasReview", userHasReview);
   // console.log("spotHasReviews", spotHasReviews);
-
-  // not owner of spot && no review matching user => show post a review button
 
   return (
     <>

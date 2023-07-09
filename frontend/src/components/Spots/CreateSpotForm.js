@@ -57,7 +57,7 @@ function CreateSpot() {
     }
 
     if (state.length > 2 || state.length < 2) {
-      errors["state"] = "State must be capitalized and 2 characters";
+      errors["state"] = "State must be 2 capital letters";
     }
 
     if (description.length < 30 && description.length > 0) {
