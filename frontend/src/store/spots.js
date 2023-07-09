@@ -77,31 +77,43 @@ export const thunkGetSpotId = (spotId) => async (dispatch) => {
   return data;
 };
 
-export const thunkCreateSpot = (formData, image) => async (dispatch) => {
-  try {
-    const res = await csrfFetch("/api/spots", {
-      method: "POST",
-      body: JSON.stringify(formData),
-    });
+export const thunkCreateSpot =
+  (formData, image, imageArray) => async (dispatch) => {
+    try {
+      const res = await csrfFetch("/api/spots", {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
 
-    // console.log("in the thunk image", image); //returns url
-    const newSpot = await res.json();
-    // console.log("in the thunk newSpot", newSpot);
-    let newImage = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
-      method: "POST",
-      body: JSON.stringify({
-        url: image,
-        preview: true,
-      }),
-    });
-    newImage = await newImage.json();
+      // console.log("in the thunk image", image); //returns url
+      const newSpot = await res.json();
+      // console.log("in the thunk newSpot", newSpot);
+      let newImage = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
+        method: "POST",
+        body: JSON.stringify({
+          url: image,
+          preview: true,
+        }),
+      });
+      newImage = await newImage.json();
 
-    await dispatch(createSpotAction(newSpot, newImage));
-    return newSpot;
-  } catch (e) {
-    return await e.json();
-  }
-};
+      for (let i = 0; i < imageArray.length; i++) {
+        const image = imageArray[i];
+        await csrfFetch(`/api/spots/${newSpot.id}/images`, {
+          method: "POST",
+          body: JSON.stringify({
+            url: image,
+            preview: false,
+          }),
+        });
+      }
+
+      await dispatch(createSpotAction(newSpot, newImage));
+      return newSpot;
+    } catch (e) {
+      return await e.json();
+    }
+  };
 
 export const thunkGetUserSpots = () => async (dispatch) => {
   let userSpots = await csrfFetch("/api/spots/current");
@@ -171,7 +183,7 @@ const spotsReducer = (state = initialState, action) => {
           ...state.allSpots,
           [action.payload.id]: {
             ...action.payload,
-            previewImage: action.image,
+            previewImage: action.image.url,
           },
         },
       };
