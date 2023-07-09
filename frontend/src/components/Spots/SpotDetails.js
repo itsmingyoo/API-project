@@ -93,6 +93,7 @@ function SpotDetails() {
             <div className="spot-details__text">{spot.description}</div>
           </div>
         </div>
+
         <div id="spot-details__container-reservation">
           <div id="spot-detail__price-rating">
             <div>
@@ -117,16 +118,7 @@ function SpotDetails() {
       <hr></hr>
 
       {/* reviews component */}
-      <div id="spot-details__container-reviews">
-        {/* Star rating && # of Reviews */}
-        <div>
-          <span className="spot-detail__avgRating">★{spot.avgRating} ·</span>
-          <span>{spot.numReviews} review(s)</span>
-          {sessionUser && (
-            <button id="spot-detail__create-review">Post Your Review</button>
-          )}
-        </div>
-
+      <div>
         <SpotReviews spot={spot} />
       </div>
     </div>

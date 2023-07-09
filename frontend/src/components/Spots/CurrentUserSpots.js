@@ -29,7 +29,9 @@ function CurrentUserSpots({ spots }) {
           userSpots.map((spot) => (
             <div key={spot.id} id="user-spot__content">
               <div id={`user-spot__${spot.id} user-spot__image`}>
-                <img src={spot.previewImage} alt="preview" />
+                <NavLink to={`/spots/${spot.id}`}>
+                  <img src={spot.previewImage} alt="preview" />
+                </NavLink>
               </div>
               <div id="user-spot__location-rating">
                 <div id="user-spot__location">
