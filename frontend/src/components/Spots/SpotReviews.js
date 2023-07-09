@@ -102,52 +102,54 @@ function SpotReviews({ spot }) {
         </div>
         <div id="spot-details__user-review">
           {spotReviewsArr?.length > 0 &&
-            spotReviewsArr?.map((review) => {
-              // console.log("each review in spot reviews map", review);
-              const reviewDate = review["createdAt"].split("-");
-              // console.log("in map for reviewDate", reviewDate);
-              const monthNames = {
-                "01": "January",
-                "02": "February",
-                "03": "March",
-                "04": "April",
-                "05": "May",
-                "06": "June",
-                "07": "July",
-                "08": "August",
-                "09": "September",
-                10: "October",
-                11: "November",
-                12: "December",
-              };
-              const reviewYear = reviewDate[0];
-              const reviewMonth = reviewDate[1];
-              const reviewMonthName = monthNames[reviewMonth];
-              return (
-                <div key={review?.id} id="user-review__container">
-                  <div id="user-review__first-name">
-                    {review?.User?.firstName}
-                  </div>
-                  <div>
-                    {reviewMonthName} {reviewYear}
-                  </div>
-                  <div>{review["review"]}</div>
-                  {sessionUser?.id === review?.userId && (
-                    <div>
-                      <OpenModalButton
-                        buttonText="Delete"
-                        modalComponent={
-                          <DeleteReviewModalButton
-                            spot={spot}
-                            review={review}
-                          />
-                        }
-                      />
+            spotReviewsArr
+              ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .map((review) => {
+                // console.log("each review in spot reviews map", review);
+                const reviewDate = review["createdAt"].split("-");
+                // console.log("in map for reviewDate", reviewDate);
+                const monthNames = {
+                  "01": "January",
+                  "02": "February",
+                  "03": "March",
+                  "04": "April",
+                  "05": "May",
+                  "06": "June",
+                  "07": "July",
+                  "08": "August",
+                  "09": "September",
+                  10: "October",
+                  11: "November",
+                  12: "December",
+                };
+                const reviewYear = reviewDate[0];
+                const reviewMonth = reviewDate[1];
+                const reviewMonthName = monthNames[reviewMonth];
+                return (
+                  <div key={review?.id} id="user-review__container">
+                    <div id="user-review__first-name">
+                      {review?.User?.firstName}
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                    <div>
+                      {reviewMonthName} {reviewYear}
+                    </div>
+                    <div>{review["review"]}</div>
+                    {sessionUser?.id === review?.userId && (
+                      <div>
+                        <OpenModalButton
+                          buttonText="Delete"
+                          modalComponent={
+                            <DeleteReviewModalButton
+                              spot={spot}
+                              review={review}
+                            />
+                          }
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
         </div>
       </div>
     </>
