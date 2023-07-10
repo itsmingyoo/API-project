@@ -130,7 +130,7 @@ function UpdateSpot() {
       price: Number(price),
     };
     const res = await dispatch(thunkUpdateUserSpot(Number(spotId), formData));
-    console.log("in the submit, res", res);
+    // console.log("in the submit, res", res);
 
     const dispatchErrors = {};
     if (address === "") dispatchErrors["address"] = res.errors.address;
@@ -453,9 +453,8 @@ function UpdateSpot() {
               neighborhood.
             </p>
             <div>
-              <input
+              <textarea
                 id="form__owner-description"
-                type="text"
                 name="description"
                 placeholder="Please write at least 30 characters"
                 value={description}

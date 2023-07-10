@@ -4,6 +4,7 @@ import { thunkGetUserSpots } from "../../store/spots";
 import DeleteModalButton from "./DeleteSpotModal";
 import OpenModalButton from "../OpenModalButton";
 import { NavLink } from "react-router-dom";
+import "./spots.css";
 
 function CurrentUserSpots({ spots }) {
   // console.log("this is spots in currentuserspots", spots);
@@ -41,7 +42,11 @@ function CurrentUserSpots({ spots }) {
                     <span>{spot.city}, </span>
                     <span>{spot.state}</span>
                   </div>
-                  <div id="user-spot__rating">★ {spot.avgRating}</div>
+                  {spot?.avgRating || spot?.numReviews ? (
+                    <div id="user-spot__rating">★ {spot.avgRating}</div>
+                  ) : (
+                    <div id="user-spot__rating">★ New</div>
+                  )}
                 </div>
                 <div id="user-spot__price">${spot.price} night</div>
               </NavLink>

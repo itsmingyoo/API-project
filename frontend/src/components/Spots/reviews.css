@@ -7,3 +7,24 @@
     padding: 40px;
     row-gap: 10px;
 }
+
+/* #create-review__button > button {
+    padding: .6rem;
+    border: 1px solid black;
+    box-shadow: 4px 4px 4px black;
+    color: white;
+    background-color: red;
+} */
+
+#delete-review__button > button{
+    /* padding: .6rem; */
+    border: 1px solid black;
+    box-shadow: 4px 4px 4px black;
+    color: white;
+    background-color: darkgray;
+}
+
+#spot-details__user-review, #spot-details__container-reviews {
+    margin-bottom: 20px;
+    /* padding-bottom: 15px; */
+}
