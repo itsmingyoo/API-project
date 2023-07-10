@@ -299,6 +299,10 @@ img {
     border-radius: 30px;
 }
 
+img {
+    border-radius: 25px;
+}
+
 #user-spot__link {
     border-radius: 30px;
 }
