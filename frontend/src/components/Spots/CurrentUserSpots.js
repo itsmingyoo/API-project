@@ -21,7 +21,7 @@ function CurrentUserSpots({ spots }) {
     <>
       <div id="manage-spots__header">
         <h2>Manage Your Spots</h2>
-        {!userSpots && (
+        {userSpots.length === 0 && (
           <NavLink to="/spots">
             <button>Create a New Spot</button>
           </NavLink>
