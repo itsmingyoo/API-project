@@ -257,9 +257,8 @@ function CreateSpot() {
               neighborhood.
             </p>
             <div>
-              <input
+              <textarea
                 id="form__owner-description"
-                type="textarea"
                 name="description"
                 placeholder="Please write at least 30 characters"
                 value={description}

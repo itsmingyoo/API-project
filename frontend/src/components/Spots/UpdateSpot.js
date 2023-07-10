@@ -453,9 +453,8 @@ function UpdateSpot() {
               neighborhood.
             </p>
             <div>
-              <input
+              <textarea
                 id="form__owner-description"
-                type="text"
                 name="description"
                 placeholder="Please write at least 30 characters"
                 value={description}
