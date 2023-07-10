@@ -60,7 +60,7 @@ function SpotDetails() {
               <div key={image?.id} id={`spot-image`}>
                 {/* {console.log("inside map", image)} */}
                 <img
-                  src={image.url}
+                  src={image?.url}
                   className={`spot-image__${image?.id} spot-image`}
                   alt={`spot-image__${image?.id}`}
                 />
