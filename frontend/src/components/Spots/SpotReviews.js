@@ -4,6 +4,7 @@ import { thunkGetSpotReviews } from "../../store/reviews";
 import CreateReviewModal from "./CreateReviewModal";
 import OpenModalButton from "../OpenModalButton";
 import DeleteReviewModalButton from "./DeleteReviewModal";
+import "./reviews.css";
 
 function SpotReviews({ spot }) {
   const dispatch = useDispatch();
@@ -42,10 +43,12 @@ function SpotReviews({ spot }) {
             !spotHasReviews && !isOwner && sessionUser ? (
               <>
                 <span className="huge-bold">★ NEW</span>
-                <OpenModalButton
-                  buttonText="Post Your Review"
-                  modalComponent={<CreateReviewModal spot={spot} />}
-                />
+                <div id="create-review__button">
+                  <OpenModalButton
+                    buttonText="Post Your Review"
+                    modalComponent={<CreateReviewModal spot={spot} />}
+                  />
+                </div>
                 <div>Be the first to post a review!</div>
               </>
             ) : // logged in && not owner && hasreview
@@ -129,7 +132,7 @@ function SpotReviews({ spot }) {
                     </div>
                     <div>{review["review"]}</div>
                     {sessionUser?.id === review?.userId && (
-                      <div>
+                      <div id="delete-review__button">
                         <OpenModalButton
                           buttonText="Delete"
                           modalComponent={

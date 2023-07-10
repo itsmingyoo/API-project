@@ -130,7 +130,7 @@ function UpdateSpot() {
       price: Number(price),
     };
     const res = await dispatch(thunkUpdateUserSpot(Number(spotId), formData));
-    console.log("in the submit, res", res);
+    // console.log("in the submit, res", res);
 
     const dispatchErrors = {};
     if (address === "") dispatchErrors["address"] = res.errors.address;

@@ -6,6 +6,7 @@ import {
   thunkGetSpots,
   thunkGetUserSpots,
 } from "../../store/spots";
+import "./spots.css";
 
 function DeleteModalButton({ spot }) {
   const dispatch = useDispatch();
@@ -20,11 +21,17 @@ function DeleteModalButton({ spot }) {
 
   return (
     <>
-      <div>
-        <div>Confirm Delete</div>
+      <div id="confirm-modal">
+        <div id="confirm-delete">Confirm Delete</div>
         <p>Are you sure you want to remove this spot from the listings?</p>
-        <button onClick={onClick}>Yes (Delete Spot)</button>
-        <button onClick={closeModal}>No (Keep Spot)</button>
+        <div id="confirm-buttons__container">
+          <button onClick={onClick} id="yes-button">
+            Yes (Delete Spot)
+          </button>
+          <button onClick={closeModal} id="no-button">
+            No (Keep Spot)
+          </button>
+        </div>
       </div>
     </>
   );

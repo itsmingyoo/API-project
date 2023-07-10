@@ -9,6 +9,7 @@ img {
     height: 100%;
     object-fit: cover;
     overflow: hidden;
+    aspect-ratio: 3/2;
 }
 
 #spots-container {
@@ -198,8 +199,8 @@ img {
 
 #spot__item-price-night {
     display: flex;
-    overflow-wrap: break-word;
-    word-break: break-word;
+    /* overflow-wrap: break-word;
+    word-break: break-word; */
 }
 
 #spot__item-price-night> label {
@@ -231,6 +232,7 @@ img {
 
 #user-spot__content {
     margin: 5px;
+    flex-basis: 23%;
 }
 
 #user-spot__link {
@@ -254,8 +256,65 @@ img {
     margin-left: 5px;
 }
 
+#confirm-delete {
+    font-size: 24px;
+    text-align: center;
+}
 
+#confirm-buttons__container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
 
+#yes-button {
+    color: white;
+    background-color: red;
+    padding: 5px 5px;
+}
+
+#no-button {
+    color: white;
+    background-color: darkgray;
+    padding: 5px 5px;
+}
+
+#confirm-modal {
+    padding: 40px;
+}
+
+#user-spot__location-rating {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+#user-spot__location {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#user-spot__image > img {
+    border-radius: 30px;
+}
+
+#user-spot__link {
+    border-radius: 30px;
+}
+
+#user-spot__rating {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#user-spot__price {
+    font-weight: bold;
+    margin-bottom: 5px;
+    padding-left: 3px;
+}
+
+/* **MEDIA QUERIES ** */
 @media screen and (max-width: 1023px) {
     #spot-item-container {
         flex-basis: 30%;

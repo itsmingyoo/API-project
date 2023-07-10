@@ -3,10 +3,10 @@
 }
 
 /* *TEST WRAPPER */
-#header-content {
+/* #header-content {
     border: 1px dotted blue;
     height: 115px;
-}
+} */
 
 #header-content {
     display: flex;
@@ -16,6 +16,9 @@
 }
 
 #header-content__home {
+    display: flex;
+    align-items: center;
+    gap: 7px;
     text-decoration: none;
     color: black
 }
@@ -41,4 +44,10 @@
 
 #login-signup-modal:hover {
     cursor: pointer;
+}
+
+
+#home-logo {
+    display: flex;
+    flex-direction: column;
 }

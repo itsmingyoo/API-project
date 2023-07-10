@@ -126,24 +126,25 @@ function CreateSpot() {
       name,
       price: Number(price),
     };
+    const dispatchErrors = {};
+    if (previewImage === "")
+      dispatchErrors["previewImage"] = "Preview image is required";
+    if (description === "" || description.length < 30)
+      dispatchErrors["description"] =
+        "Description must be at least 30 characters";
+
     const res = await dispatch(
       thunkCreateSpot(formData, previewImage, spotImages)
     );
-    // console.log("in the submit, res", res);
 
-    const dispatchErrors = {};
     if (address === "") dispatchErrors["address"] = res.errors.address;
     if (city === "") dispatchErrors["city"] = res.errors.city;
     if (state === "") dispatchErrors["state"] = res.errors.state;
     if (country === "") dispatchErrors["country"] = res.errors.country;
     if (name === "") dispatchErrors["name"] = res.errors.name;
-    if (description === "" || description.length < 30)
-      dispatchErrors["description"] =
-        res.errors.description || "Description must be at least 30 characters";
     if (price === "") dispatchErrors["price"] = res.errors.price;
-    if (previewImage === "")
-      dispatchErrors["previewImage"] = "Preview image is required";
     setValidationErrors(dispatchErrors);
+    // console.log("in the submit, res", res);
     // console.log("inside onSubmit", res, dispatchErrors, !validationErrors);
 
     if (Object.values(validationErrors).length === 0 && res.id) {

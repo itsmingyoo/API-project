@@ -15,9 +15,9 @@ function Navigation({ isLoaded }) {
   return (
     <div id="header-container">
       <div id="header-content">
-        <div>
-          <i className="fa-light fa-tent">ICON HERE</i>
+        <div id="home-logo">
           <NavLink exact to="/" id="header-content__home">
+            <i className="fas fa-light fa-tent"></i>
             <div id="header-logo">AirBlob&Blob</div>
           </NavLink>
         </div>
