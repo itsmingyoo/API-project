@@ -245,7 +245,6 @@ function CreateSpot() {
             />
           </div>
         </div> */}
-          <hr></hr>
           <div id="form__place-description">
             <h2>Describe your place to guests</h2>
             <p>
@@ -256,7 +255,7 @@ function CreateSpot() {
             <div>
               <input
                 id="form__owner-description"
-                type="text"
+                type="textarea"
                 name="description"
                 placeholder="Please write at least 30 characters"
                 value={description}
@@ -267,7 +266,6 @@ function CreateSpot() {
               )}
             </div>
           </div>
-          <hr></hr>
           <div id="form__place-title">
             <h2>Create a title for your spot</h2>
             <p>

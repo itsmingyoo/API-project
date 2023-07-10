@@ -445,7 +445,6 @@ function UpdateSpot() {
               />
             </div>
           </div> */}
-          <hr></hr>
           <div id="form__place-description">
             <h2>Describe your place to guests</h2>
             <p>
@@ -467,7 +466,6 @@ function UpdateSpot() {
               )}
             </div>
           </div>
-          <hr></hr>
           <div id="form__place-title">
             <h2>Create a title for your spot</h2>
             <p>
