@@ -30,6 +30,26 @@ body {
     background-color: red;
 }
 
+@media screen and (max-width: 700px) {
+    #spots-container {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: nowrap;
+        padding: 2rem 1rem;
+        flex-direction: column;
+    }
+}
+@media screen and (max-width: 1023px) {
+    #spot-item-container {
+        display: flex;
+        flex-basis: 45%;
+        flex-wrap: wrap;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+}
+
+
 /* TODO STYLES
 Heading: 24pt, bold
 Subheading: 18pt, bold
