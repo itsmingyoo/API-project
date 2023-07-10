@@ -1,14 +1,12 @@
 div {
     text-decoration: none;
     color: black;
-    object-fit: cover;
 }
 
 img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    overflow: hidden;
+    /* overflow: hidden; */
     aspect-ratio: 3/2;
 }
 
@@ -16,16 +14,15 @@ img {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    overflow: hidden;
+    /* overflow: hidden; */
     padding: 2rem 1rem;
 }
 
 #spot-item-container {
     flex-basis: 20%;
     margin: 1rem 1rem;
-    max-width: 195px;
-    max-height: 180px;
-    object-fit: cover;
+    /* max-width: 195px;
+    max-height: 180px; */
 }
 
 #spot__item-info {
@@ -81,17 +78,15 @@ img {
 .spot-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
 }
 
 #spot-img > img {
     border-radius: 15px;
-    max-height: 120px;
-    max-width: 195px;
+    /* max-height: 120px;
+    max-width: 195px; */
 }
 
 #spot-image {
-    object-fit: cover;
     width: 48%;
     height: 50%;
     padding: 3px 3px;
@@ -319,14 +314,21 @@ img {
 }
 
 /* **MEDIA QUERIES ** */
-@media screen and (max-width: 1023px) {
-    #spot-item-container {
-        flex-basis: 30%;
-    }
-}
-
 @media screen and (max-width: 700px) {
     #spot-item-container {
-        flex-basis: auto;
+        display: flex;
+        flex-basis: 700;
+        flex-wrap: wrap;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+}
+@media screen and (max-width: 1023px) {
+    #spot-item-container {
+        display: flex;
+        flex-basis: 45%;
+        flex-wrap: wrap;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 }
