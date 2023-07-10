@@ -21,8 +21,8 @@ function UpdateSpot() {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
+  const [lat, setLat] = useState(5);
+  const [lng, setLng] = useState(5);
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -223,7 +223,7 @@ function UpdateSpot() {
             />
           </div>
         </div>
-        <div id="form__lat-lng">
+        {/* <div id="form__lat-lng">
           <div className="form__lat-lng">
             <label>Latitude</label>
             <input
@@ -244,7 +244,7 @@ function UpdateSpot() {
               onChange={(e) => setLng(e.target.value)}
             />
           </div>
-        </div>
+        </div> */}
         <hr></hr>
         <div id="form__place-description">
           <h2>Describe your place to guests</h2>

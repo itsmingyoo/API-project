@@ -194,41 +194,6 @@ img {
     font-size: 18px;
 }
 
-#form__main-container {
-    display: flex;
-    flex-direction: column;
-}
-
-#form__city-state {
-    display: flex;
-    flex-direction: row;
-}
-
-.form__city-state {
-    display: flex;
-    flex-direction: column;
-}
-
-#form__lat-lng {
-    display: flex;
-    flex-direction: row;
-}
-
-.form__lat-lng {
-    display: flex;
-    flex-direction: column;
-}
-
-#form__owner-description {
-    height: 200px;
-    width: 100%;
-}
-
-#form__place-photos {
-    display: flex;
-    flex-direction: column;
-}
-
 /* User Review */
 #user-review__container {
     display: flex;
