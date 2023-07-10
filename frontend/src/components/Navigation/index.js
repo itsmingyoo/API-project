@@ -4,10 +4,14 @@ import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
+import { thunkGetSpots } from "../../store/spots";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
-
+  const dispatch = useDispatch();
+  const onClick = () => {
+    dispatch(thunkGetSpots());
+  };
   return (
     <div id="header-container">
       <div id="header-content">
@@ -21,8 +25,8 @@ function Navigation({ isLoaded }) {
         {isLoaded && (
           <div id="header-content__buttons">
             {sessionUser && (
-              <NavLink to="/spots">
-                <button id="header-content__create-spot">
+              <NavLink to="/spots" onClick={onClick}>
+                <button id="header-content__create-spot" onClick={onClick}>
                   Create a New Spot
                 </button>
               </NavLink>

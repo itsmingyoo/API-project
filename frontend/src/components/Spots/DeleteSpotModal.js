@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { useModal } from "../../context/Modal";
 import { useDispatch } from "react-redux";
-import { thunkDeleteUserSpot, thunkGetUserSpots } from "../../store/spots";
+import {
+  thunkDeleteUserSpot,
+  thunkGetSpots,
+  thunkGetUserSpots,
+} from "../../store/spots";
 
 function DeleteModalButton({ spot }) {
   const dispatch = useDispatch();
@@ -10,6 +14,7 @@ function DeleteModalButton({ spot }) {
     e.preventDefault();
     dispatch(thunkDeleteUserSpot(spot.id))
       .then(() => dispatch(thunkGetUserSpots())) // dispatch an action to force a re-render of the user's spots
+      .then(() => dispatch(thunkGetSpots))
       .then(closeModal);
   };
 
