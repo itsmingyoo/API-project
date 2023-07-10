@@ -22,6 +22,8 @@ img {
 #spot-item-container {
     flex-basis: 20%;
     margin: 1rem 1rem;
+    max-width: 195px;
+    max-height: 180px;
     object-fit: cover;
 }
 
@@ -83,6 +85,8 @@ img {
 
 #spot-img > img {
     border-radius: 15px;
+    max-height: 120px;
+    max-width: 195px;
 }
 
 #spot-image {
@@ -194,7 +198,8 @@ img {
 
 #spot__item-price-night {
     display: flex;
-
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 #spot__item-price-night> label {

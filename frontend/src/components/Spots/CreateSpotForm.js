@@ -64,6 +64,10 @@ function CreateSpot() {
       errors["description"] = "Description must be at least 30 characters";
     }
 
+    if (price.length > 9) {
+      errors["price"] = "Price is not reasonable or too large";
+    }
+
     // helper function to check valid url
     let isURL = (url) => {
       if (url.endsWith(".jpeg")) return true;
