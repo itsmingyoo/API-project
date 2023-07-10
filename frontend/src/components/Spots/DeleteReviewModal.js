@@ -18,9 +18,9 @@ function DeleteReviewModalButton({ spot, review }) {
     <>
       <div>
         <div>Confirm Delete</div>
-        <p>Are you sure you want to remove this spot from the listings?</p>
-        <button onClick={onClick}>Yes (Delete Spot)</button>
-        <button onClick={closeModal}>No (Keep Spot)</button>
+        <p>Are you sure you want to remove this review from the listings?</p>
+        <button onClick={onClick}>Yes (Delete Review)</button>
+        <button onClick={closeModal}>No (Keep Review)</button>
       </div>
     </>
   );
