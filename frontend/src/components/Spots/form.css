@@ -21,12 +21,16 @@
 #form__text {
     display: flex;
     flex-direction: column;
+    border-top: 1px solid black;
 }
 
 #form__city-state {
     display: flex;
     flex-direction: row;
     align-items: end;
+}
+.form__city-state > label {
+    padding-left: 3px;
 }
 
 .form__city-state {
@@ -37,6 +41,10 @@
 #form__lat-lng {
     display: flex;
     flex-direction: row;
+}
+
+#form__state-input {
+    padding-right: 31px;
 }
 
 .form__lat-lng {
@@ -54,6 +62,14 @@
     flex-direction: column;
 }
 
+#form__place-photos > input {
+    margin-bottom: 5px;
+}
+
+/* #form__place-photos > input:nth-child(1) {
+    margin-top: 200px;
+} */
+
 #label-and-errors {
     display: flex;
     gap: 5px;
@@ -61,6 +77,11 @@
 
 #form__main-container > input {
     max-width: 400px;
+    margin-bottom: 5px;
+}
+
+#form__main-container > label {
+    padding-left: 3px;
 }
 
 #form__owner-description {
@@ -73,4 +94,39 @@
     font-weight: bold;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+#form__place-photos > input {
+    max-width: 400px;
+}
+
+#form__place-title > input {
+    width: 400px;
+}
+
+h2, p {
+    max-width: 400px;
+}
+
+#form__text > span {
+    max-width: 400px;
+    margin-bottom: 12px;
+}
+
+#form__price {
+    width: 400px;
+}
+#form__price > input {
+    min-width: 380px;
+    width: 400px;
+    padding-right: 5px;
+}
+
+#form__price-input {
+    width: 400px
+}
+
+#create-spot-button {
+    padding: 8px;
+    margin-top: 10px;
 }

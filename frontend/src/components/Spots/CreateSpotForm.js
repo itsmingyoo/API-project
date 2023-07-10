@@ -156,10 +156,10 @@ function CreateSpot() {
           <h1>Create a new Spot</h1>
           <div id="form__text">
             <h2>Where's your place located?</h2>
-            <p>
+            <span>
               Guests will only get your exact address once they booked a
               reservation.
-            </p>
+            </span>
           </div>
           <label id="label-and-errors">
             Country{" "}
@@ -214,6 +214,7 @@ function CreateSpot() {
                 )}
               </label>
               <input
+                id="form__state-input"
                 type="text"
                 name="state"
                 placeholder="STATE"
@@ -293,6 +294,7 @@ function CreateSpot() {
             <div id="form__price">
               $
               <input
+                id="form__price-input"
                 type="number"
                 name="price"
                 placeholder="Price per night (USD)"
@@ -306,7 +308,7 @@ function CreateSpot() {
           </div>
           <div id="form__place-photos">
             <h2>Liven up your spot with photos</h2>
-            <p>Submit a link to at least one </p>
+            <span>Submit at least a preview image </span>
             <input
               type="url"
               name="preview-link"
