@@ -246,6 +246,12 @@ img {
 
 @media screen and (max-width: 1023px) {
     #spot-item-container {
+        flex-basis: 30%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    #spot-item-container {
         flex-basis: auto;
     }
 }
