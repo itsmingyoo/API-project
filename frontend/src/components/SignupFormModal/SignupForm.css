@@ -3,13 +3,12 @@ h1 {
 }
 
 #signup-form__container {
-    border-radius: 15px
+    padding: 10px 40px;
 }
 
 #signup-form__content {
     display: flex;
     flex-direction: column;
-    align-items: center;
     padding: 20px;
 }
 
@@ -17,16 +16,29 @@ h1 {
     margin-bottom: 10px;
 }
 
-label > input {
-    margin-left: 10px;
+.input-size {
+    width: 97%;
 }
 
-#signup-form__button {
-    padding: 5px 40px;
+/* div > input {
+    margin-left: 10px;
+} */
+
+.signup-form__button {
+    padding: 5px 100px;
     color: white;
     background-color: red;
 }
 
 #disabled {
     background-color: lightgray;
+}
+
+#signup-form__content > label {
+    display: flex;
+    justify-content: space-between;
+}
+
+#signup-form__content > label > div {
+    /* margin-right: 10px; */
 }
