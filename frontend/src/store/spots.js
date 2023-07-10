@@ -200,7 +200,7 @@ const spotsReducer = (state = initialState, action) => {
     }
     case DELETE_USER_SPOT_ACTION: {
       newState = { ...state };
-      console.log(`YOU ARE WORKING WITH THIS ===`, action.spot);
+      // console.log(`YOU ARE WORKING WITH THIS ===`, action.spot);
       delete newState.allSpots[action.spot];
       const indexToDelete = newState.ownerSpots.findIndex(
         (spot) => Number(spot.id) === Number(action.spot.id)
