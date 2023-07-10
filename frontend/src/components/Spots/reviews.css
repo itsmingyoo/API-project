@@ -1,0 +1,9 @@
+#review-form__main {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-around; */
+    align-content: space-around;
+    width: 300px;
+    padding: 40px;
+    row-gap: 10px;
+}
