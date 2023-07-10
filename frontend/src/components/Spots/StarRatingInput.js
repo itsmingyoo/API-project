@@ -85,6 +85,7 @@ const StarRatingInput = ({ stars, disabled, onChange }) => {
       >
         <i className="fa-solid fa-star"></i>
       </div>
+      <div id="stars-name">Stars</div>
     </div>
   );
 };

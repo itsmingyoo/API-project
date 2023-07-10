@@ -41,7 +41,7 @@ function SpotReviews({ spot }) {
             //logged in && not owner && no reviews
             !spotHasReviews && !isOwner && sessionUser ? (
               <>
-                <span>★ NEW</span>
+                <span className="huge-bold">★ NEW</span>
                 <OpenModalButton
                   buttonText="Post Your Review"
                   modalComponent={<CreateReviewModal spot={spot} />}
@@ -51,50 +51,44 @@ function SpotReviews({ spot }) {
             ) : // logged in && not owner && hasreview
             userHasReview && !isOwner && sessionUser ? (
               <>
-                <span className="spot-detail__avgRating">
-                  ★{spot.avgRating} ·
-                </span>
+                <span className="huge-bold">★{spot.avgRating} ·</span>
                 <span>{spot.numReviews} reviews</span>
               </>
             ) : !userHasReview && !isOwner && sessionUser ? (
               <>
-                <span className="spot-detail__avgRating">
-                  ★{spot.avgRating} ·
-                </span>
-                <span>{spot.numReviews} reviews</span>
-                <OpenModalButton
-                  buttonText="Post Your Review"
-                  modalComponent={<CreateReviewModal spot={spot} />}
-                />
+                <span className="huge-bold">★{spot.avgRating} ·</span>
+                <span className="huge-bold">{spot.numReviews} reviews</span>
+                <div id="create-review__button">
+                  <OpenModalButton
+                    buttonText="Post Your Review"
+                    modalComponent={<CreateReviewModal spot={spot} />}
+                  />
+                </div>
               </>
             ) : // logged in && not owner && multiple has reviews
             spotReviewsArr.length > 1 && !isOwner && sessionUser ? (
               <>
-                <span className="spot-detail__avgRating">
-                  ★{spot.avgRating} ·
-                </span>
+                <span className="huge-bold">★{spot.avgRating} ·</span>
                 <span>{spot.numReviews} reviews</span>
-                <OpenModalButton
-                  buttonText="Post Your Review"
-                  modalComponent={<CreateReviewModal spot={spot} />}
-                />
+                <div id="create-review__button">
+                  <OpenModalButton
+                    buttonText="Post Your Review"
+                    modalComponent={<CreateReviewModal spot={spot} />}
+                  />
+                </div>
               </>
             ) : // not logged in && 1 review
             spotReviewsArr.length === 1 && !isOwner && !sessionUser ? (
               <>
-                <span className="spot-detail__avgRating">
-                  ★{spot.avgRating} ·
-                </span>
+                <span className="huge-bold">★{spot.avgRating} ·</span>
                 <span>{spot.numReviews} review</span>
               </>
             ) : // not logged in && no reviews
             spotReviewsArr.length === 0 && !isOwner && !sessionUser ? (
-              <span>Star NEW</span>
+              <span>★ NEW</span>
             ) : (
               <>
-                <span className="spot-detail__avgRating">
-                  ★{spot.avgRating} ·
-                </span>
+                <span className="huge-bold">★{spot.avgRating} ·</span>
                 <span>{spot.numReviews} reviews</span>
               </>
             )
