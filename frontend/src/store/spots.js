@@ -129,8 +129,8 @@ export const thunkDeleteUserSpot = (spotId) => async (dispatch) => {
     method: "DELETE",
   });
   userSpot = await userSpot.json();
-  dispatch(deleteUserSpotAction(userSpot));
-  return userSpot;
+  dispatch(deleteUserSpotAction(spotId));
+  return spotId;
 };
 
 export const thunkUpdateUserSpot =
@@ -200,7 +200,8 @@ const spotsReducer = (state = initialState, action) => {
     }
     case DELETE_USER_SPOT_ACTION: {
       newState = { ...state };
-      delete newState.allSpots[action.spot.id];
+      console.log(`YOU ARE WORKING WITH THIS ===`, action.spot);
+      delete newState.allSpots[action.spot];
       const indexToDelete = newState.ownerSpots.findIndex(
         (spot) => Number(spot.id) === Number(action.spot.id)
       );

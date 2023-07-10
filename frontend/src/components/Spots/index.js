@@ -1,7 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import SpotItem from "./SpotItem";
-
 import "./spots.css";
 
 function AllSpots({ spots }) {

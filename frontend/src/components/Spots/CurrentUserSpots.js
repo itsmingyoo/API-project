@@ -21,26 +21,30 @@ function CurrentUserSpots({ spots }) {
     <>
       <div id="manage-spots__header">
         <h2>Manage Your Spots</h2>
-        <button>Create a New Spot</button>
+        {userSpots.length === 0 && (
+          <NavLink to="/spots">
+            <button>Create a New Spot</button>
+          </NavLink>
+        )}
       </div>
 
       <div id="manage-spots__main">
         {sessionUser && userSpots ? (
           userSpots.map((spot) => (
             <div key={spot.id} id="user-spot__content">
-              <div id={`user-spot__${spot.id} user-spot__image`}>
-                <NavLink to={`/spots/${spot.id}`}>
+              <NavLink to={`/spots/${spot.id}`} id="user-spot__link">
+                <div id={`user-spot__${spot.id} user-spot__image`}>
                   <img src={spot.previewImage} alt="preview" />
-                </NavLink>
-              </div>
-              <div id="user-spot__location-rating">
-                <div id="user-spot__location">
-                  <span>{spot.city}, </span>
-                  <span>{spot.state}</span>
                 </div>
-                <div id="user-spot__rating">Star {spot.avgRating}</div>
-              </div>
-              <div id="user-spot__price">${spot.price} night</div>
+                <div id="user-spot__location-rating">
+                  <div id="user-spot__location">
+                    <span>{spot.city}, </span>
+                    <span>{spot.state}</span>
+                  </div>
+                  <div id="user-spot__rating">★ {spot.avgRating}</div>
+                </div>
+                <div id="user-spot__price">${spot.price} night</div>
+              </NavLink>
               <div id="user-spot__update-delete">
                 <NavLink to={`/spots/${spot.id}/edit`}>
                   <button>Update</button>

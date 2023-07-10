@@ -20,8 +20,6 @@ function SpotDetails() {
 
   if (!spot || !Object.values(spot).length || spot.id !== spotId) return null;
 
-  // console.log("this is spot we are working with", spot);
-  // object: fit-cover css???
   const firstImage = spot ? spot?.SpotImages?.[0]?.url : [];
   const fourImages = []; // array of obj, must key into url kvp
 
@@ -39,9 +37,9 @@ function SpotDetails() {
       <h2 id="spot-detail__name">{spot.name}</h2>
       <div id="spot-details__location">
         <div>
-          <h4>
+          <div id="spot-details__location-text">
             {spot.city}, {spot.state}, {spot.country}
-          </h4>
+          </div>
         </div>
       </div>
 
@@ -89,9 +87,9 @@ function SpotDetails() {
       {/* description component */}
       <div id="spot-details__container-description">
         <div id="spot-details__owner-description">
-          <h2>
+          <div className="huge-bold">
             Hosted by {spot.Owner.firstName} {spot.Owner.lastName}
-          </h2>
+          </div>
           <div id="spot-details__spot-description">
             <div className="spot-details__text">{spot.description}</div>
           </div>
@@ -100,13 +98,15 @@ function SpotDetails() {
         <div id="spot-details__container-reservation">
           <div id="spot-detail__price-rating">
             <div>
-              <span>${spot.price}</span>
+              <span className="big-bold">${spot.price}</span>
             </div>
             <div>
-              <span className="spot-detail__avgRating">
-                ★{spot.avgRating} ·
-              </span>
-              <span>{spot.numReviews} review(s)</span>
+              <span className="big-bold">★{spot.avgRating} ·</span>
+              {spot.numReviews === 1 ? (
+                <span className="big-bold">{spot.numReviews} review</span>
+              ) : (
+                <span className="big-bold">{spot.numReviews} reviews</span>
+              )}
             </div>
           </div>
           <button
