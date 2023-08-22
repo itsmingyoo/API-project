@@ -49,9 +49,7 @@ function SpotDetails() {
           {firstImage ? (
             <img src={firstImage} alt="spot-details__preview" />
           ) : (
-            <div className="spot-details__coming-soon-main">
-              Image Coming Soon!
-            </div>
+            <div className="spot-details__coming-soon-main">Image Coming Soon!</div>
           )}
         </div>
         <div id="spot-image__right">
@@ -68,18 +66,10 @@ function SpotDetails() {
             ))}
           {(!fourImages || fourImages.length === 0) && (
             <>
-              <div className="spot-details__coming-soon">
-                Image Coming Soon!
-              </div>
-              <div className="spot-details__coming-soon">
-                Image Coming Soon!
-              </div>
-              <div className="spot-details__coming-soon">
-                Image Coming Soon!
-              </div>
-              <div className="spot-details__coming-soon">
-                Image Coming Soon!
-              </div>
+              <div className="spot-details__coming-soon">Image Coming Soon!</div>
+              <div className="spot-details__coming-soon">Image Coming Soon!</div>
+              <div className="spot-details__coming-soon">Image Coming Soon!</div>
+              <div className="spot-details__coming-soon">Image Coming Soon!</div>
             </>
           )}
         </div>
@@ -101,18 +91,22 @@ function SpotDetails() {
               <span className="big-bold">${spot.price}</span>
             </div>
             <div>
-              <span className="big-bold">★{spot.avgRating} ·</span>
               {spot.numReviews === 1 ? (
-                <span className="big-bold">{spot.numReviews} review</span>
+                <>
+                  <span className="big-bold">★{spot.avgRating} ·</span>
+                  <span className="big-bold">{spot.numReviews} review</span>
+                </>
+              ) : spot.numReviews === 0 ? (
+                <span className="big-bold">★ NEW</span>
               ) : (
-                <span className="big-bold">{spot.numReviews} reviews</span>
+                <>
+                  <span className="big-bold">★{spot.avgRating} ·</span>
+                  <span className="big-bold">{spot.numReviews} reviews</span>
+                </>
               )}
             </div>
           </div>
-          <button
-            id="spot-details__reserve-button"
-            onClick={() => alert("Feature Coming Soon...")}
-          >
+          <button id="spot-details__reserve-button" onClick={() => alert("Feature Coming Soon...")}>
             Reserve
           </button>
         </div>
