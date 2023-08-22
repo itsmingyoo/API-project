@@ -36,7 +36,7 @@ function UpdateSpot() {
   useEffect(() => {
     async function oldData() {
       const currSpot = await dispatch(thunkGetSpotId(spotId));
-      //   console.log("currspot on mount", currSpot);
+      console.log("currspot on mount", currSpot);
       setCountry(currSpot.country);
       setAddress(currSpot.address);
       setCity(currSpot.city);
@@ -46,7 +46,7 @@ function UpdateSpot() {
       setDescription(currSpot.description);
       setName(currSpot.name);
       setPrice(currSpot.price);
-      //   setPreviewImage(currSpot.previewImage);
+      // setPreviewImage(currSpot.previewImage);
     }
     oldData();
   }, [spotId, dispatch]);
@@ -54,18 +54,6 @@ function UpdateSpot() {
   useEffect(() => {
     const errors = {};
     if (country.length < 0) errors["country"] = "Country is required";
-
-    // helper func for unique address
-    // const isValidAddress = (array, address) => {
-    //   const res = array.filter((index) => {
-    //     return index["address"] === address;
-    //   });
-    //   if (res.length > 0) return false;
-    //   else if (res.length === 0) return true;
-    // };
-    // if (!isValidAddress(allSpots, address)) {
-    //   errors["address"] = "Address must be unique";
-    // }
 
     if (state.length > 2 || state.length < 2) {
       errors["state"] = "State must be capitalized and 2 characters";
@@ -83,7 +71,7 @@ function UpdateSpot() {
       else return false;
     };
     if (previewImage.length > 0 && !isURL(previewImage)) {
-      errors["previewImage"] = "Preview image is required";
+      errors["previewImage"] = "Preview image is required in .png, .jpg, .jpeg format";
     }
     if (imageOne.length > 0 && !isURL(imageOne)) {
       errors["imageOne"] = "Image URL must end in .png, .jpg, or .jpeg";
@@ -116,8 +104,22 @@ function UpdateSpot() {
 
   if (!spotId || !allSpotsObj) return null;
 
+  // ON SUBMIT
+  // ON SUBMIT
+  // ON SUBMIT
+  // ON SUBMIT
+  // ON SUBMIT
+  // ON SUBMIT
+  // ON SUBMIT
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    const spotImages = [];
+    if (imageOne && imageOne !== "") spotImages.push(imageOne);
+    if (imageTwo && imageTwo !== "") spotImages.push(imageTwo);
+    if (imageThree && imageThree !== "") spotImages.push(imageThree);
+    if (imageFour && imageFour !== "") spotImages.push(imageFour);
+
     const formData = {
       country,
       address,
@@ -129,7 +131,7 @@ function UpdateSpot() {
       name,
       price: Number(price),
     };
-    const res = await dispatch(thunkUpdateUserSpot(Number(spotId), formData));
+    const res = await dispatch(thunkUpdateUserSpot(Number(spotId), formData, previewImage, spotImages));
     // console.log("in the submit, res", res);
 
     const dispatchErrors = {};
@@ -139,14 +141,10 @@ function UpdateSpot() {
     if (country === "") dispatchErrors["country"] = res.errors.country;
     if (name === "") dispatchErrors["name"] = res.errors.name;
     if (description === "" || description.length < 30)
-      dispatchErrors["description"] =
-        res.errors.description || "Description must be at least 30 characters";
+      dispatchErrors["description"] = res.errors.description || "Description must be at least 30 characters";
     if (price === "") dispatchErrors["price"] = res.errors.price;
-    // if (previewImage === "")
-    //   dispatchErrors["previewImage"] = "Preview image is required";
     setValidationErrors(dispatchErrors);
-    // console.log("inside onSubmit", res, dispatchErrors, !validationErrors);
-    // console.log(Object.values(validationErrors).length, validationErrors);
+
     if (Object.values(validationErrors).length === 0 && res.id) {
       history.push(`/spots/${res.id}`);
     }
@@ -353,19 +351,13 @@ function UpdateSpot() {
       <div id="form-container">
         {/* <hr></hr> */}
         <form id="form__main-container" onSubmit={onSubmit}>
-          <h1>Create a new Spot</h1>
+          <h1>Update your Spot</h1>
           <div id="form__text">
-            <h2>Where's your place located?</h2>
-            <span>
-              Guests will only get your exact address once they booked a
-              reservation.
-            </span>
+            <h2>Where is your spot's located?</h2>
+            <span>Guests will only get your exact address once they booked a reservation.</span>
           </div>
           <label id="label-and-errors">
-            Country{" "}
-            {validationErrors.country && (
-              <span className="errors">{validationErrors.country}</span>
-            )}
+            Country {validationErrors.country && <span className="errors">{validationErrors.country}</span>}
           </label>
           <input
             type="text"
@@ -375,10 +367,7 @@ function UpdateSpot() {
             onChange={(e) => setCountry(e.target.value)}
           />
           <label>
-            Street Address{" "}
-            {validationErrors.address && (
-              <span className="errors">{validationErrors.address}</span>
-            )}
+            Street Address {validationErrors.address && <span className="errors">{validationErrors.address}</span>}
           </label>
           <input
             type="text"
@@ -389,12 +378,7 @@ function UpdateSpot() {
           />
           <div id="form__city-state">
             <div className="form__city-state">
-              <label>
-                City{" "}
-                {validationErrors.city && (
-                  <span className="errors">{validationErrors.city}</span>
-                )}
-              </label>
+              <label>City {validationErrors.city && <span className="errors">{validationErrors.city}</span>}</label>
               <input
                 type="text"
                 name="city"
@@ -407,12 +391,7 @@ function UpdateSpot() {
             <div id="comma">,</div>
 
             <div className="form__city-state">
-              <label>
-                State{" "}
-                {validationErrors.state && (
-                  <span className="errors">{validationErrors.state}</span>
-                )}
-              </label>
+              <label>State {validationErrors.state && <span className="errors">{validationErrors.state}</span>}</label>
               <input
                 id="form__state-input"
                 type="text"
@@ -448,9 +427,8 @@ function UpdateSpot() {
           <div id="form__place-description">
             <h2>Describe your place to guests</h2>
             <p>
-              Mention the best features of your space, any special amenities
-              like fast wifi or parking, and what you love about the
-              neighborhood.
+              Mention the best features of your space, any special amenities like fast wifi or parking, and what you
+              love about the neighborhood.
             </p>
             <div>
               <textarea
@@ -460,17 +438,12 @@ function UpdateSpot() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
-              {validationErrors.description && (
-                <p className="errors">{validationErrors.description}</p>
-              )}
+              {validationErrors.description && <p className="errors">{validationErrors.description}</p>}
             </div>
           </div>
           <div id="form__place-title">
-            <h2>Create a title for your spot</h2>
-            <p>
-              Catch guests' attention with a spot title that highlights what
-              makes your place special.
-            </p>
+            <h2>Update title for your spot</h2>
+            <p>Catch guests' attention with a spot title that highlights what makes your place special.</p>
             <input
               type="text"
               name="name"
@@ -478,16 +451,11 @@ function UpdateSpot() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            {validationErrors.name && (
-              <p className="errors">{validationErrors.name}</p>
-            )}
+            {validationErrors.name && <p className="errors">{validationErrors.name}</p>}
           </div>
           <div id="form__place-price">
             <h2>Set a base price for your spot</h2>
-            <p>
-              Competitive pricing can help your listing stand out and rank
-              higher in search results.
-            </p>
+            <p>Competitive pricing can help your listing stand out and rank higher in search results.</p>
             <div id="form__price">
               $
               <input
@@ -498,9 +466,7 @@ function UpdateSpot() {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
               />
-              {validationErrors.price && (
-                <p className="errors">{validationErrors.price}</p>
-              )}
+              {validationErrors.price && <p className="errors">{validationErrors.price}</p>}
             </div>
           </div>
           <div id="form__place-photos">
@@ -513,9 +479,7 @@ function UpdateSpot() {
               value={previewImage}
               onChange={(e) => setPreviewImage(e.target.value)}
             />
-            {validationErrors.previewImage && (
-              <p className="errors">{validationErrors.previewImage}</p>
-            )}
+            {validationErrors.previewImage && <p className="errors">{validationErrors.previewImage}</p>}
             <input
               type="url"
               name="image-url"
@@ -523,9 +487,7 @@ function UpdateSpot() {
               value={imageOne}
               onChange={(e) => setImageOne(e.target.value)}
             />
-            {validationErrors.imageOne && (
-              <p className="errors">{validationErrors.imageOne}</p>
-            )}
+            {validationErrors.imageOne && <p className="errors">{validationErrors.imageOne}</p>}
             <input
               type="url"
               name="image-url"
@@ -533,9 +495,7 @@ function UpdateSpot() {
               value={imageTwo}
               onChange={(e) => setImageTwo(e.target.value)}
             />
-            {validationErrors.imageTwo && (
-              <p className="errors">{validationErrors.imageTwo}</p>
-            )}
+            {validationErrors.imageTwo && <p className="errors">{validationErrors.imageTwo}</p>}
             <input
               type="url"
               name="image-url"
@@ -543,9 +503,7 @@ function UpdateSpot() {
               value={imageThree}
               onChange={(e) => setImageThree(e.target.value)}
             />
-            {validationErrors.imageThree && (
-              <p className="errors">{validationErrors.imageThree}</p>
-            )}
+            {validationErrors.imageThree && <p className="errors">{validationErrors.imageThree}</p>}
             <input
               type="url"
               name="image-url"
@@ -553,11 +511,9 @@ function UpdateSpot() {
               value={imageFour}
               onChange={(e) => setImageFour(e.target.value)}
             />
-            {validationErrors.imageFour && (
-              <p className="errors">{validationErrors.imageFour}</p>
-            )}
+            {validationErrors.imageFour && <p className="errors">{validationErrors.imageFour}</p>}
           </div>
-          <button id="create-spot-button">Create Spot</button>
+          <button id="create-spot-button">Update Spot</button>
         </form>
       </div>
     </div>

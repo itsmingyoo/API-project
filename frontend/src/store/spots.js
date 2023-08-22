@@ -77,43 +77,42 @@ export const thunkGetSpotId = (spotId) => async (dispatch) => {
   return data;
 };
 
-export const thunkCreateSpot =
-  (formData, image, imageArray) => async (dispatch) => {
-    try {
-      const res = await csrfFetch("/api/spots", {
-        method: "POST",
-        body: JSON.stringify(formData),
-      });
+export const thunkCreateSpot = (formData, image, imageArray) => async (dispatch) => {
+  try {
+    const res = await csrfFetch("/api/spots", {
+      method: "POST",
+      body: JSON.stringify(formData),
+    });
 
-      // console.log("in the thunk image", image); //returns url
-      const newSpot = await res.json();
-      // console.log("in the thunk newSpot", newSpot);
-      let newImage = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
+    // console.log("in the thunk image", image); //returns url
+    const newSpot = await res.json();
+    // console.log("in the thunk newSpot", newSpot);
+    let newImage = await csrfFetch(`/api/spots/${newSpot.id}/images`, {
+      method: "POST",
+      body: JSON.stringify({
+        url: image,
+        preview: true,
+      }),
+    });
+    newImage = await newImage.json();
+
+    for (let i = 0; i < imageArray.length; i++) {
+      const image = imageArray[i];
+      await csrfFetch(`/api/spots/${newSpot.id}/images`, {
         method: "POST",
         body: JSON.stringify({
           url: image,
-          preview: true,
+          preview: false,
         }),
       });
-      newImage = await newImage.json();
-
-      for (let i = 0; i < imageArray.length; i++) {
-        const image = imageArray[i];
-        await csrfFetch(`/api/spots/${newSpot.id}/images`, {
-          method: "POST",
-          body: JSON.stringify({
-            url: image,
-            preview: false,
-          }),
-        });
-      }
-
-      await dispatch(createSpotAction(newSpot, newImage));
-      return newSpot;
-    } catch (e) {
-      return await e.json();
     }
-  };
+
+    await dispatch(createSpotAction(newSpot, newImage));
+    return newSpot;
+  } catch (e) {
+    return await e.json();
+  }
+};
 
 export const thunkGetUserSpots = () => async (dispatch) => {
   let userSpots = await csrfFetch("/api/spots/current");
@@ -133,26 +132,48 @@ export const thunkDeleteUserSpot = (spotId) => async (dispatch) => {
   return spotId;
 };
 
-export const thunkUpdateUserSpot =
-  (spotId, updatedData) => async (dispatch) => {
-    try {
-      let newData = await csrfFetch(`/api/spots/${spotId}`, {
-        method: "PUT",
-        body: JSON.stringify(updatedData),
-      });
-      newData = await newData.json();
+export const thunkUpdateUserSpot = (spotId, updatedData, previewImage, spotImages) => async (dispatch) => {
+  try {
+    let newData = await csrfFetch(`/api/spots/${spotId}`, {
+      method: "PUT",
+      body: JSON.stringify(updatedData),
+    });
+    newData = await newData.json();
+    console.log("newData", newData);
 
-      let owner = await csrfFetch(`/api/spots/${spotId}`);
-      owner = await owner.json();
-      owner = await owner.Owner;
-      // console.log("in the thunk - newData.json() ===> ", newData);
-      // console.log("in the thunk - owner.json() ===> ", owner);
-      dispatch(updateUserSpotAction(newData));
-      return newData;
-    } catch (e) {
-      return await e.json();
+    let pImage = await csrfFetch(`/api/spots/${spotId}/images`, {
+      method: "POST",
+      body: JSON.stringify({
+        url: previewImage,
+        preview: true,
+      }),
+    });
+    pImage = await pImage.json();
+    console.log("pImage", pImage);
+
+    for (let i = 0; i < spotImages.length; i++) {
+      const image = spotImages[i];
+      await csrfFetch(`/api/spots/${spotId}/images`, {
+        method: "POST",
+        body: JSON.stringify({
+          url: image,
+          preview: false,
+        }),
+      });
+      console.log("each image", image);
     }
-  };
+
+    // let owner = await csrfFetch(`/api/spots/${spotId}`);
+    // owner = await owner.json();
+    // owner = await owner.Owner;
+    // console.log("in the thunk - newData.json() ===> ", newData);
+    // console.log("in the thunk - owner.json() ===> ", owner);
+    dispatch(updateUserSpotAction(newData));
+    return newData;
+  } catch (e) {
+    return await e.json();
+  }
+};
 
 // reducer - initialState = spots : { fill in your kvp }
 let initialState = {
@@ -202,9 +223,7 @@ const spotsReducer = (state = initialState, action) => {
       newState = { ...state };
       // console.log(`YOU ARE WORKING WITH THIS ===`, action.spot);
       delete newState.allSpots[action.spot];
-      const indexToDelete = newState.ownerSpots.findIndex(
-        (spot) => Number(spot.id) === Number(action.spot.id)
-      );
+      const indexToDelete = newState.ownerSpots.findIndex((spot) => Number(spot.id) === Number(action.spot.id));
       if (indexToDelete !== -1) {
         newState.ownerSpots.splice(indexToDelete, 1);
       }
