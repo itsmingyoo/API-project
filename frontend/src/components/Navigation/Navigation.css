@@ -12,7 +12,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 20px;
+    /* padding: 20px 20px; */
+    margin: 50px;
 }
 
 #header-content__home {
@@ -25,6 +26,7 @@
 
 #header-content__create-spot {
     color: black;
+    height: 31px;
 }
 
 #header-content__buttons {
@@ -33,9 +35,24 @@
 }
 
 /*!! this looks hella ugly */
-/* #profile-container {
+#profile-container {
     display: flex;
-} */
+    align-items: center;
+    position: absolute;
+    background: white;
+    padding: 10px 100px 10px 10px;
+    right: 58px;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+#profile-container > div {
+    margin-bottom: 5px;
+}
+#profile-container a {
+    text-decoration: none;
+    color: black;
+}
 
 #header-logo {
     font-size: 24px;
@@ -46,8 +63,40 @@
     cursor: pointer;
 }
 
+#login-signup-modal > li {
+    list-style: none;
+}
 
 #home-logo {
     display: flex;
     flex-direction: column;
+}
+
+.profile-dropdown > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+#header-content__buttons > div > button > i {
+    font-size: 25px;
+}
+
+.fa-user-circle {
+    margin-left: 10px;
+}
+
+.dashes {
+    font-size: 20px;
+}
+
+#pfp-button-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

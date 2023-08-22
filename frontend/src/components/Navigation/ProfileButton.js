@@ -4,6 +4,7 @@ import * as sessionActions from "../../store/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import { PiListDashesFill } from "react-icons/pi";
 import { NavLink } from "react-router-dom";
 
 function ProfileButton({ user }) {
@@ -42,7 +43,8 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={openMenu}>
+      <button onClick={openMenu} id="pfp-button-icons">
+        <PiListDashesFill className="dashes" />
         <i className="fas fa-user-circle" />
       </button>
       <div className={ulClassName} ref={ulRef}>
@@ -57,6 +59,9 @@ function ProfileButton({ user }) {
               </NavLink>
             </div>
             <div>
+              <NavLink to="/bookings">Trips</NavLink>
+            </div>
+            <div>
               <button onClick={logout}>
                 <NavLink to="/">Log Out</NavLink>
               </button>
@@ -65,18 +70,10 @@ function ProfileButton({ user }) {
         ) : (
           <div>
             <div id="login-signup-modal">
-              <OpenModalMenuItem
-                itemText="Log In"
-                onItemClick={closeMenu}
-                modalComponent={<LoginFormModal />}
-              />
+              <OpenModalMenuItem itemText="Log In" onItemClick={closeMenu} modalComponent={<LoginFormModal />} />
             </div>
             <div id="login-signup-modal">
-              <OpenModalMenuItem
-                itemText="Sign Up"
-                onItemClick={closeMenu}
-                modalComponent={<SignupFormModal />}
-              />
+              <OpenModalMenuItem itemText="Sign Up" onItemClick={closeMenu} modalComponent={<SignupFormModal />} />
             </div>
           </div>
         )}
